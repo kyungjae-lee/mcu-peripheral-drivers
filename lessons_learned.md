@@ -215,7 +215,7 @@ Reference: STM32F407xx MCU
 
 * The HSI clock signal is generated from an internal 16 MHz RC oscillator and can be used directly as a system clock, or used as PLL input.
 * On reset, MCU uses HSI as its default clock source.
-* By default, HSE and PLL are disabled. To use these clock sources you need to enable them through the software.
+* By default, HSE and PLL are disabled. To use these clock sources you need to enable them and select one via the System Clock Mux.
 
 
 
@@ -223,7 +223,7 @@ Reference: STM32F407xx MCU
 
 * STM32CubeIDE Clock Configuration GUI:
 
-  Be able to understand the clock hierarchy from the following diagram. For example, `APB1 peripheral clocks` are governed by the `PCLK1` which is governed by the `HCLK` adjusted by the `APB1 Prescalar`. And the `HCLK` is dependent on the `SYSCLK` whose source is currently set to PLL. (Here, by default, PLL source is selected as HSI. By manipulating the multiplier and divider, etc. you can modify the SYSCLK frequency.)
+  Be able to understand the clock hierarchy from the following diagram. For example, `APB1 peripheral clocks` are derived from the `PCLK1` which is derived from the `HCLK` adjusted by the `APB1 Prescalar`. And the `HCLK` is derived from the `SYSCLK` whose source is currently set to PLL. (Here, by default, PLL source is selected as HSI. By manipulating the multiplier and divider, etc. you can modify the SYSCLK frequency.)
 
   To configure all these, reference the "RCC clock control register (RCC_CR)" section of the MCU reference manual.
 
@@ -231,3 +231,13 @@ Reference: STM32F407xx MCU
 
 <img src="./img/clock-configuration.png" alt="clock-configuration" width="800">
 
+
+
+
+
+## Peripheral Clock Configuration
+
+* In modern MCUs, before using any peripheral, you must enable its peripheral clock using peripheral clock registers.
+* By default, peripheral clocks of almost all peripherals will be disabled to save power.
+* A peripheral won't take or respond to your configuration values until you enable its peripheral clock.
+* In STM32 microcontrollers, peripheral clocks are managed through RCC registers.
