@@ -241,3 +241,34 @@ Reference: STM32F407xx MCU
 * By default, peripheral clocks of almost all peripherals will be disabled to save power.
 * A peripheral won't take or respond to your configuration values until you enable its peripheral clock.
 * In STM32 microcontrollers, peripheral clocks are managed through RCC registers.
+
+
+
+## Alternate Function Mapping for MCU Pins
+
+* You can multiplex different functionalities of MCU pins by configuring their modes (i.e., alternate function modes).
+
+
+
+## Vector Table
+
+* Table of vectors (Here, vectors mean "pointers" or "addresses")
+
+  $=$ Table of pointers (or addresses) of exception handlers
+
+* Exceptions include:
+
+  * 15 system exceptions (internal to the processor)
+
+  * 240 interrupts (external to the processor)
+    * Out of 240 rooms provided for interrupts by default, STM32F407xx MCU supports only 82. 
+
+* Vector table is implemented in the startup code of your project. (A startup file can be written either in C or assembly.)
+
+* Total space consumed by the vector table:
+
+  1 (initial stack pointer) + 97 (exceptions) = 98 words = 392 bytes
+
+
+
+<img src="./img/vector-table.png" alt="vector-table" width="800">
