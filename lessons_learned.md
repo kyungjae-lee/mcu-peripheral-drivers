@@ -324,7 +324,39 @@ Reference: STM32F407xx MCU
 
 ## General Purpose Input/Output (GPIO)
 
-### GPIO Input Mode
+
+
+<img src="./img/gpio-basic-structure.png" alt="gpio-basic-structure" width="800">
+
+
+
+* A GPIO pin can be used for many purposes as shown below. This is why it is called as "General purpose". (Some pins of an MCU cannot be usd for all these purposes. So, those are called as "Pins" but not as "GPIOs".)
+* A GPIO pin of MCU can be operate in:
+  * Input mode
+    * Interrupt - When an MCU pin is in input mode, it can be configured to issue an interrupt to the processor.
+  * Output mode
+  * Alternate function mode
+  * Analog mode
+
+### Input Mode
+
+* When an I/O pin is programmed as input mode:
+
+  * The output buffer is disabled.
+
+  * The Schmitt trigger input is activated.
+
+  * The pull-up and pull-down resistors are activated depending on the value in the `GPIOx_PUPDR` register.
+
+  * The data present on the I/O pin are sampled into the input data register every AHB1 clock cycle.
+
+  * A read access to the input data register provides the I/O state.
+
+  
+
+<img src="./img/gpio-input-mode.png" alt="gpio-input-mode" width="800">
+
+
 
 * High impedance (HI-Z) state (a.k.a. Floating state)
   * HI-Z state of an I/O pin is keeping the pin floating by **NOT connecting** it to the high or low voltage level.
@@ -345,7 +377,16 @@ Reference: STM32F407xx MCU
 
   * It is always safe to keep the unused GPIO pin in one of the states so that they are reluctant to voltage fluctuations which may lead to leakage of current.
 
-### GPIO Output Mode
+### Output Mode
+
+* When an I/O pin is programmed as output mode:
+  * The input buffer is still on. Therefore you can read the state of an I/O pin through the Input Data Register. (Reading is possible.)
+
+
+
+<img src="./img/gpio-output-mode.png" alt="gpio-output-mode" width="800">
+
+
 
 * **Open-drain configuration**
 
@@ -394,6 +435,40 @@ Reference: STM32F407xx MCU
 
     * Write 1 to input $\to$ The top transistor (PMOS) turns on $\to$ Pin pull to HIGH $\to$ LED forward biased (LED turns ON)
     * Write 0 to input $\to$ The bottom transistor (NMOS) turns on $\to$ Pin pull to GND $\to$ LED reverse biased (LED turns OFF)
+
+### Alternate Function Mode
+
+* When an I/O pin is programmed as alternate function mode:
+
+  * The pin will be assigned for alternate functionalities.
+
+  * Output part
+
+    The Output Data Register has no control over the Output Control Block. The Output Control Block is now controlled by the Alternate Function Output. 
+
+    The pin is controlled by assigned peripheral output functionality like `I2C_SDA`, `I2C_CLK`, `UART_TX`, etc.
+
+  * Input part
+
+    The pin is ready by assigned peripheral input functionality like `USART_RX`, `ADCIN`, `TIMER_CHx`, `CAN_RX`, etc.
+
+
+
+<img src="./img/gpio-alternate-function-mode.png" alt="gpio-alternate-function-mode" width="800">
+
+
+
+### GPIO Functional Summary
+
+* By taking various modes and pull-up/pull-down resistors combinations, the following configurations can be obtained for a GPIO pin:
+  * Input floating
+  * Input pull-up
+  * Input-pull-down
+  * Analog
+  * Output open-drain with pull-up or pull-down capability
+  * Output push-pull with pull-up or pull-down capability
+  * Alternate function push-pull with pull-up or pull-down capability
+  * Alternate function open -drain with pull-up or pull-down capability
 
 
 
