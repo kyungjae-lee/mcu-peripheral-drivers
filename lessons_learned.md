@@ -319,3 +319,87 @@ Reference: STM32F407xx MCU
   3. The link between a GPIO port and the corresponding EXTI line must be established using the SYSCFG_EXTICRx register.
   4. Configure the trigger detection (falling/rising/both) for relevant EXTI line. (This is done via EXTI controller regsters.)
   5. Implement the handler to service the interrupt.
+
+
+
+## General Purpose Input/Output (GPIO)
+
+### GPIO Input Mode
+
+* High impedance (HI-Z) state (a.k.a. Floating state)
+  * HI-Z state of an I/O pin is keeping the pin floating by **NOT connecting** it to the high or low voltage level.
+  * After you power up the MCU, by default, all the GPIO pins will be in input mode with HIGH-Z state or floating state. (This is true with most of the MCUs.)
+  * Keeping a pin in a floating state can cause leakage current which may lead to higher power consumption. This is because a floating pin is highly susceptible to the circuit voltage noise and may result in leakage current.
+
+* **Pull-up/pull-down state**
+
+  * Floating state of a pin can be avoided by introducing an internal pull-up or pull-down resistor.
+
+    
+
+    <img src="./img/gpio-pull-up-pull-down-resistors.png" alt="gpio-pull-up-pull-down-resistors" width="500">
+
+    
+
+  * There are configuration registers for every GPIO port which enable you to handle internal pull-up or pull-down resistors.
+
+  * It is always safe to keep the unused GPIO pin in one of the states so that they are reluctant to voltage fluctuations which may lead to leakage of current.
+
+### GPIO Output Mode
+
+* **Open-drain configuration**
+
+  * Basically the default configuration (i.e., push-pull) of an output mode pin without the top PMOS transistor. (Only the NMOS transistor is present.)
+    * When the transistor is switched ON, the output will be pulled down to LOW (i.e., **GND**).
+    * When the transistor is switched OFF, the drain will be open, and the output will be in **floating** state.
+
+  * An open-drain output configuration can only pull-down the pin, but it cannot pull-up the pin. It provides only 2 states; GND and float.
+
+  * The open drain output configuration of a GPIO is useless until you provide the pull-up capacity (e.g., internal/external pull-up resistor).
+
+  * Open-drain with pull-up resistor
+
+    * Open-drain with internal pull-up resistor
+      * Case of the most of the modern MCUs
+      * Activated/deactivated via GPIO control registers
+    * Open-drain with external pull-up resistor
+      * If your MCU does not support internal pull-up resistor, which is very unlikely for modern MCUs, you may have to add an external pull-up resistor by yourself.
+
+  * How to drive an LED from an output mode open-drain configuration GPIO pin?
+
+    Using internal pull-up resistor:
+
+    1. Activate the internal pull-up resistor
+
+    2. Connect the pin to the LED
+
+    3. Write 1 to input $\to$ LED will be pulled to HIGH and it is now forward biased (LED ON)
+
+       Write 0 to input $\to$ LED will be pulled down to GND and it is now reverse biased (LED OFF)
+
+    Remember! Always activate and use the internal pull-up resistor of an I/O pin instead of connecting external resistors by hand unless you have a valid design issues with the internal one.
+
+* **Push-pull configuration**
+
+  * Default configuration of an output mode pin.
+
+  * In the push-pull configuration you don't need any pull-up or pull-down resistor.
+
+    * When the top transistor (PMOS) is ON, the output will be HIGH.
+    * When the bottom transistor (NMOS) is ON, the output will be LOW.
+
+  * How to drive an LED from an output mode push-pull configuration GPIO pin?
+
+    It is not necessary to use the pull-up resistor in order to drive an LED using push-pull configuration.
+
+    * Write 1 to input $\to$ The top transistor (PMOS) turns on $\to$ Pin pull to HIGH $\to$ LED forward biased (LED turns ON)
+    * Write 0 to input $\to$ The bottom transistor (NMOS) turns on $\to$ Pin pull to GND $\to$ LED reverse biased (LED turns OFF)
+
+
+
+## Optimizing I/O Power Consumption
+
+* Leakage mechanism by input pin floating
+  * When an input pin is in floating state, it's voltage may be somewhere between VCC and GND. This intermediate level of voltage may turn on both of the transistors (PMOS and NMOS) with resistance and it can lead to small amount of current sink from VCC to GND.
+  * Think of a water tap not closed a 100%. Water will leak!
+* In all modern MCUs, I/O pins use **Schmitt trigger** to resolve the noise issues.
