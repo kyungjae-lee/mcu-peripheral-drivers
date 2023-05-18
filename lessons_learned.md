@@ -11,6 +11,7 @@
 * Code auto completion: `ctrl` + `space`
 * View list of functions & global variables: `ctrl` + `o`
   * Quickly find the function and jump to it
+* Adding the custom header file folder to the compiler include path: Project $\to$ Properties $\to$ C/C++ Build $\to$ Settings $\to$ MCU GCC Compiler $\to$ Include paths
 
 
 
