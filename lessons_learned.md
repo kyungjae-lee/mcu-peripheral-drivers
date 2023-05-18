@@ -440,7 +440,30 @@ Reference: STM32F407xx MCU
 
 * When an I/O pin is programmed as alternate function mode:
 
-  * The pin will be assigned for alternate functionalities.
+  * The pin will be assigned for alternate functionalities. (For STM32F407 MCU, there are 16 possible alternate functionalities, `AF0`-`AF15`, that can be configured to the GPIO pins. Not every pin support all 16 functionalities and this information can be found in the data sheet of the MCU; "Alternate function mapping")
+
+  * Example - List out all the 16 possible alternate functionalities supported by GPIO port A pin number 8 (i.e., GPIOA.8)
+
+    | MODE (AFx) | Functionality   |
+    | ---------- | --------------- |
+    | AF0        | MCO1            |
+    | AF1        | TIM1_CH1        |
+    | AF2        | (Not supported) |
+    | AF3        | (Not supported) |
+    | AF4        | I2C3_SCL        |
+    | AF5        | (Not supported) |
+    | AF6        | (Not supported) |
+    | AF7        | USART1_CK       |
+    | AF8        | (Not supported) |
+    | AF9        | (Not supported) |
+    | AF10       | OTG_FS_SOF      |
+    | AF11       | (Not supported) |
+    | AF12       | (Not supported) |
+    | AF13       | (Not supported) |
+    | AF14       | (Not supported) |
+    | AF15       | EVENTOUT        |
+
+* Circuit analysis
 
   * Output part
 
