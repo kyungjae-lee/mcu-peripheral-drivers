@@ -501,3 +501,37 @@ Reference: STM32F407xx MCU
   * When an input pin is in floating state, it's voltage may be somewhere between VCC and GND. This intermediate level of voltage may turn on both of the transistors (PMOS and NMOS) with resistance and it can lead to small amount of current sink from VCC to GND.
   * Think of a water tap not closed a 100%. Water will leak!
 * In all modern MCUs, I/O pins use **Schmitt trigger** to resolve the noise issues.
+
+
+
+## MCU Peripheral Driver Development Project
+
+### Architecture
+
+
+
+<img src="./img/mcu-peripheral-driver-development-project-architecture.png" alt="mcu-peripheral-driver-development-project-architecture" width="700">
+
+
+
+### Development Plan
+
+1. Write a device header file (`stm32f407xx.h`)
+2. Write a peripheral driver (`.c`/`.h`)
+3. Write a sample application to test the driver
+
+
+
+## Device Header File
+
+* A **device header file** (C header file in this case) is a header file which contains MCU specific details such as:
+  * Base addresses of various memories present in the MCU such as Flash, SRAM1, SRAM2, ROM, etc.
+  * Base addresses of various bus domains such as AHBx domain, APBx domain, etc.
+  * Base addresses of various peripherals present in different bus domains of the MCU.
+  * Clock management macros (i.e., clock enable/disable macros)
+  * IRQ definitions
+  * Peripheral register definition structures
+  * Peripheral register bit definitions
+  * Other useful MCU configuration macros
+
+* The device header file will be used by both the application and the drivers. Therefore, the application and the driver source files may `#include` the device specific header file to access MCU specific details.
