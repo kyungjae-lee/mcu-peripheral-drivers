@@ -758,3 +758,106 @@ Reference: STM32F407xx MCU
 
 
 * Not all GPIO pins are available for custom use. Make sure to check the documentation before selecting the GPIO pins to use for your project.
+
+### Implementation
+
+* Implementation
+
+  ```c
+  /**
+   * Filename		: button_led_external.c
+   * Description	: Program to toggle the external LED whenever the external LED is pressed
+   * Author		: Kyungjae Lee
+   * Created on	: May 24, 2023
+   */
+  
+  #include "stm32f407xx.h"
+  
+  #define HIGH			1
+  #define LOW 			0
+  #define BTN_PRESSED 	LOW
+  
+  /* Spinlock delay */
+  void delay(void)
+  {
+  	for (uint32_t i = 0; i < 500000 / 2; i++);
+  }
+  
+  int main(int argc, char *argv[])
+  {
+  	GPIO_Handle_TypeDef GPIOLed, GPIOBtn;
+  
+  	/* GPIOLed configuration */
+  	GPIOLed.pGPIOx = GPIOA;
+  	GPIOLed.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_8;
+  	GPIOLed.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_OUT;
+  	GPIOLed.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST;
+  	GPIOLed.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;
+  	GPIOLed.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;
+  	GPIO_PeriClockControl(GPIOLed.pGPIOx, ENABLE);
+  	GPIO_Init(&GPIOLed);
+  
+  	/* GPIOBtn configuration */
+  	GPIOBtn.pGPIOx = GPIOB;
+  	GPIOBtn.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_12;
+  	GPIOBtn.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_IN;
+  	GPIOBtn.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST; /* Doesn't matter */
+  	//GPIOBtn.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;	/* N/A */
+  	GPIOBtn.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_PU;
+  		/* External pull-down resistor is already present (see the schematic) */
+  	GPIO_PeriClockControl(GPIOBtn.pGPIOx, ENABLE);
+  	GPIO_Init(&GPIOBtn);
+  
+  
+  	while (1)
+  	{
+  		if (GPIO_ReadFromInputPin(GPIOBtn.pGPIOx, GPIOBtn.GPIO_PinConfig.GPIO_PinNumber)
+              == BTN_PRESSED)
+  		{
+  			delay();	/* Introduce debouncing time */
+  			GPIO_ToggleOutputPin(GPIOLed.pGPIOx, GPIOLed.GPIO_PinConfig.GPIO_PinNumber);
+  		}
+  	}
+  
+  	return 0;
+  }
+  ```
+
+
+
+## GPIO Pin Interrupt Configuration
+
+1. Pin must be in input mode (Because the pin is supposed to be receiving interrupt)
+
+2. Configure the edge trigger (RT, FR, RFT)
+
+3. Enable interrupt delivery from the peripheral to the processor (Peripheral side; using Interrupt Mask Register of EXTI)
+
+4. Identify the IRQ number on which the processor accepts the interrupt from that pin
+
+   * Check the MCU reference manual
+
+5. Configure the IRQ priority for the identified IRQ number (Process side)
+
+   * Interrupt Priority Registers (`NVIC_IPR0` - `NVIC_IPRO59`)
+
+     Each 32-bit registers are composed of 4 8-bit sections each of which is responsible for each IRQ.
+
+6. Enable interrupt reception on that IRQ number (Processor side; register of NVIC)
+
+   * Interrupt Set-enable Registers (`NVIC_ISER0` - `NVIC_ISER7`) - 0 has no effect, 1 enables the interrupt
+   * Interrupt Clear-enable Registers (`NVIC_ICER0` - `NVIC_ICER7`) - 0 has no effect, 1 disables the interrupt
+
+7. Implement IRQ handler
+
+
+
+<img src="./img/stm32f4-gpio-pins-interrupt-delivery-to-the-processor.png" alt="stm32f4-gpio-pins-interrupt-delivery-to-the-processor" width="900">
+
+> `Pinx` of all GPIO ports will share `EXTIx`. Then how do you assign a specific port to an `EXTIx` line? $\to$ By using the `SYSCFG_EXTICR` register! 
+>
+> By default, `EXTI0` will be used by `GPIOA Pin0`. Configure `SYSCFG_EXTICR` to select which GPIO port to use the EXTI line.
+
+
+
+## Exercise 04: Toggling LED with Interrupt Triggered by Button Press

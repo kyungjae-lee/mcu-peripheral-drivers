@@ -99,6 +99,7 @@ typedef struct
 #define GPIO_PIN_PU					1
 #define GPIO_PIN_PD					2
 
+
 /*****************************************************************************************
  * APIs supported by the GPIO driver (See function definitions for more information)
  ****************************************************************************************/
@@ -126,7 +127,8 @@ void GPIO_ToggleOutputPin(GPIO_TypeDef *pGPIOx, uint8_t pinNumber);
 /**
  * IRQ configuration and ISR handling
  */
-void GPIO_IRQConfig(uint8_t irqNumber, uint8_t irqPriority, uint8_t state);
+void GPIO_IRQInterruptConfig(uint8_t irqNumber, uint8_t state);
+void GPIO_IRQPriorityConfig(uint8_t irqNumber, uint8_t irqPriority);
 void GPIO_IRQHandling(uint8_t pinNumber);
 
 

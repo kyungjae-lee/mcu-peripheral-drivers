@@ -1,4 +1,4 @@
-/*
+/**
  * Filename		: stm32f407xx.h
  * Description	: Device header file for stm32f407xx MCU
  * Author		: Kyungjae Lee
@@ -11,6 +11,58 @@
 #include <stdint.h>
 
 #define __IO			volatile		/* I/O registers are highly volatile in nature */
+
+/************************** START: Processor Specific Details ***************************/
+
+/**
+ * ARM Cortex-Mx processor NVIC_ISERx register addresses
+ * Interrupt Set-enable Registers
+ * Note: Since ARM Cortex-Mx process implements only 82 interrupts, ISER3-7 will not
+ * 		 be used.
+ * 		 NVIC could be defined as a structure, but just the necessary registers are
+ * 		 defined separately here since there is too much space in between each group of
+ * 		 registers.
+ */
+#define NVIC_ISER0		((uint32_t volatile *)0xE000E100)
+#define NVIC_ISER1		((uint32_t volatile *)0xE000E104)
+#define NVIC_ISER2		((uint32_t volatile *)0xE000E108)
+#define NVIC_ISER3		((uint32_t volatile *)0xE000E10C)
+#define NVIC_ISER4		((uint32_t volatile *)0xE000E110)
+#define NVIC_ISER5		((uint32_t volatile *)0xE000E114)
+#define NVIC_ISER6		((uint32_t volatile *)0xE000E118)
+#define NVIC_ISER7		((uint32_t volatile *)0xE000E11C)
+
+/**
+ * ARM Cortex-Mx processor NVIC_ICERx register addresses
+ * Interrupt Clear-enable Registers
+ * Note: Since ARM Cortex-Mx process implements only 82 interrupts, ICER3-7 will not
+ * 		 be used.
+ * 		 NVIC could be defined as a structure, but just the necessary registers are
+ * 		 defined separately here since there is too much space in between each group of
+ * 		 registers.
+ */
+#define NVIC_ICER0		((uint32_t volatile *)0XE000E180)
+#define NVIC_ICER1		((uint32_t volatile *)0xE000E184)
+#define NVIC_ICER2		((uint32_t volatile *)0xE000E188)
+#define NVIC_ICER3		((uint32_t volatile *)0xE000E18C)
+#define NVIC_ICER4		((uint32_t volatile *)0xE000E190)
+#define NVIC_ICER5		((uint32_t volatile *)0xE000E194)
+#define NVIC_ICER6		((uint32_t volatile *)0xE000E198)
+#define NVIC_ICER7		((uint32_t volatile *)0xE000E19C)
+
+/**
+ * ARM Cortex-Mx processor NVIC_IPRx register addresses
+ * Interrupt Priority Registers
+ * Note: NVIC could be defined as a structure, but just the necessary registers are
+ * 		 defined separately here since there is too much space in between each group of
+ * 		 registers.
+ */
+#define NVIC_IPR_BASE	((uint32_t volatile *)0xE000E400)
+
+#define NUM_PRI_BITS_USED	4
+
+/*************************** END: Processor Specific Details ****************************/
+
 
 /* Base addresses of memories */
 #define FLASH_BASE		0x08000000U		/* Flash base address in the alias 				*/
@@ -106,13 +158,33 @@ typedef struct
 	__IO uint32_t APB1LPENR;		/* RCC APB1 peripheral clock enable in low power mode register,	Address offset: 0x60 */
 	__IO uint32_t APB2LPENR;		/* RCC APB2 peripheral clock enable in low power mode register, Address offset: 0x64 */
 	uint32_t 	 RESERVED5[2];	/* Reserved, Address offset: 0x68-0x6C												 */
-	__IO uint32_t BDCR;			/* RCC Backup domain control register,							Address offset: 0x70 */
-	__IO uint32_t CSR;			/* RCC clock control & status register,							Address offset: 0x74 */
+	__IO uint32_t BDCR;			/* RCC Backup domain control register,								Address offset: 0x70 */
+	__IO uint32_t CSR;			/* RCC clock control & status register,								Address offset: 0x74 */
 	uint32_t 	 RESERVED6[2];	/* Reserved, Address offset: 0x78-7C												 */
 	__IO uint32_t SSCGR;			/* RCC spread spectrum clock generation register,				Address offset: 0x80 */
-	__IO uint32_t PLLI2SCFGR;	/* RCC PLLI2S configuration register,							Address offset: 0x84 */
+	__IO uint32_t PLLI2SCFGR;	/* RCC PLLI2S configuration register,								Address offset: 0x84 */
 } RCC_TypeDef;
 
+/* External interrupt/event controller (EXTI) */
+typedef struct
+{
+	__IO uint32_t IMR;			/* Interrupt mask register,				Address offset: 0x00 */
+	__IO uint32_t EMR;			/* Event mask register,					Address offset: 0x04 */
+	__IO uint32_t RTSR;			/* Rising trigger selection register,	Address offset: 0x08 */
+	__IO uint32_t FTSR;			/* Falling trigger selection register,	Address offset: 0x0C */
+	__IO uint32_t SWIER;		/* Software interrupt event register,	Address offset: 0x10 */
+	__IO uint32_t PR;			/* Pending register,					Address offset: 0x14 */
+} EXTI_TypeDef;
+
+/* System configuration controller (SYSCFG) */
+typedef struct
+{
+	__IO uint32_t MEMRMP;		/* SYSCFG memory remap register,						Address offset: 0x00 */
+	__IO uint32_t PMC;			/* SYSCFG peripheral mode configuration register,		Address offset: 0x04 */
+	__IO uint32_t EXTICR[4];	/* SYSCFG external interrupt configuration register1-4, Address offset: 0x08 */
+	uint32_t RESERVED[2];		/* Reserved, Address offset: 0x18-0x1C										 */
+	__IO uint32_t CMPCR;		/* Compensation cell control register,					Address offset: 0x20 */
+} SYSCFG_TypeDef;
 
 /**
  * Peripheral declarations (Peripheral base addresses typecasted to (x_TypeDef *))
@@ -132,6 +204,11 @@ typedef struct
 /* RCC */
 #define RCC				((RCC_TypeDef *)RCC_BASE)
 
+/* EXTI */
+#define EXTI			((EXTI_TypeDef *)EXTI_BASE)
+
+/* SYSCFG */
+#define SYSCFG			((SYSCFG_TypeDef *)SYSCFG_BASE)
 
 /**
  * Clock enable macros for peripherals
@@ -222,6 +299,19 @@ typedef struct
 #define GPIOI_RESET()		do { (RCC->AHB1RSTR |= (1 << 8)); (RCC->AHB1RSTR &= ~(1 << 8)); } while (0)
 
 /**
+ * Macro function to return port code for the given GPIO base address
+ */
+#define GPIO_BASE_TO_PORT_CODE(x)	((x == GPIOA) ? 0 :	\
+									(x == GPIOB) ? 1 :	\
+									(x == GPIOC) ? 2 :	\
+									(x == GPIOD) ? 3 :	\
+									(x == GPIOE) ? 4 :	\
+									(x == GPIOF) ? 5 :	\
+									(x == GPIOG) ? 6 :	\
+									(x == GPIOH) ? 7 :	\
+									(x == GPIOI) ? 8 : 0)
+
+/**
  * Other generic macros
  */
 #define ENABLE				1
@@ -230,6 +320,18 @@ typedef struct
 #define RESET				DISABLE
 #define GPIO_PIN_SET		SET
 #define GPIO_PIN_RESET		RESET
+
+/**
+ * Interrupt Request (IRQ) numbers of STM32F407xx MCU
+ * Note: This information is specific to MCU family
+ */
+#define IRQ_NO_EXTI0		6
+#define IRQ_NO_EXTI1		7
+#define IRQ_NO_EXTI2		8
+#define IRQ_NO_EXTI3		9
+#define IRQ_NO_EXTI4		10
+#define IRQ_NO_EXTI9_5		23
+#define IRQ_NO_EXTI15_10	40
 
 
 #include "stm32f407xx_gpio_driver.h"

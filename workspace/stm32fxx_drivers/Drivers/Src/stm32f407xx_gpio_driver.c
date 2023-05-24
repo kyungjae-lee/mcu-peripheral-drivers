@@ -19,7 +19,7 @@
  * GPIO_PeriClockControl()
  * Desc.	: Enables or disables peripheral clock for the given GPIO port
  * Param.	: @pGPIOx - base address of GPIO peripheral
- * 			  @state - ENABLE or DISABLE macros
+ * 			  @state - ENABLE or DISABLE macro
  * Returns	: None
  * Note		: N/A
  */
@@ -102,6 +102,50 @@ void GPIO_Init(GPIO_Handle_TypeDef *pGPIOHandle)
 		 * Interrupt mode
 		 */
 
+		if (pGPIOHandle->GPIO_PinConfig.GPIO_PinMode == GPIO_PIN_MODE_IT_FT)
+		{
+			/**
+			 * Configure the Falling Trigger Selection Register (FTSR)
+			 */
+
+			/* Set the corresponding bit of FTSR */
+			EXTI->FTSR |= (0x1 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+
+			/* Clear the corresponding bit of RTSR in case it is set */
+			EXTI->RTSR &= ~(0x1 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+		}
+		else if (pGPIOHandle->GPIO_PinConfig.GPIO_PinMode == GPIO_PIN_MODE_IT_FT)
+		{
+			/**
+			 * Configure the Rising Trigger Selection Register (RTSR)
+			 */
+
+			/* Set the corresponding bit of RTSR */
+			EXTI->RTSR |= (0x1 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+
+			/* Clear the corresponding bit of FTSR in case it is set */
+			EXTI->FTSR &= ~(0x1 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+		}
+		else if (pGPIOHandle->GPIO_PinConfig.GPIO_PinMode == GPIO_PIN_MODE_IT_RFT)
+		{
+			/**
+			 * Configure both the FTSR and RTSR
+			 */
+
+			/* Set the corresponding bit of FTSR and RTSR */
+			EXTI->FTSR |= (0x1 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+			EXTI->RTSR |= (0x1 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+		}
+
+		/* Configure the GPIO port selection in SYSCFG_EXTICR */
+		uint8_t index = pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber / 4;
+		uint8_t bitOffset = (pGPIOHandle-> GPIO_PinConfig.GPIO_PinNumber % 4) * 4;
+		uint8_t portCode = GPIO_BASE_TO_PORT_CODE(pGPIOHandle->pGPIOx);
+		SYSCFG->EXTICR[index] |= (portCode << bitOffset);
+		SYSCFG_PCLK_EN();
+
+		/* Enable the EXTI interrupt delivery by using the Interrupt Mask Register (IMR) */
+		EXTI->IMR |= (0x1 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
 	}
 
 	/* Configure GPIO pin speed */
@@ -124,9 +168,9 @@ void GPIO_Init(GPIO_Handle_TypeDef *pGPIOHandle)
 	{
 		/* Configure alternate function registers */
 		uint8_t index = pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber / 8;
-		uint8_t offset = (pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber % 8) * 4;
-		temp = (pGPIOHandle->GPIO_PinConfig.GPIO_PinAltFcnMode << offset);
-		pGPIOHandle->pGPIOx->AFR[index] &= ~(0xF << offset);	/* Clear */
+		uint8_t bitOffset = (pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber % 8) * 4;
+		temp = (pGPIOHandle->GPIO_PinConfig.GPIO_PinAltFcnMode << bitOffset);
+		pGPIOHandle->pGPIOx->AFR[index] &= ~(0xF << bitOffset);	/* Clear */
 		pGPIOHandle->pGPIOx->AFR[index] |= temp;				/* Set */
 	}
 }
@@ -237,10 +281,75 @@ void GPIO_ToggleOutputPin(GPIO_TypeDef *pGPIOx, uint8_t pinNumber)
 /**
  * IRQ configuration and ISR handling
  */
-void GPIO_IRQConfig(uint8_t irqNumber, uint8_t irqPriority, uint8_t state)
+
+/**
+ * GPIO_IRQInterruptConfig()
+ * Desc.	: Configures IRQ interrupts (processor; NVIC_ISERx, NVIC_ICERx)
+ * Param.	: @irqNumber - IRQ number
+ * 			  @state - ENABLE or DISABLE macro
+ * Returns	: None
+ * Note		: Reference - Cortex-M4 Devices Generic User Guide
+ * 			  Clearing ISERx bit won't disable the interrupt.
+ * 			  To disable interrupt ICERx bit has to be set!
+ */
+void GPIO_IRQInterruptConfig(uint8_t irqNumber, uint8_t state)
 {
+	if (state == ENABLE)
+	{
+		/* Configure NVIC_ISERx register */
+		if (irqNumber <= 31)
+			*NVIC_ISER0 |= (0x1 << irqNumber);
+		else if (32 <= irqNumber && irqNumber <= 64)
+			*NVIC_ISER1 |= (0x1 << irqNumber % 32);
+		else if (65 <= irqNumber && irqNumber <= 96)
+			*NVIC_ISER2 |= (0x1 << irqNumber % 32);
+	}
+	else
+	{
+		/* Configure NVIC_ICERx register */
+		if (irqNumber <= 31)
+			*NVIC_ICER0 |= (0x1 << irqNumber);
+		else if (32 <= irqNumber && irqNumber <= 64)
+			*NVIC_ICER1 |= (0x1 << irqNumber % 32);
+		else if (65 <= irqNumber && irqNumber <= 96)
+			*NVIC_ICER2 |= (0x1 << irqNumber % 32);
+	}
 }
 
+/**
+ * GPIO_IRQPriorityConfig()
+ * Desc.	: Configures IRQ priority (processor; NVIC_IPRx)
+ * Param.	: @irqNumber - IRQ number
+ * 			  @irqPriotity - IRQ priority
+ * 			  @state - ENABLE or DISABLE macro
+ * Returns	: None
+ * Note		: Reference - Cortex-M4 Devices Generic User Guide
+ * 			  STM32F407xx MCUs use only 4 most significant bits within
+ * 			  each 8-bit section of IPRx. Make sure to account for
+ * 			  this offset when calculating the place to write the
+ * 			  priority.
+ */
+void GPIO_IRQPriorityConfig(uint8_t irqNumber, uint8_t irqPriority)
+{
+	/* Find out the IPR register */
+	uint8_t iprNumber = irqNumber / 4;
+	uint8_t iprSection = irqNumber % 4;
+	uint8_t bitOffset = (iprSection * 8) + (8 - NUM_PRI_BITS_USED);
+	*(NVIC_IPR_BASE + (iprNumber * 4)) |= (irqPriority << bitOffset);
+}
+
+/**
+ * GPIO_IRQHandling()
+ * Desc.	: Clears the pending state of the triggered IRQ
+ * Param.	: @pinNumber - Pin number
+ * Returns	: None
+ * Note		: N/A
+ */
 void GPIO_IRQHandling(uint8_t pinNumber)
 {
+	/* Clear the corresponding bit of the EXTI_PR (Pending Register) */
+	if (EXTI->PR & (0x1 << pinNumber))
+	{
+		EXTI->PR |= (0x1 << pinNumber);
+	}
 }
