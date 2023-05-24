@@ -16,12 +16,12 @@
  */
 
 /**
- * @fn			: GPIO_PeriClockControl
- * @brief		: enables or disables peripheral clock for the given GPIO port
- * @param[in]	: pGPIOx - base address of GPIO peripheral
- * @param[in]	: state - ENABLE or DISABLE macros
- * @return		: none
- * @note		: n/a
+ * GPIO_PeriClockControl()
+ * Desc.	: Enables or disables peripheral clock for the given GPIO port
+ * Param.	: @pGPIOx - base address of GPIO peripheral
+ * 			  @state - ENABLE or DISABLE macros
+ * Returns	: None
+ * Note		: N/A
  */
 void GPIO_PeriClockControl(GPIO_TypeDef *pGPIOx, uint8_t state)
 {
@@ -75,11 +75,11 @@ void GPIO_PeriClockControl(GPIO_TypeDef *pGPIOx, uint8_t state)
  */
 
 /**
- * @fn			: GPIO_Init
- * @brief		: configures GPIO pins
- * @param[in]	: pGPIOHandle - pointer to the GPIO handle structure
- * @return		: none
- * @note		: n/a
+ * GPIO_Init()
+ * Desc.	: Configures GPIO pin
+ * Param.	: @pGPIOHandle - pointer to the GPIO handle structure
+ * Returns	: None
+ * Note		: N/A
  */
 void GPIO_Init(GPIO_Handle_TypeDef *pGPIOHandle)
 {
@@ -132,11 +132,11 @@ void GPIO_Init(GPIO_Handle_TypeDef *pGPIOHandle)
 }
 
 /**
- * @fn			: GPIO_DeInit
- * @brief		: configures GPIO pins
- * @param[in]	: pGPIOx - base address of GPIO peripheral
- * @return		: none
- * @note		: n/a
+ * GPIO_DeInit()
+ * Desc.	: Deinitializes GPIO pin
+ * Params.	: @pGPIOx - base address of GPIO peripheral
+ * Returns	: None
+ * Note		: N/A
  */
 void GPIO_DeInit(GPIO_TypeDef *pGPIOx)	/* Utilize RCC_AHB1RSTR (AHB1 peripheral reset register to reset in one queue) */
 {
@@ -166,12 +166,12 @@ void GPIO_DeInit(GPIO_TypeDef *pGPIOx)	/* Utilize RCC_AHB1RSTR (AHB1 peripheral 
  */
 
 /**
- * @fn			: GPIO_ReadFromInputPin
- * @brief		: reads the input pin (@pGPIOx, @pinNumber) and returns the read value
- * @param[in]	: pGPIOx - base address of GPIO peripheral
- * @param[in]	: pinNumber - pin number
- * @return		: 0 or 1
- * @note		: n/a
+ * GPIO_ReadFromInputPin()
+ * Desc.	: Reads the input pin (@pGPIOx, @pinNumber) and returns the read value
+ * Param.	: @pGPIOx - base address of GPIO peripheral
+ * 			  @pinNumber - pin number
+ * Returns	: 0 or 1
+ * Note 	: N/A
  */
 uint8_t GPIO_ReadFromInputPin(GPIO_TypeDef *pGPIOx, uint8_t pinNumber)
 {
@@ -179,11 +179,11 @@ uint8_t GPIO_ReadFromInputPin(GPIO_TypeDef *pGPIOx, uint8_t pinNumber)
 }
 
 /**
- * @fn			: GPIO_ReadFromInputPort
- * @brief		: returns the contents of @pGPIOx IDR
- * @param[in]	: pGPIOx - base address of GPIO peripheral
- * @return		: contents of IDR (least significant 16 bits)
- * @note		: n/a
+ * GPIO_ReadFromInputPort()
+ * Desc.	: Returns the contents of @pGPIOx IDR
+ * Param.	: @pGPIOx - base address of GPIO peripheral
+ * Returns	: Contents of IDR (least significant 16 bits)
+ * @note	: N/A
  */
 uint16_t GPIO_ReadFromInputPort(GPIO_TypeDef *pGPIOx)
 {
@@ -191,13 +191,13 @@ uint16_t GPIO_ReadFromInputPort(GPIO_TypeDef *pGPIOx)
 }
 
 /**
- * @fn			: GPIO_WriteToOutputPin
- * @brief		: writes @value to the output pin @pGPIOx @pinNumber
- * @param[in]	: pGPIOx - base address of GPIO peripheral
- * @param[in]	: pinNumber - output pin number
- * @param[in]	: value - value to write to output pin
- * @return		: none
- * @note		: be aware of the possibility that a user may pass 0-255 value to @value
+ * GPIO_WriteToOutputPin()
+ * Desc.	: Writes @value to the output pin @pGPIOx @pinNumber
+ * Param.	: @pGPIOx - base address of GPIO peripheral
+ * 			  @pinNumber - output pin number
+ * 			  @value - value to write to output pin
+ * Returns	: None
+ * Note		: Be aware of the possibility that a user may pass 0-255 value to @value
  */
 void GPIO_WriteToOutputPin(GPIO_TypeDef *pGPIOx, uint8_t pinNumber, uint8_t value)
 {
@@ -207,11 +207,28 @@ void GPIO_WriteToOutputPin(GPIO_TypeDef *pGPIOx, uint8_t pinNumber, uint8_t valu
 		pGPIOx->ODR |= (0x1 << pinNumber);
 }
 
+/**
+ * GPIO_WriteToOutputPort()
+ * Desc.	: Writes @value to @pGPIOx ODR
+ * Param.	: @pGPIOx - base address of GPIO peripheral
+ * 			  @pinNumber - output pin number
+ * 			  @value - value to write to output pin
+ * Returns	: None
+ * Note		: Be aware of the possibility that a user may pass 0-255 value to @value
+ */
 void GPIO_WriteToOutputPort(GPIO_TypeDef *pGPIOx, uint16_t value)
 {
 	pGPIOx->ODR = value;
 }
 
+/**
+ * GPIO_ToggleOutputPin()
+ * Desc.	: Toggles output pin @pGPIOx @pinNumber
+ * Param.	: @pGPIOx - base address of GPIO peripheral
+ * 			  @pinNumber - output pin number
+ * Returns	: None
+ * Note		: N/A
+ */
 void GPIO_ToggleOutputPin(GPIO_TypeDef *pGPIOx, uint8_t pinNumber)
 {
 	pGPIOx->ODR ^= (0x1 << pinNumber);
