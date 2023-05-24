@@ -1,8 +1,8 @@
 /*
- * @ Filename		: stm32f407xx.h
- * @ Description	: Device header file for stm32f407xx MCU
- * @ Author			: Kyungjae Lee
- * @ Date created	: 05/18/2023
+ * Filename		: stm32f407xx.h
+ * Description	: Device header file for stm32f407xx MCU
+ * Author		: Kyungjae Lee
+ * Created on	: May 18, 2023
  */
 
 #ifndef INC_STM32F407XX_H_
@@ -57,7 +57,7 @@
 #define EXTI_BASE		(APB2PERIPH_BASE + 0x3C00U)
 
 
-/*
+/**
  * Peripheral registers structures
  *
  * Note: Number of registers of each peripheral may defer from MCU family to MCU family.
@@ -114,7 +114,7 @@ typedef struct
 } RCC_TypeDef;
 
 
-/*
+/**
  * Peripheral declarations (Peripheral base addresses typecasted to (x_TypeDef *))
  */
 
@@ -133,7 +133,7 @@ typedef struct
 #define RCC				((RCC_TypeDef *)RCC_BASE)
 
 
-/*
+/**
  * Clock enable macros for peripherals
  */
 
@@ -172,7 +172,7 @@ typedef struct
 
 
 
-/*
+/**
  * Clock enable macros for peripherals
  */
 
@@ -208,8 +208,30 @@ typedef struct
 /* SYSCFG */
 #define SYSCFG_PCLK_DI()	(RCC->APB2ENR &= ~(1 << 14))
 
+/**
+ * Reset GPIOx peripherals (set the corresponding bit, and then clear)
+ */
+#define GPIOA_RESET()		do { (RCC->AHB1RSTR |= (1 << 0)); (RCC->AHB1RSTR &= ~(1 << 0)); } while (0)
+#define GPIOB_RESET()		do { (RCC->AHB1RSTR |= (1 << 1)); (RCC->AHB1RSTR &= ~(1 << 1)); } while (0)
+#define GPIOC_RESET()		do { (RCC->AHB1RSTR |= (1 << 2)); (RCC->AHB1RSTR &= ~(1 << 2)); } while (0)
+#define GPIOD_RESET()		do { (RCC->AHB1RSTR |= (1 << 3)); (RCC->AHB1RSTR &= ~(1 << 3)); } while (0)
+#define GPIOE_RESET()		do { (RCC->AHB1RSTR |= (1 << 4)); (RCC->AHB1RSTR &= ~(1 << 4)); } while (0)
+#define GPIOF_RESET()		do { (RCC->AHB1RSTR |= (1 << 5)); (RCC->AHB1RSTR &= ~(1 << 5)); } while (0)
+#define GPIOG_RESET()		do { (RCC->AHB1RSTR |= (1 << 6)); (RCC->AHB1RSTR &= ~(1 << 6)); } while (0)
+#define GPIOH_RESET()		do { (RCC->AHB1RSTR |= (1 << 7)); (RCC->AHB1RSTR &= ~(1 << 7)); } while (0)
+#define GPIOI_RESET()		do { (RCC->AHB1RSTR |= (1 << 8)); (RCC->AHB1RSTR &= ~(1 << 8)); } while (0)
+
+/**
+ * Other generic macros
+ */
+#define ENABLE				1
+#define DISABLE				0
+#define SET					ENABLE
+#define RESET				DISABLE
+#define GPIO_PIN_SET		SET
+#define GPIO_PIN_RESET		RESET
 
 
-
+#include "stm32f407xx_gpio_driver.h"
 
 #endif /* INC_STM32F407XX_H_ */

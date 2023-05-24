@@ -5,29 +5,23 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Src/01_led_toggle.c \
-../Src/syscalls.c \
-../Src/sysmem.c 
+../Drivers/Src/stm32f407xx_gpio_driver.c 
 
 OBJS += \
-./Src/01_led_toggle.o \
-./Src/syscalls.o \
-./Src/sysmem.o 
+./Drivers/Src/stm32f407xx_gpio_driver.o 
 
 C_DEPS += \
-./Src/01_led_toggle.d \
-./Src/syscalls.d \
-./Src/sysmem.d 
+./Drivers/Src/stm32f407xx_gpio_driver.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
-Src/%.o Src/%.su: ../Src/%.c Src/subdir.mk
+Drivers/Src/%.o Drivers/Src/%.su: ../Drivers/Src/%.c Drivers/Src/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F407G_DISC1 -DSTM32F4 -DSTM32F407VGTx -c -I../Inc -I"/home/klee/repos/mcu-peripheral-drivers/workspace/stm32fxx_drivers/Drivers/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "$@"
 
-clean: clean-Src
+clean: clean-Drivers-2f-Src
 
-clean-Src:
-	-$(RM) ./Src/01_led_toggle.d ./Src/01_led_toggle.o ./Src/01_led_toggle.su ./Src/syscalls.d ./Src/syscalls.o ./Src/syscalls.su ./Src/sysmem.d ./Src/sysmem.o ./Src/sysmem.su
+clean-Drivers-2f-Src:
+	-$(RM) ./Drivers/Src/stm32f407xx_gpio_driver.d ./Drivers/Src/stm32f407xx_gpio_driver.o ./Drivers/Src/stm32f407xx_gpio_driver.su
 
-.PHONY: clean-Src
+.PHONY: clean-Drivers-2f-Src
 
