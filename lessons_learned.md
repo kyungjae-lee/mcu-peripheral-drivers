@@ -566,7 +566,7 @@ Reference: STM32F407xx MCU
 
   
 
-## Exercise: Toggling On-board LED
+## Exercise 01: Toggling On-board LED
 
 * Write a program to toggle the on-board LED with some delay.
   * Case 1: Use push pull configuration for the output pin
@@ -669,7 +669,7 @@ Reference: STM32F407xx MCU
 
   
 
-## Exercise: Toggling On-board LED at Button Press
+## Exercise 02: Toggling On-board LED with On-board Button
 
 * Write a program to toggle the on-board LED whenever the on-board button is pressed.
 * In the case of STM32F407 Discovery board, when the user button is pressed, the GPIO pin connected to it is pulled to HIGH. (Check the schematic of the board. It is board specific!)
@@ -738,3 +738,23 @@ Reference: STM32F407xx MCU
   ```
 
   
+
+## Exercise 03: Toggling External LED with External Button
+
+* Connect an external button to the GPIO pin PB12 of the board and an external LED to the GPIO pin PA08, write a program to toggle the external LED whenever the external button is pressed.
+
+* Circuit design
+
+  When the button is pressed, the pin will be pulled to GND. If the button is released, it will be pulled to HIGH. (Without the external pull-up resistor (22Kohm), the pin state when the button is not pressed will be floating!)
+
+  Avoid the floating state by giving a proper state for the pin, either HIGH or LOW when the button is not pressed. In this case, LOW is when the button is pressed. So, make the pin HIGH when the button is not pressed through a pull-up resistor.
+
+  > Another way is to enable the internal pull-up resistor (which is 40kohm) of the PB12 pin instead of using the external pull-up resistor.
+
+  
+
+<img src="./img/exercise-03-circuit-design.png" alt="exercise-03-circuit-design" width="700">
+
+
+
+* Not all GPIO pins are available for custom use. Make sure to check the documentation before selecting the GPIO pins to use for your project.
