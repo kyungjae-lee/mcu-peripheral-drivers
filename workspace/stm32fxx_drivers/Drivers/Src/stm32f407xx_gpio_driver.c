@@ -343,13 +343,16 @@ void GPIO_IRQPriorityConfig(uint8_t irqNumber, uint8_t irqPriority)
  * Desc.	: Clears the pending state of the triggered IRQ
  * Param.	: @pinNumber - Pin number
  * Returns	: None
- * Note		: N/A
+ * Note		: Clearing the pending bit in EXTI_PR is a bit unusual! The set bit
+ * 			  can be cleared by programming the bit to 1. Don't be confused!
+ * 			  This is by design!
  */
 void GPIO_IRQHandling(uint8_t pinNumber)
 {
 	/* Clear the corresponding bit of the EXTI_PR (Pending Register) */
 	if (EXTI->PR & (0x1 << pinNumber))
 	{
+		/* Clear the bit by programming it to 1 */
 		EXTI->PR |= (0x1 << pinNumber);
 	}
 }
