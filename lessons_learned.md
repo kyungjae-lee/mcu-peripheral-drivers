@@ -843,6 +843,8 @@ Reference: STM32F407xx MCU
 
      Each 32-bit registers are composed of 4 8-bit sections each of which is responsible for each IRQ.
 
+     [!] Tip: `IRQ Number / 4` gives IPR number, `IRQ Number % 4` gives the section index
+
 6. Enable interrupt reception on that IRQ number (Processor side; register of NVIC)
 
    * Interrupt Set-enable Registers (`NVIC_ISER0` - `NVIC_ISER7`) - 0 has no effect, 1 enables the interrupt
@@ -857,6 +859,24 @@ Reference: STM32F407xx MCU
 > `Pinx` of all GPIO ports will share `EXTIx`. Then how do you assign a specific port to an `EXTIx` line? $\to$ By using the `SYSCFG_EXTICR` register! 
 >
 > By default, `EXTI0` will be used by `GPIOA Pin0`. Configure `SYSCFG_EXTICR` to select which GPIO port to use the EXTI line.
+
+
+
+## GPIO Interrupt Handling
+
+* When an interrupt is received through a GPIO pin, EXTI controller will detected it (Falling-edge, rising-edge, or both) and the corresponding EXTIx line will be triggered. Then, the fixed vector address of the corresponding IRQ number will be accessed. In the memory space fixed vector address points to holds the address of an IRQ handler (or Interrupt Service Routine; ISR) that needs to be invoked. 
+
+* The lower the IRQ number, the higher the priority.
+
+  If another IRQ is triggered while the processor is executing an ISR, their IRQ numbers will be compared, and if the newely arrived register happened to be of higher priority, the currently running ISR will be preempted.
+
+* Even if the IRQ is disabled (`ICERx` register), the incoming interrupt will still be pended in the pending register (`ISPRx`).
+
+* Implement the ISR, and store its address to the vector address location corresponding to the IRQ number for which the ISR is written.
+
+* In fact, ISRs are application specific and therefore should be written in the application layer. The ISRs implemented in the application layer should call the driver supported peripheral handling APIs to service that IRQ.
+
+* ISRs are registered in the startup code as `.weak` functions which will be redirected to the `Default_Handler()` until they are defined by the programmer. All you need to do is to implement the ISR with the name found in the startup file. Then, upon invocation, the user-defined ISR will be called instead of the `Default_Handler()`.
 
 
 
