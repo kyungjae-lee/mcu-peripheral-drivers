@@ -960,4 +960,132 @@ Reference: STM32F407xx MCU
   }
   ```
 
-  
+
+
+
+## STM32 GPIO Pin Specifications
+
+* Absolute Maximum Ratings (AMR) and general operating conditions
+* Maximum input voltage (V~in~), which can be applied to a pin
+* 3.3V and 5V tolerant pins
+* STM32 logic levels max and min voltages
+* Source and sing current
+
+
+
+<img src="./img/absolute-maximum-ratings.png" alt="absolute-maximum-ratings" width="700">
+
+
+
+### V~dd~ and V~ss~
+
+* V~dd~ is the main power supply of the microcontroller provided externally through V~dd~ pins of the microcontroller
+* Standard operating voltage of V~dd~ is $1.8V \le V_{dd} \le 3.6V$
+* Max voltage which can be applied on any V~dd~ pin of the microcontroller is 4V (check AMR tables in the datasheet)
+* V~ss~ is a ground reference of the microcontroller and should be maintained at 0V
+* Minimum value which can be applied to V~ss~ is -0.3V (no less than this)
+
+### General Operating Conditions
+
+* See the Table 14 in the device datasheet
+* The general operating conditions represent the range of guaranteed values within which the device operates in proper conditions.
+
+
+
+<img src="./img/general-operating-conditions.png" alt="general-operating-conditions" width="800">
+
+
+
+### V~in~
+
+* V~in~ is the input voltage applied to any STM32 pins
+
+
+
+<img src="./img/pin-input-voltage.png" alt="pin-input-voltages" width="300">
+
+
+
+### STM32 Pins
+
+* Three-volt tolerant (abbreviated as TT)
+  * Maximum V~in~ voltage: V~dd~ + 0.3V (Exceeding this voltage level will damage the TTa pin and may lead to device malfunction.)
+  * General operating condition: $-0.3V \le V_{in(tta)} \le V_{dd} + 0.3V$
+* Five-volt tolerant (abbreviated as FT)
+  * Five-volt tolerant pin means voltage protection is guaranteed (signal clamping using protection diodes) for the pin when its input voltage falls within $-0.3V \le V_{in(ft)} \le 5.5V$
+  * A GPIO is five-volt tolerant only in input mode (Five-volt tolerant feature not applicable when the GPIO is in output mode or analog mode)
+  * For FT GPIO, maximum V~in~ voltage is limited to V~dd~ + 4V
+  * General operating condition for FT pin: $-0.3V \le V_{in(ft)} \le 5.5V$
+  * For FT pin, regardless of the supply voltage, ensure that V~in~ does not exceed 5.5V.
+  * When V~dd~ = 0V (unpowered STM32 device), the input voltage on the FT GPIO cannot exceed 4V.
+* Three-volt tolerant directly connected to ADC (TTa)
+* Tolerance represents the voltage value which can be accepted by the GPIO
+
+### Current Characteristics
+
+
+
+<img src="./img/current-characteristics.png" alt="current-characteristics" width="700">
+
+
+
+* I/O source current (I~IO~)
+  * Max current which flows out of the device through GPIO output pin when HIGH.
+* Injected current (I~INJ~)
+  * Injection current is the current that is being forced into a pin by an input voltage (V~in~) higher than the positive supply (V~dd~) or lower than ground (V~ss~).
+  * Injection current specified in the specification causes a current flow inside the device and affects its reliability. Even a tiny current exceeding the specified limit is not allowed.
+  * Negative-injection current is the current induced when V~in~ $\lt$ V~ss~. The maximum negative injected current is -5mA, and the minimum V~in~ voltage level acceptable on the GPIO is -0.3V for TT and FT GPIO.
+  * Positive-injection current is the current induced when V~in~ $\gt$ V~dd~. For STM32 devices, the maximum positive-injection current on FT GPIO is defined as N/A or 0mA.
+  * 0mA means that the current injection can damage the GPIO and induce STM32 malfunction.
+  * Positive current injection is prohibited for a TT or FT GPIO defined as 0mA.
+  * As long as V~in~ on FT is less than AMR (V~dd~ + 4V) the positive current injection won't happen. The upper limit 0mA indicates that the positive injection current should never flow into the GPIO pin. Otherwise, the device may be damaged. If V~in~ goes beyond V~dd~ + 4V, then positive injection will happen, and the device may be damaged if the injection current is above the threshold, which is not mentioned in the datasheet.
+  * So, note that positive injection is prohibited for FT GPIO defined as 0mA.
+
+
+
+## Logic Levels
+
+Following discussion is applicable to any MCU.
+
+* All I/Os are CMOS and TTL compliant
+* Whenever interfacing two devices, logic level compatibility must be taken into account. (In compatible logic levels may lead to data corruption or communication fail.)
+
+### Logic Level Compatibility
+
+
+
+<img src="./img/logic-level-compatibility.png" alt="logic-level-compatibility" width="800">
+
+
+
+* In case of communication exchange, the STM32 output signals must be compatible with the V~IL~/V~IH~ (input threshold) of the recipient device and the STM32 input signals must be compatible with the V~O~/V~OH~ (output threshold) of the transmitter device as shown in the diagram above.
+
+  * Receiver
+    * V~IH~ - The **minimum** voltage level that is interpreted as a logical 1 (HIGH) by a digital input.
+    * V~IL~ - The **maximum** voltage level that is interpreted as a logical 0 (LOW) by a digital input.
+  * Transmitter
+    * V~OL~ - The **maximum** output low level voltage which can be interpreted as logic 0 (LOW).
+    * V~OH~ - The **minimum** output high level voltage which can be interpreted as logic 1 (HIGH).
+
+* For the CMOS technology, the input threshold voltages are relative to V~dd~ as follows:
+
+  V~IH(min)~ = 2/3 V~dd~, and  V~IL(max)~ = 1/3 V~dd~
+
+* For the TTL technology, the levels are fixed and equal to V~IH(min)~ = 2V, and V~IL(max)~ = 0.8V
+
+### Example of Logic Level Compatibility between STM32 and Arduino
+
+* Take a look at the following examples, and understand why you cannot simply assume that the communication will work out-of-the-box.
+  * V~dd~ for STM32 = 3.3V
+  * V~cc~ for Arduino = 5V
+
+### Scenario 1
+
+<img src="./img/logic-level-compatibility-example-1.png" alt="logic-level-compatibility-example-1" width="800">
+
+
+
+### Scenario 2
+
+<img src="./img/logic-level-compatibility-example-2.png" alt="logic-level-compatibility-example-1" width="800">
+
