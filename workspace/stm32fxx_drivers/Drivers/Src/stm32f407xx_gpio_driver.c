@@ -141,8 +141,10 @@ void GPIO_Init(GPIO_Handle_TypeDef *pGPIOHandle)
 		uint8_t index = pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber / 4;
 		uint8_t bitOffset = (pGPIOHandle-> GPIO_PinConfig.GPIO_PinNumber % 4) * 4;
 		uint8_t portCode = GPIO_BASE_TO_PORT_CODE(pGPIOHandle->pGPIOx);
+		SYSCFG_PCLK_EN();	/* Clock for SYSCFG must be enabled for the
+							   following bit manipulations to take effect */
+		SYSCFG->EXTICR[index] &= ~(0xF << bitOffset);
 		SYSCFG->EXTICR[index] |= (portCode << bitOffset);
-		SYSCFG_PCLK_EN();
 
 		/* Enable the EXTI interrupt delivery by using the Interrupt Mask Register (IMR) */
 		EXTI->IMR |= (0x1 << pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
@@ -320,7 +322,10 @@ void GPIO_IRQInterruptConfig(uint8_t irqNumber, uint8_t state)
  * GPIO_IRQPriorityConfig()
  * Desc.	: Configures IRQ priority (processor; NVIC_IPRx)
  * Param.	: @irqNumber - IRQ number
- * 			  @irqPriotity - IRQ priority
+ * 			  @irqPriotity - IRQ priority (Make sure this parameter is of
+ * 			  				 type uint32_t. Due to the number of bits it
+ * 			  				 needs to be shifted during the calculation,
+ * 							 declaring it as uint8_t did not do its job.)
  * 			  @state - ENABLE or DISABLE macro
  * Returns	: None
  * Note		: Reference - Cortex-M4 Devices Generic User Guide
@@ -329,13 +334,13 @@ void GPIO_IRQInterruptConfig(uint8_t irqNumber, uint8_t state)
  * 			  this offset when calculating the place to write the
  * 			  priority.
  */
-void GPIO_IRQPriorityConfig(uint8_t irqNumber, uint8_t irqPriority)
+void GPIO_IRQPriorityConfig(uint8_t irqNumber, uint32_t irqPriority)
 {
 	/* Find out the IPR register */
 	uint8_t iprNumber = irqNumber / 4;
 	uint8_t iprSection = irqNumber % 4;
 	uint8_t bitOffset = (iprSection * 8) + (8 - NUM_PRI_BITS_USED);
-	*(NVIC_IPR_BASE + (iprNumber * 4)) |= (irqPriority << bitOffset);
+	*(NVIC_IPR_BASE + iprNumber) |= (irqPriority << bitOffset);
 }
 
 /**
