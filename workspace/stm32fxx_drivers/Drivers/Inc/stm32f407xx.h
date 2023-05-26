@@ -5,8 +5,8 @@
  * Created on	: May 18, 2023
  */
 
-#ifndef INC_STM32F407XX_H_
-#define INC_STM32F407XX_H_
+#ifndef STM32F407XX_H
+#define STM32F407XX_H
 
 #include <stdint.h>
 
@@ -186,6 +186,20 @@ typedef struct
 	__IO uint32_t CMPCR;		/* Compensation cell control register,					Address offset: 0x20 */
 } SYSCFG_TypeDef;
 
+/* Serial peripheral interface (SPI) */
+typedef struct
+{
+	__IO uint32_t CR1;			/* SPI control register 1,				Address offset: 0x00 */
+	__IO uint32_t CR2;			/* SPI control register 2,				Address offset: 0x04 */
+	__IO uint32_t SR;			/* SPI status register,					Address offset: 0x08 */
+	__IO uint32_t DR;			/* SPI data register,					Address offset: 0x0C */
+	__IO uint32_t SRCPR;		/* SPI CRC polynomial register,			Address offset: 0x10 */
+	__IO uint32_t RXCRCR;		/* SPI RX CRC register,					Address offset: 0x14 */
+	__IO uint32_t TXCRCR;		/* SPI TX CRC register,					Address offset: 0x18 */
+	__IO uint32_t I2SCFGR;		/* SPI_I2S configuration register,		Address offset: 0x1C */
+	__IO uint32_t I2SPR;		/* SPI_I2S prescaler register,			Address offset: 0x20 */
+
+} SPI_TypeDef;
 /**
  * Peripheral declarations (Peripheral base addresses typecasted to (x_TypeDef *))
  */
@@ -273,6 +287,7 @@ typedef struct
 #define SPI1_PCLK_DI()		(RCC->APB2ENR &= ~(1 << 12))
 #define SPI2_PCLK_DI()		(RCC->APB1ENR &= ~(1 << 14))
 #define SPI3_PCLK_DI()		(RCC->APB1ENR &= ~(1 << 15))
+#define SPI4_PCLK_DI()		(RCC->APB2ENR |= ~(1 << 13))
 
 /* USARTx */
 #define USART1_PCLK_DI()	(RCC->APB2ENR &= ~(1 << 4))
@@ -356,4 +371,4 @@ typedef struct
 
 #include "stm32f407xx_gpio_driver.h"
 
-#endif /* INC_STM32F407XX_H_ */
+#endif /* STM32F407XX_H */
