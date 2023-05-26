@@ -1,6 +1,6 @@
 /**
  * Filename		: 01_led_toggle.c
- * Description	: Program to toggle the on-board LED (Push-pull config for output pin)
+ * Description	: Program to toggle the on-board LED (Open-drain config for output pin)
  * Author		: Kyungjae Lee
  * Created on	: May 23, 2023
  */

@@ -1,5 +1,5 @@
 /**
- * Filename		: 03_button_led_external.c
+ * Filename		: 03_ext_led_toggle_with_ext_button.c
  * Description	: Program to toggle the external LED whenever the external LED is pressed
  * Author		: Kyungjae Lee
  * Created on	: May 24, 2023
