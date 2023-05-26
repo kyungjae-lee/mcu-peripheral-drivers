@@ -5,8 +5,8 @@
  * Created on	: May 21, 2023
  */
 
-#ifndef INC_STM32F407XX_GPIO_DRIVER_H_
-#define INC_STM32F407XX_GPIO_DRIVER_H_
+#ifndef STM32F407XX_GPIO_DRIVER_H
+#define STM32F407XX_GPIO_DRIVER_H
 
 #include "stm32f407xx.h"
 
@@ -133,4 +133,4 @@ void GPIO_IRQHandling(uint8_t pinNumber);
 
 
 
-#endif /* INC_STM32F407XX_GPIO_DRIVER_H_ */
+#endif /* STM32F407XX_GPIO_DRIVER_H */
