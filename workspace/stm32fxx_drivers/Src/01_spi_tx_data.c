@@ -93,11 +93,17 @@ int main(int argc, char *argv[])
 		 * control registers.
 		 */
 
+	/* To make NSS signal pulled to high internally and avoid MODF error */
+	SPI_SSIConfig(SPI2, ENABLE);
+
 	/* Enable SPI2 peripheral (Set SPI_CR1 bit[6] SPE - Peripheral enabled) */
 	SPI_PeriControl(SPI2, ENABLE);
 
 	/* Send data */
 	SPI_TxData(SPI2, (uint8_t *)userData, strlen(userData));
+
+	/* Disable SPI2 peripheral (Terminate communication) */
+	SPI_PeriControl(SPI2, DISABLE);
 
 	while (1);
 

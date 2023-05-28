@@ -116,6 +116,9 @@ void SPI_Init(SPI_Handle_TypeDef *pSPIHandle)
 	/* Configure CPHA */
 	temp |= pSPIHandle->SPI_Config.SPI_CPHA << SPI_CR1_CPHA;
 
+	/* Configure SSM */
+	temp |= pSPIHandle->SPI_Config.SPI_SSM << SPI_CR1_SSM;
+
 	pSPIHandle->pSPIx->CR1 = temp;
 }
 
@@ -257,3 +260,23 @@ void SPI_PeriControl(SPI_TypeDef *pSPIx, uint8_t state)
 	else
 		pSPIx->CR1 &= ~(0x1 << SPI_CR1_SPE);	/* Disable */
 }
+
+/**
+ * SPI_SSIConfig()
+ * Desc.	: Sets or resets SPI CR1 register's SSI (Internal Slave Select) bit
+ * Param.	: @pSPIx - base address of SPIx peripheral
+ * 			  @state - ENABLE or DISABLE macro
+ * Returns	: None
+ * Note		: This bit has an effect only when the SSM bit is set.
+ * 			  The value of this bit is forced onto the NSS pin and
+ * 			  the IO value of the NSS pin is ignored.
+ * 			  This bit is not used in I2S mode and SPI TI mode.
+ */
+void SPI_SSIConfig(SPI_TypeDef *pSPIx, uint8_t state)
+{
+	if (state == ENABLE)
+		pSPIx->CR1 |= (0x1 << SPI_CR1_SSI);		/* Enable */
+	else
+		pSPIx->CR1 &= ~(0x1 << SPI_CR1_SSI);	/* Disable */
+}
+
