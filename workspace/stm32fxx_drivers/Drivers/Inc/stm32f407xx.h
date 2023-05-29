@@ -2,7 +2,8 @@
  * Filename		: stm32f407xx.h
  * Description	: Device header file for stm32f407xx MCU
  * Author		: Kyungjae Lee
- * Created on	: May 18, 2023
+ * Created     	: May 18, 2023
+ * Updates		: May 28, 2023 - Add SPI peripheral specific information
  */
 
 #ifndef STM32F407XX_H
