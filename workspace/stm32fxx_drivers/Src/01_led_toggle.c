@@ -2,14 +2,22 @@
  * Filename		: 01_led_toggle.c
  * Description	: Program to toggle the on-board LED (Open-drain config for output pin)
  * Author		: Kyungjae Lee
- * Created on	: May 23, 2023
+ * History		: May 23, 2023 - Created file
+ * 				  Jun 02, 2023 - Removed redundant 'GPIO_PeriClockControl()'
  */
 
 #include "stm32f407xx.h"
 
-/* Spinlock delay */
+/**
+ * delay()
+ * Desc.	: Spinlock delays the program execution
+ * Param.	: None
+ * Returns	: None
+ * Note		: N/A
+ */
 void delay(void)
 {
+	/* Appoximately ~200ms delay when the system clock freq is 16 MHz */
 	for (uint32_t i = 0; i < 500000 / 2; i++);
 }
 
@@ -31,7 +39,6 @@ int main(int argc, char *argv[])
 		 * For these reasons, it is not a good idea to use open-drain configuration for
 		 * a GPIO output pin in general unless it is required by the requirements.
 		 */
-	GPIO_PeriClockControl(GPIOLed.pGPIOx, ENABLE);
 
 	GPIO_Init(&GPIOLed);
 

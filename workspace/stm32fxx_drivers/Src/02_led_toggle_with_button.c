@@ -2,7 +2,8 @@
  * Filename		: 02_led_toggle_with_button.c
  * Description	: Program to toggle the on-board LED whenever the on-board button is pressed
  * Author		: Kyungjae Lee
- * Created on	: May 23, 2023
+ * History		: May 23, 2023 - Created file
+ * 				  Jun 02, 2023 - Removed redundant 'GPIO_PeriClockControl()'
  */
 
 #include "stm32f407xx.h"
@@ -10,9 +11,16 @@
 #define HIGH			1
 #define BTN_PRESSED 	HIGH	/* This is not universal. Check the board schematic */
 
-/* Spinlock delay */
+/**
+ * delay()
+ * Desc.	: Spinlock delays the program execution
+ * Param.	: None
+ * Returns	: None
+ * Note		: N/A
+ */
 void delay(void)
 {
+	/* Appoximately ~200ms delay when the system clock freq is 16 MHz */
 	for (uint32_t i = 0; i < 500000 / 2; i++);
 }
 
@@ -27,7 +35,6 @@ int main(int argc, char *argv[])
 	GPIOLed.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST;
 	GPIOLed.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;
 	GPIOLed.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;
-	GPIO_PeriClockControl(GPIOLed.pGPIOx, ENABLE);
 	GPIO_Init(&GPIOLed);
 
 	/* GPIOBtn configuration */
@@ -38,7 +45,6 @@ int main(int argc, char *argv[])
 	//GPIOBtn.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;	/* N/A */
 	GPIOBtn.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;
 		/* External pull-down resistor is already present (see the schematic) */
-	GPIO_PeriClockControl(GPIOBtn.pGPIOx, ENABLE);
 	GPIO_Init(&GPIOBtn);
 
 
@@ -53,6 +59,3 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
-
-
-
