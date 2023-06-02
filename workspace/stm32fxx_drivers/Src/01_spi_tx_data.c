@@ -2,7 +2,9 @@
  * Filename		: 01_spi_tx_data
  * Description	: Program to test SPI send data functionality
  * Author		: Kyungjae Lee
- * Created on	: May 27, 2023
+ * History   	: May 27, 2023 - File created
+ * 				  Jun 02, 2023 - Added 'Wait until SPI no longer busy' logic
+ * 				  				 before terminating the SPI communication
  */
 
 #include <string.h> 		/* strlen() */
@@ -101,6 +103,14 @@ int main(int argc, char *argv[])
 
 	/* Send data */
 	SPI_TxData(SPI2, (uint8_t *)userData, strlen(userData));
+
+	/* Wait until SPI no longer busy */
+	while (SPI2->SR & (0x1 << SPI_SR_BSY));
+		/* SPI_SR bit[7] - BSY (Busy flag)
+		 * 0: SPI (or I2S) not busy
+		 * 1: SPI (or I2S) is busy in communication or Tx buffer is not empty
+		 * This flag is set and cleared by hardware.
+		 */
 
 	/* Disable SPI2 peripheral (Terminate communication) */
 	SPI_PeriControl(SPI2, DISABLE);
