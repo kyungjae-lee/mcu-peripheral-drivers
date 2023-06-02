@@ -280,3 +280,21 @@ void SPI_SSIConfig(SPI_TypeDef *pSPIx, uint8_t state)
 		pSPIx->CR1 &= ~(0x1 << SPI_CR1_SSI);	/* Disable */
 }
 
+/**
+ * SPI_SSOEConfig()
+ * Desc.	: Sets or resets SPI CR2 register's SSOE (Slave Select Output Enable) bit
+ * Param.	: @pSPIx - base address of SPIx peripheral
+ * 			  @state - ENABLE or DISABLE macro
+ * Returns	: None
+ * Note		: When SSOE = 1, SS output is disabled in master mode and the cell
+ * 			  can work in multimaster configuration
+ * 			  When SSOE = 0, SS output is enabled in master mode and when the cell
+ * 			  is enabled. The cell cannot work in a multimaster environment.
+ */
+void SPI_SSOEConfig(SPI_TypeDef *pSPIx, uint8_t state)
+{
+	if (state == ENABLE)
+		pSPIx->CR2 |= (0x1 << SPI_CR2_SSOE);	/* Enable */
+	else
+		pSPIx->CR2 &= ~(0x1 << SPI_CR2_SSOE);	/* Disable */
+}
