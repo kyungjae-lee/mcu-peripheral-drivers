@@ -1,5 +1,5 @@
 /**
- * Filename		: 02_spi_master_slave_communication.c
+ * Filename		: 02_spi_master_slave_tx.c
  * Description	: Program to test SPI send data functionality
  * Author		: Kyungjae Lee
  * History 		: Jun 02, 2023 - Created file
@@ -101,6 +101,14 @@ void GPIO_ButtonInit(void)
 {
 	GPIO_Handle_TypeDef GPIOBtn;
 
+	/* Zero-out all the fields in the structures (Very important! GPIOLed and GPIOBtn
+	 * are local variables whose members may be filled with garbage values before
+	 * initialization. These garbage values may set (corrupt) the bit fields that
+	 * you did not touch assuming that they will be 0 by default. Do NOT make this
+	 * mistake!
+	 */
+	memset(&GPIOBtn, 0, sizeof(GPIOBtn));
+
 	/* GPIOBtn configuration */
 	GPIOBtn.pGPIOx = GPIOA;
 	GPIOBtn.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_0;
@@ -115,6 +123,10 @@ void GPIO_ButtonInit(void)
 int main(int argc, char *argv[])
 {
 	char userData[] = "Hello world";
+
+	/* Initialize and configure GPIO pin for user button */
+	GPIO_ButtonInit();
+
 	/* Initialize and configure GPIO pins to be used as SPI2 pins */
 	SPI2_PinsInit();
 
@@ -149,7 +161,7 @@ int main(int argc, char *argv[])
 
 		/* Arduino sketch expects 1 byte of length information followed by data */
 		/* Send length information to the slave first */
-		uint8_t dataLen = strlen(user_data);
+		uint8_t dataLen = strlen(userData);
 		SPI_TxData(SPI2, &dataLen, 1);
 		/* Send data */
 		SPI_TxData(SPI2, (uint8_t *)userData, strlen(userData));
