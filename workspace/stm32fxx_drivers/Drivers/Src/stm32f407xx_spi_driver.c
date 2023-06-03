@@ -2,7 +2,8 @@
  * Filename		: stm32f407xx_spi_driver.c
  * Description	: STM32F407xx MCU specific SPI driver source file
  * Author		: Kyungjae Lee
- * Created on	: May 27, 2023
+ * History		: May 27, 2023 - Created file
+ * 				  Jun 02, 2023 - Implemented 'SPI_RxData()'
  */
 
 #include "stm32f407xx.h"
@@ -198,14 +199,49 @@ void SPI_TxData(SPI_TypeDef *pSPIx, uint8_t *pTxBuffer, uint32_t len)
 }
 
 /**
- * ()
- * Desc.	:
- * Param.	: @
+ * SPI_RxData()
+ * Desc.	: Receive the data of length @len stored in @pRxBuffer
+ * Param.	: @pSPIx - base address of SPIx peripheral
+ * 			  @pRxBuffer - address of the Rx buffer
+ * 			  @len - length of the data to transmit
  * Returns	: None
- * Note		: N/A
+ * Note		: This is a blocking function. This function will not return until
+ *            the data is fully received.
  */
-void SPI_RxData(SPI_TypeDef *pSPIx, uint8_t *pTxBuffer, uint32_t len)
+void SPI_RxData(SPI_TypeDef *pSPIx, uint8_t *pRxBuffer, uint32_t len)
 {
+	while (len > 0)
+	{
+		/* Wait until RXNE (Rx buffer not empty) bit is set */
+		while (!(pSPIx->SR & (0x1 << SPI_SR_RXNE)));	/* Blocking (Polling for the RXNE flag to set) */
+
+		/* Check DFF (Data frame format) bit in SPIx_CR1 */
+		if (pSPIx->CR1 & (0x1 << SPI_CR1_DFF))
+		{
+			/* 16-bit DFF */
+			/* Read the data from DR into RxBuffer */
+			*((uint16_t *)pRxBuffer) = pSPIx->DR;
+
+			/* Decrement the length (2 bytes) */
+			len--;
+			len--;
+
+			/* Adjust the buffer pointer */
+			(uint16_t *)pRxBuffer++;
+		}
+		else
+		{
+			/* 8-bit DFF */
+			/* Read the data from DR into RxBuffer */
+			*pRxBuffer = pSPIx->DR;
+
+			/* Decrement the length (1 byte) */
+			len--;
+
+			/* Adjust the buffer pointer */
+			pRxBuffer++;
+		}
+	}
 }
 
 /**

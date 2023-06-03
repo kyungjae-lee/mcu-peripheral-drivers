@@ -2,7 +2,7 @@
  * Filename		: stm32f407xx_spi_driver.h
  * Description	: STM32F407xx MCU specific SPI driver header file
  * Author		: Kyungjae Lee
- * Created on	: May 21, 2023
+ * History		: May 21, 2023 - Created file
  */
 
 #ifndef STM32F407XX_SPI_DRIVER_H
@@ -114,7 +114,7 @@ void SPI_DeInit(SPI_TypeDef *pSPIx);	/* Utilize RCC_AHBxRSTR (AHBx peripheral re
  * Note: Standard practice for choosing the size of 'length' variable is uint32_t or greater
  */
 void SPI_TxData(SPI_TypeDef *pSPIx, uint8_t *pTxBuffer, uint32_t len);
-void SPI_RxData(SPI_TypeDef *pSPIx, uint8_t *pTxBuffer, uint32_t len);
+void SPI_RxData(SPI_TypeDef *pSPIx, uint8_t *pRxBuffer, uint32_t len);
 
 /**
  * IRQ configuration and ISR handling
