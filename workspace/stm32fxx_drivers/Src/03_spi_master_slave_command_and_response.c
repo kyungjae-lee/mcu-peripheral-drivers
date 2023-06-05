@@ -1,13 +1,22 @@
 /**
  * Filename		: 03_spi_master_slave_command_and_response.c
  * Description	: Program to test SPI master-slave command and response communication
+ * 				  (Blocking Tx/Rx)
  * Author		: Kyungjae Lee
  * History 		: Jun 03, 2023 - Created file
+ * 				  Jun 05, 2023 - Added Semihosting features to utilize printf()
  */
 
 #include <stdio.h>			/* printf() */
 #include <string.h> 		/* strlen() */
 #include "stm32f407xx.h"
+
+/* To use Semihosting features
+ * (Make sure to exclude or remove 'syscalls.c' file from build. Otherwise,
+ * an empty definition of `initialise_monitor_handles()` in `syscalls.c` file
+ * will cause a build error.
+ */
+extern void initialise_monitor_handles();
 
 /* Arduino (slave) command codes */
 #define CMD_LED_CTRL		0x50
@@ -194,6 +203,11 @@ int main(int argc, char *argv[])
 	uint8_t dummyWrite = 0xff;
 	uint8_t dummyRead;
 
+	/* Enables Semihosting features (After this, printf() can be use) */
+	initialise_monitor_handles();
+
+	printf("Application is running...\n");
+
 	/* Initialize and configure GPIO pin for user button */
 	GPIO_ButtonInit();
 
@@ -212,6 +226,8 @@ int main(int argc, char *argv[])
 		 * will be busy communicating with other device(s) and will not allow modifying its
 		 * control registers.
 		 */
+
+	printf("SPI initialized\n");
 
 	/* Enable NSS output (Set SPI_CR2 bit[2] SSOE - Slave Select Output Enable) */
 	SPI_SSOEConfig(SPI2, ENABLE);
@@ -273,6 +289,7 @@ int main(int argc, char *argv[])
 			/* Send arguments */
 			SPI_TxData(SPI2, args, 2);
 
+			printf("CMD_LED_CTRL executed\n");
 		}
 		/* End of CMD_LED_CTRL */
 
@@ -342,6 +359,8 @@ int main(int argc, char *argv[])
 			uint8_t analogData;
 			SPI_RxData(SPI2, &analogData, 1);
 				/* Analog data ranges from 0(0V) to 255(5V) */
+
+			printf("CMD_SENSOR_READ: %d\n", analogData);
 		}
 		/* End of CMD_SENSOR_READ */
 
@@ -409,6 +428,7 @@ int main(int argc, char *argv[])
 
 			uint8_t ledStatus;
 			SPI_RxData(SPI2, &ledStatus, 1);
+
 			printf("CMD_LED_READ: %d\n", ledStatus);
 		}
 		/* End of CMD_LED_READ */
