@@ -37,6 +37,7 @@ uint8_t SPI_SlaveReceive(void)
 {
   /* Wait for reception complete */
   while(!(SPSR & (1<<SPIF)));
+
   /* Return Data Register */
   return SPDR;
 }
@@ -70,12 +71,15 @@ void loop()
   Serial.println("Slave waiting for ss to go low");
   while(digitalRead(SS));
 
+  
   i = 0;
   dataLen = SPI_SlaveReceive();
+
   for(i = 0 ; i < dataLen ; i++ )
   {
     dataBuff[i] =  SPI_SlaveReceive();
   }
+
 
 
   //  Serial.println(String(i,HEX));
