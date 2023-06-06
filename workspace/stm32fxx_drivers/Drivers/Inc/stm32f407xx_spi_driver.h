@@ -2,7 +2,10 @@
  * Filename		: stm32f407xx_spi_driver.h
  * Description	: STM32F407xx MCU specific SPI driver header file
  * Author		: Kyungjae Lee
- * History		: May 21, 2023 - Created file
+ * History		: May 21, 2023 - Created fileo
+ * 				  Jun 05, 2023 - Added interrupt related macros and functions
+ * 				  			   - Updated 'SPI_Handle_Typdef' structure
+ * 				  			   - Added application callback functions
  */
 
 #ifndef STM32F407XX_SPI_DRIVER_H
@@ -29,9 +32,30 @@ typedef struct
  */
 typedef struct
 {
-	SPI_TypeDef *pSPIx;	/* Holds the base address of the SPIx(x:0,1,2) peripheral */
-	SPI_Config_TypeDef SPI_Config;
+	SPI_TypeDef 		*pSPIx;	/* Holds the base address of the SPIx(x:0,1,2) peripheral */
+	SPI_Config_TypeDef 	SPI_Config;
+	uint8_t				*pTxBuffer;	/* App's Tx buffer address */
+	uint8_t				*pRxBuffer;	/* App's Rx buffer address */
+	uint32_t			TxLen;
+	uint32_t			RxLen;
+	uint8_t				TxState;	/* Available values @SPI_ApplicationStateus */
+	uint8_t				RxState;	/* Available values @SPI_ApplicationStateus */
 } SPI_Handle_TypeDef;
+
+/**
+ * @SPI_ApplicationStatus
+ */
+#define SPI_READY						0
+#define SPI_BUSY_IN_RX					1
+#define SPI_BUSY_IN_TX					2
+
+/**
+ * @SPI_ApplicationEvents
+ */
+#define SPI_EVENT_TX_CMPLT				1
+#define SPI_EVENT_RX_CMPLT				2
+#define SPI_EVENT_OVR					3
+#define SPI_EVENT_CRCERR				4
 
 /**
  * @SPI_DeviceMode
@@ -113,8 +137,11 @@ void SPI_DeInit(SPI_TypeDef *pSPIx);	/* Utilize RCC_AHBxRSTR (AHBx peripheral re
  *
  * Note: Standard practice for choosing the size of 'length' variable is uint32_t or greater
  */
-void SPI_TxData(SPI_TypeDef *pSPIx, uint8_t *pTxBuffer, uint32_t len);
-void SPI_RxData(SPI_TypeDef *pSPIx, uint8_t *pRxBuffer, uint32_t len);
+void SPI_TxBlocking(SPI_TypeDef *pSPIx, uint8_t *pTxBuffer, uint32_t len);
+void SPI_RxBlocking(SPI_TypeDef *pSPIx, uint8_t *pRxBuffer, uint32_t len);
+
+uint8_t SPI_TxInterrupt(SPI_Handle_TypeDef *pSPIHandle, uint8_t *pTxBuffer, uint32_t len);
+uint8_t SPI_RxInterrupt(SPI_Handle_TypeDef *pSPIHandle, uint8_t *pRxBuffer, uint32_t len);
 
 /**
  * IRQ configuration and ISR handling
@@ -129,5 +156,16 @@ void SPI_IRQHandling(SPI_Handle_TypeDef *pSPIHandle);
 void SPI_PeriControl(SPI_TypeDef *pSPIx, uint8_t state);
 void SPI_SSIConfig(SPI_TypeDef *pSPIx, uint8_t state);
 void SPI_SSOEConfig(SPI_TypeDef *pSPIx, uint8_t state);
+void SPI_ClearOVRFlag(SPI_TypeDef *pSPIx);
+void SPI_CloseTx(SPI_Handle_TypeDef *pSPIHandle);
+void SPI_CloseRx(SPI_Handle_TypeDef *pSPIHandle);
+
+/**
+ * Application callback functions (Must be implemented by application)
+ * Note: Since the driver does not know in which application this function will be
+ * 	     implemented, it is good idea to give a weak function definition.
+ */
+__WEAK void SPI_ApplicationEventCallback(SPI_Handle_TypeDef *pSPIHandle, uint8_t appEvent);
+
 
 #endif /* STM32F407XX_SPI_DRIVER_H */

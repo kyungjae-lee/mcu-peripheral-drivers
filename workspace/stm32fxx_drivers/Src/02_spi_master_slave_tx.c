@@ -162,9 +162,9 @@ int main(int argc, char *argv[])
 		/* Arduino sketch expects 1 byte of length information followed by data */
 		/* Send length information to the slave first */
 		uint8_t dataLen = strlen(userData);
-		SPI_TxData(SPI2, &dataLen, 1);
+		SPI_TxBlocking(SPI2, &dataLen, 1);
 		/* Send data */
-		SPI_TxData(SPI2, (uint8_t *)userData, strlen(userData));
+		SPI_TxBlocking(SPI2, (uint8_t *)userData, strlen(userData));
 
 		/* Wait until SPI no longer busy */
 		while (SPI2->SR & (0x1 << SPI_SR_BSY));

@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
 	SPI_PeriControl(SPI2, ENABLE);
 
 	/* Send data */
-	SPI_TxData(SPI2, (uint8_t *)userData, strlen(userData));
+	SPI_TxBlocking(SPI2, (uint8_t *)userData, strlen(userData));
 
 	/* Wait until SPI no longer busy */
 	while (SPI2->SR & (0x1 << SPI_SR_BSY));
