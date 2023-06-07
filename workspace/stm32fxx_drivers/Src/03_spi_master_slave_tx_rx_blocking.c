@@ -1,7 +1,6 @@
 /**
- * Filename		: 03_spi_master_slave_command_and_response.c
- * Description	: Program to test SPI master-slave command and response communication
- * 				  (Blocking Tx/Rx)
+ * Filename		: 03_spi_master_slave_tx_rx_blocking.c
+ * Description	: Program to test SPI master-slave Tx/Rx functionality (blocking)
  * Author		: Kyungjae Lee
  * History 		: Jun 03, 2023 - Created file
  * 				  Jun 05, 2023 - Added Semihosting features to utilize printf()

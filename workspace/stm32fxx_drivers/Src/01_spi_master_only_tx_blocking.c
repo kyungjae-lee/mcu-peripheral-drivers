@@ -1,6 +1,7 @@
 /**
- * Filename		: 01_spi_tx_data
- * Description	: Program to test SPI send data functionality
+ * Filename		: 01_spi_master_only_tx_blocking.c
+ * Description	: Program to test SPI master's Tx (blocking) functionality
+ * 				  (without slave)
  * Author		: Kyungjae Lee
  * History   	: May 27, 2023 - File created
  * 				  Jun 02, 2023 - Added 'Wait until SPI no longer busy' logic

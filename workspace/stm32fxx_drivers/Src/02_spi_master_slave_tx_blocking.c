@@ -1,6 +1,7 @@
 /**
- * Filename		: 02_spi_master_slave_tx.c
- * Description	: Program to test SPI send data functionality
+ * Filename		: 02_spi_master_slave_tx_blocking.c
+ * Description	: Program to test SPI master's Tx (blocking) functionality
+ * 				  (with slave)
  * Author		: Kyungjae Lee
  * History 		: Jun 02, 2023 - Created file
  */
