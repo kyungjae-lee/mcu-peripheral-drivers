@@ -1,5 +1,5 @@
 /**
- * Filename		: 03_spi_master_slave_tx_rx_blocking.c
+ * Filename		: spi_03_master_slave_tx_rx_blocking.c
  * Description	: Program to test SPI master-slave Tx/Rx functionality (blocking)
  * Author		: Kyungjae Lee
  * History 		: Jun 03, 2023 - Created file

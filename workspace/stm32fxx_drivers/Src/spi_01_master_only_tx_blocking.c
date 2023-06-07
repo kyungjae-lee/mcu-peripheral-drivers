@@ -1,5 +1,5 @@
 /**
- * Filename		: 01_spi_master_only_tx_blocking.c
+ * Filename		: spi_01_master_only_tx_blocking.c
  * Description	: Program to test SPI master's Tx (blocking) functionality
  * 				  (without slave)
  * Author		: Kyungjae Lee
