@@ -1,5 +1,5 @@
 /**
- * Filename		: 04_led_toggle_with_ext_button_interrupt.c
+ * Filename		: 04_gpio_led_toggle_with_ext_button_interrupt.c
  * Description	: Program to toggle LED whenever an interrupt is triggered by
  * 				  the external button press
  * Author		: Kyungjae Lee

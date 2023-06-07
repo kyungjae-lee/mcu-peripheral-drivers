@@ -1,5 +1,5 @@
 /**
- * Filename		: 03_ext_led_toggle_with_ext_button.c
+ * Filename		: 03_gpio_ext_led_toggle_with_ext_button.c
  * Description	: Program to toggle the external LED whenever the external LED is pressed
  * Author		: Kyungjae Lee
  * History		: May 24, 2023 - Created file

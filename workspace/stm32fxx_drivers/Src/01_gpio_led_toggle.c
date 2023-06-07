@@ -1,5 +1,5 @@
 /**
- * Filename		: 01_led_toggle.c
+ * Filename		: 01_gpio_led_toggle.c
  * Description	: Program to toggle the on-board LED (Open-drain config for output pin)
  * Author		: Kyungjae Lee
  * History		: May 23, 2023 - Created file

@@ -1,5 +1,5 @@
 /**
- * Filename		: 02_led_toggle_with_button.c
+ * Filename		: 02_gpio_led_toggle_with_button.c
  * Description	: Program to toggle the on-board LED whenever the on-board button is pressed
  * Author		: Kyungjae Lee
  * History		: May 23, 2023 - Created file
