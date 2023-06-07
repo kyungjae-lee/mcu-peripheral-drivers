@@ -2,10 +2,7 @@
  * Filename		: stm32f407xx_spi_driver.h
  * Description	: STM32F407xx MCU specific SPI driver header file
  * Author		: Kyungjae Lee
- * History		: May 21, 2023 - Created fileo
- * 				  Jun 05, 2023 - Added interrupt related macros and functions
- * 				  			   - Updated 'SPI_Handle_Typdef' structure
- * 				  			   - Added application callback functions
+ * History		: May 21, 2023 - Created file
  */
 
 #ifndef STM32F407XX_SPI_DRIVER_H
@@ -34,8 +31,8 @@ typedef struct
 {
 	SPI_TypeDef 		*pSPIx;	/* Holds the base address of the SPIx(x:0,1,2) peripheral */
 	SPI_Config_TypeDef 	SPI_Config;
-	uint8_t				*pTxBuffer;	/* App's Tx buffer address */
-	uint8_t				*pRxBuffer;	/* App's Rx buffer address */
+	uint8_t	volatile	*pTxBuffer;	/* App's Tx buffer address */
+	uint8_t	volatile	*pRxBuffer;	/* App's Rx buffer address */
 	uint32_t			TxLen;
 	uint32_t			RxLen;
 	uint8_t				TxState;	/* Available values @SPI_ApplicationStateus */
@@ -140,8 +137,8 @@ void SPI_DeInit(SPI_TypeDef *pSPIx);	/* Utilize RCC_AHBxRSTR (AHBx peripheral re
 void SPI_TxBlocking(SPI_TypeDef *pSPIx, uint8_t *pTxBuffer, uint32_t len);
 void SPI_RxBlocking(SPI_TypeDef *pSPIx, uint8_t *pRxBuffer, uint32_t len);
 
-uint8_t SPI_TxInterrupt(SPI_Handle_TypeDef *pSPIHandle, uint8_t *pTxBuffer, uint32_t len);
-uint8_t SPI_RxInterrupt(SPI_Handle_TypeDef *pSPIHandle, uint8_t *pRxBuffer, uint32_t len);
+uint8_t SPI_TxInterrupt(SPI_Handle_TypeDef *pSPIHandle, uint8_t volatile *pTxBuffer, uint32_t len);
+uint8_t SPI_RxInterrupt(SPI_Handle_TypeDef *pSPIHandle, uint8_t volatile *pRxBuffer, uint32_t len);
 
 /**
  * IRQ configuration and ISR handling

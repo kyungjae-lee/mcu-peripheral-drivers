@@ -3,9 +3,6 @@
  * Description	: STM32F407xx MCU specific SPI driver source file
  * Author		: Kyungjae Lee
  * History		: May 27, 2023 - Created file
- * 				  Jun 02, 2023 - Implemented 'SPI_RxBlocking()'
- * 				  Jun 05, 2023 - Added interrupt related functionalities
- * 				  			   - Implemented 'SPI_IRQHandling()'
  */
 
 #include "stm32f407xx.h"
@@ -263,7 +260,7 @@ void SPI_RxBlocking(SPI_TypeDef *pSPIx, uint8_t *pRxBuffer, uint32_t len)
  * 			  data into the data register. Writing will be taken care of by
  * 			  the interrupt handler.
  */
-uint8_t SPI_TxInterrupt(SPI_Handle_TypeDef *pSPIHandle, uint8_t *pTxBuffer, uint32_t len)
+uint8_t SPI_TxInterrupt(SPI_Handle_TypeDef *pSPIHandle, uint8_t volatile *pTxBuffer, uint32_t len)
 {
 	uint8_t state = pSPIHandle->TxState;
 
@@ -301,7 +298,7 @@ uint8_t SPI_TxInterrupt(SPI_Handle_TypeDef *pSPIHandle, uint8_t *pTxBuffer, uint
  * 			  data from the data register. Reading will be taken care of by
  * 			  the interrupt handler.
  */
-uint8_t SPI_RxInterrupt(SPI_Handle_TypeDef *pSPIHandle, uint8_t *pRxBuffer, uint32_t len)
+uint8_t SPI_RxInterrupt(SPI_Handle_TypeDef *pSPIHandle, uint8_t volatile *pRxBuffer, uint32_t len)
 {
 	uint8_t state = pSPIHandle->RxState;
 
@@ -446,7 +443,7 @@ void SPI_IRQPriorityConfig(uint8_t irqNumber, uint32_t irqPriority)
 
 /**
  * SPI_IRQHandling()
- * Desc.	:
+ * Desc.	: Handles SPI interrupt
  * Param.	: @pSPIHandle - pointer to SPI handle structure
  * Returns	: None
  * Note		: SPI interrupt event flags (TXE, RXNE, MODF, OVR, CRCERR, FRE)
@@ -668,9 +665,10 @@ void SPI_CloseRx(SPI_Handle_TypeDef *pSPIHandle)
 
 /**
  * SPI_ApplicationEventCallback()
- * Desc.	:
- * Param.	:
- * Returns	:
+ * Desc.	: Notifies the application of the event occurred
+ * Param.	: @pSPIHandle - pointer to SPI handle structure
+ * 			  @appEvent - SPI event occurred
+ * Returns	: None
  * Note		: This function must be implemented by the application. Since the driver
  * 			  does not know in which application this function will be implemented,
  * 			  the driver defines it as a weak function. The application may override

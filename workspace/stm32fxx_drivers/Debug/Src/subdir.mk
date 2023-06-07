@@ -5,15 +5,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Src/03_spi_master_slave_command_and_response.c \
+../Src/spi_04_master_slave_rx_interrupt.c \
 ../Src/sysmem.c 
 
 OBJS += \
-./Src/03_spi_master_slave_command_and_response.o \
+./Src/spi_04_master_slave_rx_interrupt.o \
 ./Src/sysmem.o 
 
 C_DEPS += \
-./Src/03_spi_master_slave_command_and_response.d \
+./Src/spi_04_master_slave_rx_interrupt.d \
 ./Src/sysmem.d 
 
 
@@ -24,7 +24,7 @@ Src/%.o Src/%.su: ../Src/%.c Src/subdir.mk
 clean: clean-Src
 
 clean-Src:
-	-$(RM) ./Src/03_spi_master_slave_command_and_response.d ./Src/03_spi_master_slave_command_and_response.o ./Src/03_spi_master_slave_command_and_response.su ./Src/sysmem.d ./Src/sysmem.o ./Src/sysmem.su
+	-$(RM) ./Src/spi_04_master_slave_rx_interrupt.d ./Src/spi_04_master_slave_rx_interrupt.o ./Src/spi_04_master_slave_rx_interrupt.su ./Src/sysmem.d ./Src/sysmem.o ./Src/sysmem.su
 
 .PHONY: clean-Src
 
