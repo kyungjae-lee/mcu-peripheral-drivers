@@ -205,8 +205,24 @@ typedef struct
 	__IO uint32_t TXCRCR;		/* SPI TX CRC register,					Address offset: 0x18 */
 	__IO uint32_t I2SCFGR;		/* SPI_I2S configuration register,		Address offset: 0x1C */
 	__IO uint32_t I2SPR;		/* SPI_I2S prescaler register,			Address offset: 0x20 */
-
 } SPI_TypeDef;
+
+/* Inter-integrated circuit (I2C) */
+typedef struct
+{
+	__IO uint32_t CR1;			/* SPI control register 1,				Address offset: 0x00 */
+	__IO uint32_t CR2;			/* SPI control register 2,				Address offset: 0x04 */
+	__IO uint32_t OAR1;			/* SPI status register,					Address offset: 0x08 */
+	__IO uint32_t OAR2;			/* SPI data register,					Address offset: 0x0C */
+	__IO uint32_t DR;			/* SPI CRC polynomial register,			Address offset: 0x10 */
+	__IO uint32_t SR1;			/* SPI RX CRC register,					Address offset: 0x14 */
+	__IO uint32_t SR2;			/* SPI TX CRC register,					Address offset: 0x18 */
+	__IO uint32_t CCR;			/* SPI_I2S configuration register,		Address offset: 0x1C */
+	__IO uint32_t TRISE;		/* SPI_I2S prescaler register,			Address offset: 0x20 */
+	__IO uint32_t FLTR;			/* SPI_I2S prescaler register,			Address offset: 0x24 */
+} I2C_TypeDef;
+
+
 /**
  * Peripheral declarations (Peripheral base addresses typecasted to (x_TypeDef *))
  */
@@ -236,6 +252,11 @@ typedef struct
 #define SPI2			((SPI_TypeDef *)SPI2_BASE)
 #define SPI3			((SPI_TypeDef *)SPI3_BASE)
 #define SPI4			((SPI_TypeDef *)SPI4_BASE)
+
+/* I2Cx */
+#define I2C1			((I2C_TypeDef *)I2C_BASE)
+#define I2C2			((I2C_TypeDef *)I2C_BASE)
+#define I2C3			((I2C_TypeDef *)I2C_BASE)
 
 /**
  * Clock enable macros for peripherals
@@ -402,9 +423,9 @@ typedef struct
 #define NVIC_IRQ_PRI15		15
 
 
-/*****************************************************************************************
+/**
  * SPI peripheral bit position definitions
- ****************************************************************************************/
+ */
 
 /* SPI_CR1 */
 #define SPI_CR1_CPHA		0
@@ -442,7 +463,69 @@ typedef struct
 #define SPI_SR_BSY 			7
 #define SPI_SR_FRE 			8
 
+
+/**
+ * I2C peripheral bit position definitions
+ */
+
+/* I2C_CR1 */
+#define I2C_CR1_PE			0
+#define I2C_CR1_SMBUS		1
+#define I2C_CR1_SMBTYPE		3
+#define I2C_CR1_ENARP		4
+#define I2C_CR1_ENPEC		5
+#define I2C_CR1_ENGC		6
+#define I2C_CR1_NOSTRETCH	7
+#define I2C_CR1_START		8
+#define I2C_CR1_STOP		9
+#define I2C_CR1_ACK			10
+#define I2C_CR1_POS			11
+#define I2C_CR1_PEC			12
+#define I2C_CR1_ALERT		13
+#define I2C_CR1_SWRST		15
+
+/* I2C_CR2 */
+#define I2C_CR2_FREQ 		0
+#define I2C_CR2_ITERREN		8
+#define I2C_CR2_ITEVTEN		9
+#define I2C_CR2_ITBUFEN		10
+#define I2C_CR2_DMAEN		11
+#define I2C_CR2_LAST		12
+
+/* I2C_SR1 */
+#define I2C_SR1_SB			0
+#define I2C_SR1_ADDR		1
+#define I2C_SR1_BTF			2
+#define I2C_SR1_ADD10		3
+#define I2C_SR1_STOPF		4
+#define I2C_SR1_RxNE		6
+#define I2C_SR1_TxE			7
+#define I2C_SR1_BERR		8
+#define I2C_SR1_ARLO		9
+#define I2C_SR1_AF			10
+#define I2C_SR1_OVR			11
+#define I2C_SR1_PECERR		12
+#define I2C_SR1_TIMEOUT		14
+#define I2C_SR1_SMBALERT	15
+
+/* I2C_SR2 */
+#define I2C_SR2_MSL			0
+#define I2C_SR2_BUSY		1
+#define I2C_SR2_TRA			2
+#define I2C_SR2_GENCALL		4
+#define I2C_SR2_SMBDEFAULT	5
+#define I2C_SR2_SMBDEFAULT	5
+#define I2C_SR2_SMBHOST		6
+#define I2C_SR2_DUALF		7
+
+/* I2C_CCR */
+#define I2C_CCR_CCR			0
+#define I2C_CCR_DUTY		14
+#define I2C_CCR_FS			15
+
+
 #include "stm32f407xx_gpio_driver.h"
 #include "stm32f407xx_spi_driver.h"
+#include "stm32f407xx_i2c_driver.h"
 
 #endif /* STM32F407XX_H */
