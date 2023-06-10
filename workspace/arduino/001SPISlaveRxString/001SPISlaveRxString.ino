@@ -57,7 +57,7 @@ void SPI_SlaveTransmit(char data)
 void setup() 
 {
   // Initialize serial communication 
-  Serial.begin(9600);
+  Serial.begin(1200);
   // Initialize SPI Slave.
   SPI_SlaveInit();
   Serial.println("Slave Initialized");

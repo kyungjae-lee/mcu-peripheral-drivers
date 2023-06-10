@@ -110,7 +110,7 @@ void SPI2_Init(void)
 	SPI2Handle.pSPIx = SPI2;
 	SPI2Handle.SPI_Config.SPI_BusConfig = SPI_BUS_CONFIG_FULL_DUPLEX;
 	SPI2Handle.SPI_Config.SPI_DeviceMode = SPI_DEVICE_MODE_MASTER;
-	SPI2Handle.SPI_Config.SPI_SCLKSpeed = SPI_SCLK_SPEED_PRESCALAR_8;	/* Generates 2MHz SCLK */
+    SPI2Handle.SPI_Config.SPI_SCLKSpeed = SPI_SCLK_SPEED_PRESCALAR_32;  /* Generates 500KHz SCLK */
 		/* Min prescalar -> maximum clk speed */
 	SPI2Handle.SPI_Config.SPI_DFF = SPI_DFF_8BITS;
 	SPI2Handle.SPI_Config.SPI_CPOL = SPI_CPOL_LOW;
@@ -203,7 +203,7 @@ int main(int argc, char *argv[])
 	uint8_t dummyRead;
 
 	/* Enables Semihosting features (After this, printf() can be use) */
-	initialise_monitor_handles();
+	//initialise_monitor_handles();
 
 	printf("Application is running...\n");
 
