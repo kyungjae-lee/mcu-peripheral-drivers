@@ -71,6 +71,7 @@ void I2C_DeInit(I2C_TypeDef *pI2Cx);	/* Utilize RCC_AHBxRSTR (AHBx peripheral re
  * Note: Standard practice for choosing the size of 'length' variable is
  * 		 uint32_t or greater.
  */
+void I2C_MasterTx(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pTxBuffer, uint8_t Len, uint8_t slaveAddr);
 
 
 /**

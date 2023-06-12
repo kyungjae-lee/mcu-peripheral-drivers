@@ -1,13 +1,9 @@
-/**
+/*******************************************************************************
  * Filename		: stm32f407xx.h
  * Description	: Device header file for stm32f407xx MCU
  * Author		: Kyungjae Lee
- * History     	: May 18, 2023
- *        		  May 28, 2023 - Add SPI peripheral specific information
- *        	 	  Jun 05, 2023 - Correct typo 'SPI_CR2_XEIE' -> 'SPI_CR2_TXEIE'
- *							   - Added 'stddef.h'
- *							   - Added '__WEAK' macro for weak function definitions
- */
+ * History     	: May 18, 2023 - Created file
+ ******************************************************************************/
 
 #ifndef STM32F407XX_H
 #define STM32F407XX_H
@@ -15,19 +11,19 @@
 #include <stdint.h>
 #include <stddef.h>	/* NULL */
 
-#define __IO			volatile		/* I/O registers are highly volatile in nature */
+#define __IO			volatile		/* I/O registers are highly volatile */
 #define __WEAK			__attribute__((weak))
 
-/************************** START: Processor Specific Details ***************************/
+/********************* START: Processor Specific Details **********************/
 
 /**
  * ARM Cortex-Mx processor NVIC_ISERx register addresses
  * Interrupt Set-enable Registers
- * Note: Since ARM Cortex-Mx process implements only 82 interrupts, ISER3-7 will not
- * 		 be used.
- * 		 NVIC could be defined as a structure, but just the necessary registers are
- * 		 defined separately here since there is too much space in between each group of
- * 		 registers.
+ * Note: Since ARM Cortex-Mx process implements only 82 interrupts, ISER3-7 will
+ * 		 not be used.
+ * 		 NVIC could be defined as a structure, but just the necessary registers
+ * 		 are defined separately here since there is too much space in between
+ * 		 each group of registers.
  */
 #define NVIC_ISER0		((uint32_t volatile *)0xE000E100)
 #define NVIC_ISER1		((uint32_t volatile *)0xE000E104)
@@ -41,11 +37,11 @@
 /**
  * ARM Cortex-Mx processor NVIC_ICERx register addresses
  * Interrupt Clear-enable Registers
- * Note: Since ARM Cortex-Mx process implements only 82 interrupts, ICER3-7 will not
- * 		 be used.
- * 		 NVIC could be defined as a structure, but just the necessary registers are
- * 		 defined separately here since there is too much space in between each group of
- * 		 registers.
+ * Note: Since ARM Cortex-Mx process implements only 82 interrupts, ISER3-7 will
+ * 		 not be used.
+ * 		 NVIC could be defined as a structure, but just the necessary registers
+ * 		 are defined separately here since there is too much space in between
+ * 		 each group of registers.
  */
 #define NVIC_ICER0		((uint32_t volatile *)0XE000E180)
 #define NVIC_ICER1		((uint32_t volatile *)0xE000E184)
@@ -59,15 +55,15 @@
 /**
  * ARM Cortex-Mx processor NVIC_IPRx register addresses
  * Interrupt Priority Registers
- * Note: NVIC could be defined as a structure, but just the necessary registers are
- * 		 defined separately here since there is too much space in between each group of
- * 		 registers.
+ * Note: NVIC could be defined as a structure, but just the necessary registers
+ * 		 are defined separately here since there is too much space in between
+ * 		 each group of registers.
  */
 #define NVIC_IPR_BASE	((uint32_t volatile *)0xE000E400)
 
 #define NUM_PRI_BITS_USED	4
 
-/*************************** END: Processor Specific Details ****************************/
+/*********************** END: Processor Specific Details **********************/
 
 
 /* Base addresses of memories */
@@ -119,8 +115,8 @@
 /**
  * Peripheral registers structures
  *
- * Note: Number of registers of each peripheral may defer from MCU family to MCU family.
- * 		 Check the reference manual!
+ * Note: Number of registers of each peripheral may defer from MCU family to MCU
+ * 		 family. Check the reference manual!
  */
 
 /* General Purpose I/O */
@@ -224,7 +220,8 @@ typedef struct
 
 
 /**
- * Peripheral declarations (Peripheral base addresses typecasted to (x_TypeDef *))
+ * Peripheral declarations (Peripheral base addresses typecasted to
+ * (x_TypeDef *))
  */
 
 /* GPIOs */
@@ -368,17 +365,6 @@ typedef struct
 									(x == GPIOH) ? 7 :	\
 									(x == GPIOI) ? 8 : 0)
 
-/**
- * Other generic macros
- */
-#define ENABLE				1
-#define DISABLE				0
-#define SET					ENABLE
-#define RESET				DISABLE
-#define GPIO_PIN_SET		SET
-#define GPIO_PIN_RESET		RESET
-#define FLAG_RESET			RESET
-#define FLAG_SET			SET
 
 /**
  * Interrupt Request (IRQ) numbers of STM32F407xx MCU
@@ -398,8 +384,6 @@ typedef struct
 #define IRQ_NO_SPI1 		35
 #define IRQ_NO_SPI2 		36
 #define IRQ_NO_SPI3 		51
-
-
 
 
 /**
@@ -492,6 +476,12 @@ typedef struct
 #define I2C_CR2_DMAEN		11
 #define I2C_CR2_LAST		12
 
+/* I2C_OAR1 */
+#define I2C_OAR1_ADD0		0
+#define I2C_OAR1_ADD71		7
+#define I2C_OAR1_ADD98		8
+#define I2C_OAR1_ADDMODE	15
+
 /* I2C_SR1 */
 #define I2C_SR1_SB			0
 #define I2C_SR1_ADDR		1
@@ -522,6 +512,26 @@ typedef struct
 #define I2C_CCR_CCR			0
 #define I2C_CCR_DUTY		14
 #define I2C_CCR_FS			15
+
+
+/**
+ * RCC peripheral bit position definitions
+ * (Required bit positions only)
+ */
+#define RCC_CFGR_SWS		2	/* System clock switch status */
+#define RCC_CFGR_HPRE		4	/* AHB prescalar */
+#define RCC_CFGR_PPRE1		10	/* APB Low speed prescalar (APB1) */
+
+
+/**
+ * Other generic macros
+ */
+#define ENABLE				1
+#define DISABLE				0
+#define SET					1
+#define RESET				0
+#define GPIO_PIN_SET		SET
+#define GPIO_PIN_RESET		RESET
 
 
 #include "stm32f407xx_gpio_driver.h"
