@@ -1,7 +1,7 @@
 "./Drivers/Src/stm32f407xx_gpio_driver.o"
 "./Drivers/Src/stm32f407xx_i2c_driver.o"
 "./Drivers/Src/stm32f407xx_spi_driver.o"
-"./Src/spi_03_master_slave_tx_rx_blocking.o"
+"./Src/i2c_01_master_tx.o"
 "./Src/syscalls.o"
 "./Src/sysmem.o"
 "./Startup/startup_stm32f407vgtx.o"

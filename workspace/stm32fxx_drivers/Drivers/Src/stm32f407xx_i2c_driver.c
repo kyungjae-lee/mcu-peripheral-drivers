@@ -25,6 +25,26 @@ static void I2C_ClearADDRFlag(I2C_TypeDef *pI2Cx);
  ******************************************************************************/
 
 /**
+ * I2C_PeriControl()
+ * Desc.	: Enables or disables I2C peripheral
+ * Param.	: @pI2Cx - base address of I2Cx peripheral
+ * 			  @state -
+ * Return	: None
+ * Note		: N/A
+ */
+void I2C_PeriControl(I2C_TypeDef *pI2Cx, uint8_t state)
+{
+	if (state == ENABLE)
+	{
+		pI2Cx->CR1 |= (1 << I2C_CR1_PE);
+	}
+	else
+	{
+		pI2Cx->CR1 &= ~(1 << I2C_CR1_PE);
+	}
+}
+
+/**
  * I2C_PeriClockControl()
  * Desc.	:
  * Param.	: @pI2Cx - base address of I2Cx peripheral
@@ -33,6 +53,24 @@ static void I2C_ClearADDRFlag(I2C_TypeDef *pI2Cx);
  */
 void I2C_PeriClockControl(I2C_TypeDef *pI2Cx, uint8_t state)
 {
+	if (state == ENABLE)
+	{
+		if (pI2Cx == I2C1)
+			I2C1_PCLK_EN();
+		else if (pI2Cx == I2C2)
+			I2C2_PCLK_EN();
+		else if (pI2Cx == I2C3)
+			I2C3_PCLK_EN();
+	}
+	else
+	{
+		if (pI2Cx == I2C1)
+			I2C1_PCLK_DI();
+		else if (pI2Cx == I2C2)
+			I2C2_PCLK_DI();
+		else if (pI2Cx == I2C3)
+			I2C3_PCLK_DI();
+	}
 }
 
 /**
@@ -124,6 +162,9 @@ void I2C_Init(I2C_Handle_TypeDef *pI2CHandle)
 {
 	uint32_t temp = 0;
 
+	/* Enable I2C1 peripheral clock */
+	I2C_PeriClockControl(pI2CHandle->pI2Cx, ENABLE);
+
 	/* Configure I2C_CR1 (Enable ACK) */
 	temp |= pI2CHandle->I2C_Config.I2C_ACKEnable << I2C_CR1_ACK;
 	pI2CHandle->pI2Cx->CR1 = temp;
@@ -200,7 +241,7 @@ void I2C_Init(I2C_Handle_TypeDef *pI2CHandle)
 		temp = ((RCC_GetPCLK1Value() * 300U) / 1000000000U) + 1;
 	}
 
-	pI2CHandle->pI2Cx->TRISE |= (temp & 0x3F);
+	pI2CHandle->pI2Cx->TRISE = (temp & 0x3F);
 }
 
 /**
@@ -231,9 +272,9 @@ void I2C_MasterTx(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pTxBuffer, uint8_t le
 
 	/* 2. Confirm that START generation is completed by checking the SB flag in
 	 * 	  the SR1
-	 * Note: Until SB (Start Bit) is cleared, SCL will be stretched
+	 * Note: Until SB (Start Bit) gets cleared, SCL will be stretched
 	 * 		 (pulled to LOW)
-	 * 		 cording to the reference manual, SB bit can be cleared by
+	 * 		 According to the reference manual, SB bit can be cleared by
 	 * 		 reading the SR1 register followed by writing the DR register,
 	 * 		 or by hardware when PE = 0.
 	 */
@@ -262,7 +303,7 @@ void I2C_MasterTx(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pTxBuffer, uint8_t le
 	while (len > 0)
 	{
 		/* Wait until the TxE is set */
-		while ( !(pI2CHandle->pI2Cx->SR1 & (0x01 << I2C_SR1_TxE)) );
+		while ( !(pI2CHandle->pI2Cx->SR1 & (0x1 << I2C_SR1_TxE)) );
 
 		/* Copy @pTxBuffer contents to DR */
 		pI2CHandle->pI2Cx->DR = *pTxBuffer;
@@ -276,9 +317,9 @@ void I2C_MasterTx(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pTxBuffer, uint8_t le
 	 * 		 transmission should begin when BTF=1 SCL will be stretched
 	 * 		 (pulled to LOW)
 	 */
-	while ( !(pI2CHandle->pI2Cx->SR1 & (0x01 << I2C_SR1_TxE)) );
+	while ( !(pI2CHandle->pI2Cx->SR1 & (0x1 << I2C_SR1_TxE)) );
 
-	while ( !(pI2CHandle->pI2Cx->SR1 & (0x01 << I2C_SR1_BTF)) );
+	while ( !(pI2CHandle->pI2Cx->SR1 & (0x1 << I2C_SR1_BTF)) );
 
 
 	/* 8. Generate STOP condition and master does not need to wait for the
@@ -307,17 +348,6 @@ void I2C_IRQInterruptConfig(uint8_t irqNumber, uint8_t state)
  * Note		:
  */
 void I2C_IRQPriorityConfig(uint8_t irqNumber, uint32_t irqPriority)
-{
-}
-
-/**
- * I2C_PeriControl()
- * Desc.	:
- * Param.	:
- * Return	:
- * Note		:
- */
-void I2C_PeriControl(I2C_TypeDef *pI2Cx, uint8_t state)
 {
 }
 

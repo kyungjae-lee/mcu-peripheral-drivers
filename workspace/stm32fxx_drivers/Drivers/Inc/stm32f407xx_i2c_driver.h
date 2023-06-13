@@ -17,7 +17,7 @@
 /* I2Cx peripheral configuration structure */
 typedef struct
 {
-	uint8_t I2C_SCLSpeed;		/* Available values @I2C_SCLSpeed	 		*/
+	uint32_t I2C_SCLSpeed;		/* Available values @I2C_SCLSpeed	 		*/
 	uint8_t I2C_DeviceAddress;	/* Value will be entered by user			*/
 	uint8_t I2C_ACKEnable;		/* Available values @I2C_ACKEnable	 		*/
 	uint8_t I2C_FMDutyCycle;	/* Available values @I2C_FMDutyCycle 		*/

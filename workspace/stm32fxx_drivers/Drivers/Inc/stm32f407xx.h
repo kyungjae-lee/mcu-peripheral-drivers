@@ -251,9 +251,9 @@ typedef struct
 #define SPI4			((SPI_TypeDef *)SPI4_BASE)
 
 /* I2Cx */
-#define I2C1			((I2C_TypeDef *)I2C_BASE)
-#define I2C2			((I2C_TypeDef *)I2C_BASE)
-#define I2C3			((I2C_TypeDef *)I2C_BASE)
+#define I2C1			((I2C_TypeDef *)I2C1_BASE)
+#define I2C2			((I2C_TypeDef *)I2C2_BASE)
+#define I2C3			((I2C_TypeDef *)I2C3_BASE)
 
 /**
  * Clock enable macros for peripherals
@@ -478,7 +478,7 @@ typedef struct
 
 /* I2C_OAR1 */
 #define I2C_OAR1_ADD0		0
-#define I2C_OAR1_ADD71		7
+#define I2C_OAR1_ADD71		1
 #define I2C_OAR1_ADD98		8
 #define I2C_OAR1_ADDMODE	15
 
