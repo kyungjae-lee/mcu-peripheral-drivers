@@ -1,6 +1,6 @@
 /**
  * Filename		: i2c_01_master_tx_blocking.c
- * Description	: Program to test I2C master's Tx functionality
+ * Description	: Program to test I2C master's (blocking) Tx functionality
  * Author		: Kyungjae Lee
  * History 		: Jun 12, 2023 - Created file
  */

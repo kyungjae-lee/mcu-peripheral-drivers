@@ -1,6 +1,6 @@
 /**
  * Filename		: i2c_02_master_rx_blocking.c
- * Description	: Program to test I2C master's Rx functionality
+ * Description	: Program to test I2C master's Rx (blocking) functionality
  * Author		: Kyungjae Lee
  * History 		: Jun 13, 2023 - Created file
  */
