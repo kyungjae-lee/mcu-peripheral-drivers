@@ -71,8 +71,8 @@ void I2C_DeInit(I2C_TypeDef *pI2Cx);	/* Utilize RCC_AHBxRSTR (AHBx peripheral re
  * Note: Standard practice for choosing the size of 'length' variable is
  * 		 uint32_t or greater.
  */
-void I2C_MasterTx(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pTxBuffer, uint8_t Len, uint8_t slaveAddr);
-
+void I2C_MasterTx(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pTxBuffer, uint8_t len, uint8_t slaveAddr, uint8_t repeatedStartState);
+void I2C_MasterRx(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pRxBuffer, uint8_t len, uint8_t slaveAddr, uint8_t repeatedStartState);
 
 /**
  * IRQ configuration and ISR handling
@@ -85,6 +85,7 @@ void I2C_IRQPriorityConfig(uint8_t irqNumber, uint32_t irqPriority);
  */
 /* Enable or disable the peripheral */
 void I2C_PeriControl(I2C_TypeDef *pI2Cx, uint8_t state);
+void I2C_ManageACK(I2C_TypeDef *pI2Cx, uint8_t state);
 
 /**
  * Application callback functions (Must be implemented by application)

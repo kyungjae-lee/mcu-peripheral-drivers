@@ -532,6 +532,8 @@ typedef struct
 #define RESET				0
 #define GPIO_PIN_SET		SET
 #define GPIO_PIN_RESET		RESET
+#define I2C_REPEATED_START_EN	ENABLE
+#define I2C_REPEATED_START_DI	DISABLE
 
 
 #include "stm32f407xx_gpio_driver.h"

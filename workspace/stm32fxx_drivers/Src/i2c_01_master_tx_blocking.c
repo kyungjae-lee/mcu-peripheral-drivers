@@ -1,5 +1,5 @@
 /**
- * Filename		: i2c_01_master_tx.c
+ * Filename		: i2c_01_master_tx_blocking.c
  * Description	: Program to test I2C master's Tx functionality
  * Author		: Kyungjae Lee
  * History 		: Jun 12, 2023 - Created file
@@ -17,7 +17,7 @@ I2C_Handle_TypeDef I2C1Handle;
  * Pin selection for I2C communication
  *
  * I2C1_SCL  - PB6 (AF4)
- * I2C1_SDA  - PB9 (AF4)
+ * I2C1_SDA  - PB7 (AF4)
  */
 
 /**
@@ -56,7 +56,7 @@ void I2C1_PinsInit(void)
 	GPIO_Init(&I2CPins);
 
 	/* SDA */
-	I2CPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_9;
+	I2CPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_7;
 	GPIO_Init(&I2CPins);
 }
 

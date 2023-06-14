@@ -16,7 +16,8 @@ uint16_t APB1_Prescalar[4] = {2, 4, 8, 16};
 /* Declaration of I2C peripheral driver private functions */
 static void I2C_GenerateSTARTCondition(I2C_TypeDef *pI2Cx);
 static void I2C_GenerateSTOPCondition(I2C_TypeDef *pI2Cx);
-static void I2C_ExecuteAddressPhase(I2C_TypeDef *pI2Cx, uint8_t slaveAddr);
+static void I2C_ExecuteAddressPhaseRead(I2C_TypeDef *pI2Cx, uint8_t slaveAddr);
+static void I2C_ExecuteAddressPhaseWrite(I2C_TypeDef *pI2Cx, uint8_t slaveAddr);
 static void I2C_ClearADDRFlag(I2C_TypeDef *pI2Cx);
 
 /*******************************************************************************
@@ -166,8 +167,11 @@ void I2C_Init(I2C_Handle_TypeDef *pI2CHandle)
 	I2C_PeriClockControl(pI2CHandle->pI2Cx, ENABLE);
 
 	/* Configure I2C_CR1 (Enable ACK) */
-	temp |= pI2CHandle->I2C_Config.I2C_ACKEnable << I2C_CR1_ACK;
-	pI2CHandle->pI2Cx->CR1 = temp;
+	//temp |= pI2CHandle->I2C_Config.I2C_ACKEnable << I2C_CR1_ACK;
+	//pI2CHandle->pI2Cx->CR1 = temp;
+	// Commented out since ACK bit cannot be set when PE=0. This will be done
+	// in the application.
+	// (Consider moving this logic into 'I2C_PeriControl()' function. )
 
 	/* Configure I2C_CR2 (FREQ[5:0])
 	 * The FREQ bits must be configured with the APB clock frequency value (I2C
@@ -257,15 +261,16 @@ void I2C_DeInit(I2C_TypeDef *pI2Cx)
 
 /**
  * I2C_MasterTx()
- * Desc.	:
+ * Desc.	: Handles I2C transmission
  * Param.	: @pI2CHandle - pointer to I2C peripheral handle
  * 			  @pTxBuffer - address of the Tx buffer
  * 			  @len - length of the data to transmit
  * 			  @slaveAddr - slave address
+ * 			  @repeatedStartState - I2C_REPEATED_START_EN or DI
  * Return	: None
  * Note		: N/A
  */
-void I2C_MasterTx(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pTxBuffer, uint8_t len, uint8_t slaveAddr)
+void I2C_MasterTx(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pTxBuffer, uint8_t len, uint8_t slaveAddr, uint8_t repeatedStartState)
 {
 	/* 1. Generate the START condition */
 	I2C_GenerateSTARTCondition(pI2CHandle->pI2Cx);	/* Helper function private to driver */
@@ -285,9 +290,9 @@ void I2C_MasterTx(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pTxBuffer, uint8_t le
 
 	/* 3. Send the address of the slave with r/w bit set to w(0) (total 8 bits)
 	 */
-	I2C_ExecuteAddressPhase(pI2CHandle->pI2Cx, slaveAddr);
+	I2C_ExecuteAddressPhaseWrite(pI2CHandle->pI2Cx, slaveAddr);
 
-	/* 4. Confirm that address phase is completed by checking the ADDR flag
+	/* 4. Wait until the address phase is completed by checking the ADDR flag
 	 *	  of SR1
 	 */
 	while ( !(pI2CHandle->pI2Cx->SR1 & (0x01 << I2C_SR1_ADDR)) );
@@ -326,7 +331,135 @@ void I2C_MasterTx(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pTxBuffer, uint8_t le
 	 * 	  completion of stop condition.
 	 * Note: generating STOP, automatically clears the BTF.
 	 */
-	I2C_GenerateSTOPCondition(pI2CHandle->pI2Cx);
+	if (repeatedStartState == I2C_REPEATED_START_DI)
+	{
+		I2C_GenerateSTOPCondition(pI2CHandle->pI2Cx);
+	}
+}
+
+/**
+ * I2C_MasterRx()
+ * Desc.	: Handles I2C reception
+ * Param.	: @pI2CHandle - pointer to I2C peripheral handle
+ * 			  @pTxBuffer - address of the Tx buffer
+ * 			  @len - length of the data to transmit
+ * 			  @slaveAddr - slave address
+ * 			  @repeatedStartState - I2C_REPEATED_START_EN or DI
+ * Return	: None
+ * Note		: N/A
+ */
+void I2C_MasterRx(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pRxBuffer, uint8_t len, uint8_t slaveAddr, uint8_t repeatedStartState)
+{
+	/* 1. Generate the START condition */
+	I2C_GenerateSTARTCondition(pI2CHandle->pI2Cx);	/* Helper function private to driver */
+
+	/* 2. Confirm that START generation is completed by checking the SB flag in
+	 * 	  the SR1
+	 * Note: Until SB (Start Bit) gets cleared, SCL will be stretched
+	 * 		 (pulled to LOW)
+	 * 		 According to the reference manual, SB bit can be cleared by
+	 * 		 reading the SR1 register followed by writing the DR register,
+	 * 		 or by hardware when PE = 0.
+	 */
+	while ( !(pI2CHandle->pI2Cx->SR1 & (0x01 << I2C_SR1_SB)) );
+		/* Reading SR1 register is done here. Writing the DR register will
+		 * be done in Step 3.
+		 */
+	/* 3. Send the address of the slave with r/w bit set to R(1) (total 8 bits)
+	 */
+	I2C_ExecuteAddressPhaseRead(pI2CHandle->pI2Cx, slaveAddr);
+
+	/* 4. Wait until the address phase is completed by checking the ADDR flag
+	 *	  of SR1
+	 */
+	while ( !(pI2CHandle->pI2Cx->SR1 & (0x01 << I2C_SR1_ADDR)) );
+
+	/**
+	 * 5. Read data from the slave
+	 */
+
+	/* 5.1. Read the last byte */
+	if (len == 1)
+	{
+		/* Disable ACK */
+		I2C_ManageACK(pI2CHandle->pI2Cx, I2C_ACK_DISABLE);
+
+		/* Clear the ADDR flag */
+		I2C_ClearADDRFlag(pI2CHandle->pI2Cx);
+
+		/* Wait until the RxNE flag is set */
+		while ( !(pI2CHandle->pI2Cx->SR1 & (0x01 << I2C_SR1_RxNE)) );
+
+		/* Generate STOP condition */
+		if (repeatedStartState == I2C_REPEATED_START_DI)
+		{
+			I2C_GenerateSTOPCondition(pI2CHandle->pI2Cx);
+		}
+
+		/* Read data into the Rx buffer */
+		*pRxBuffer = pI2CHandle->pI2Cx->DR;
+	}
+
+	/* 5.2. Read non-last byte */
+	if (len > 1)
+	{
+		/* Clear the ADDR flag */
+		I2C_ClearADDRFlag(pI2CHandle->pI2Cx);
+			/* Now, the data reception begins! */
+
+		/* Read the data until @len becomes zero */
+		for (uint32_t i = len; i > 0; i--)
+		{
+			/* Wait until RxNE flag is set */
+			while ( !(pI2CHandle->pI2Cx->SR1 & (0x01 << I2C_SR1_RxNE)) );
+
+			/* Read the second to last byte */
+			if (i == 2)
+			{
+				/* Disable ACK */
+				I2C_ManageACK(pI2CHandle->pI2Cx, I2C_ACK_DISABLE);
+
+				/* Generate STOP condition */
+				if (repeatedStartState == I2C_REPEATED_START_DI)
+				{
+					I2C_GenerateSTOPCondition(pI2CHandle->pI2Cx);
+				}
+			}
+
+			/* Read the data from the DR into Rx buffer */
+			*pRxBuffer = pI2CHandle->pI2Cx->DR;
+
+			/* Increment the buffer address */
+			pRxBuffer++;
+		}
+
+	}
+
+	/* Enable ACK (Before entering this function, ACK was enabled.
+	 * Make sure to re-enable ACK to restore the previous condition.) */
+	if (pI2CHandle->I2C_Config.I2C_ACKEnable == I2C_ACK_ENABLE)
+	I2C_ManageACK(pI2CHandle->pI2Cx, I2C_ACK_ENABLE);
+}
+
+/**
+ * I2C_ManageACK()
+ * Desc.	:
+ * Param.	:
+ * Return	:
+ * Note		:
+ */
+void I2C_ManageACK(I2C_TypeDef *pI2Cx, uint8_t state)
+{
+	if (state == I2C_ACK_ENABLE)
+	{
+		/* Enable ACK */
+		pI2Cx->CR1 |= (0x1 << I2C_CR1_ACK);
+	}
+	else
+	{
+		/* Disable ACK */
+		pI2Cx->CR1 &= ~(0x1 << I2C_CR1_ACK);
+	}
 }
 
 /**
@@ -397,16 +530,33 @@ static void I2C_GenerateSTOPCondition(I2C_TypeDef *pI2Cx)
 }
 
 /**
- * I2C_ExecuteAddressPhase()
+ * I2C_ExecuteAddressPhaseRead()
  * Desc.	:
  * Param.	:
  * Return	:
  * Note		:
  */
-static void I2C_ExecuteAddressPhase(I2C_TypeDef *pI2Cx, uint8_t slaveAddr)
+static void I2C_ExecuteAddressPhaseRead(I2C_TypeDef *pI2Cx, uint8_t slaveAddr)
 {
 	/* Shift 7-bit slave address to left 1 bit position to make room for
-	 * r/w bit. Slave address (1 byte) = 7-bit slave address + r/w bit.
+	 * r/w bit. Slave address (1 byte) = 7-bit slave address + r/w bit (1).
+	 */
+	slaveAddr <<= 1;
+	slaveAddr |= 1;		/* Set bit[0] */
+	pI2Cx->DR = slaveAddr;
+}
+
+/**
+ * I2C_ExecuteAddressPhaseWrite()
+ * Desc.	:
+ * Param.	:
+ * Return	:
+ * Note		:
+ */
+static void I2C_ExecuteAddressPhaseWrite(I2C_TypeDef *pI2Cx, uint8_t slaveAddr)
+{
+	/* Shift 7-bit slave address to left 1 bit position to make room for
+	 * r/w bit. Slave address (1 byte) = 7-bit slave address + r/w bit (0).
 	 */
 	slaveAddr <<= 1;
 	slaveAddr &= ~(1);	/* Clear bit[0] */
