@@ -255,6 +255,7 @@ typedef struct
 #define I2C2			((I2C_TypeDef *)I2C2_BASE)
 #define I2C3			((I2C_TypeDef *)I2C3_BASE)
 
+
 /**
  * Clock enable macros for peripherals
  */
@@ -291,7 +292,6 @@ typedef struct
 
 /* SYSCFG */
 #define SYSCFG_PCLK_EN()	(RCC->APB2ENR |= (1 << 14))
-
 
 
 /**
@@ -331,6 +331,7 @@ typedef struct
 /* SYSCFG */
 #define SYSCFG_PCLK_DI()	(RCC->APB2ENR &= ~(1 << 14))
 
+
 /**
  * Reset peripherals (set the corresponding bit, and then clear)
  */
@@ -351,6 +352,7 @@ typedef struct
 #define SPI2_RESET()		do { (RCC->APB1RSTR |= (1 << 14)); (RCC->APB1RSTR &= ~(1 << 14)); } while (0)
 #define SPI3_RESET()		do { (RCC->APB1RSTR |= (1 << 15)); (RCC->APB1RSTR &= ~(1 << 15)); } while (0)
 #define SPI4_RESET()		do { (RCC->APB2RSTR |= (1 << 13)); (RCC->APB2RSTR &= ~(1 << 13)); } while (0)
+
 
 /**
  * Macro function to return port code for the given GPIO base address
@@ -384,6 +386,14 @@ typedef struct
 #define IRQ_NO_SPI1 		35
 #define IRQ_NO_SPI2 		36
 #define IRQ_NO_SPI3 		51
+
+/* I2C interrupts */
+#define IRQ_NO_I2C1_EV		31
+#define IRQ_NO_I2C1_ER		32
+#define IRQ_NO_I2C2_EV		33
+#define IRQ_NO_I2C2_ER		34
+#define IRQ_NO_I2C3_EV		72
+#define IRQ_NO_I2C3_ER		73
 
 
 /**
@@ -535,9 +545,9 @@ typedef struct
 #define I2C_REPEATED_START_EN	ENABLE
 #define I2C_REPEATED_START_DI	DISABLE
 
-
 #include "stm32f407xx_gpio_driver.h"
 #include "stm32f407xx_spi_driver.h"
 #include "stm32f407xx_i2c_driver.h"
+
 
 #endif /* STM32F407XX_H */

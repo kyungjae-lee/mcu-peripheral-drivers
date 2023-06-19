@@ -1,8 +1,8 @@
 /**
- * Filename		: i2c_02_master_rx_blocking.c
- * Description	: Program to test I2C master's Rx (blocking) functionality
+ * Filename		: i2c_03_master_rx_interrupt.c
+ * Description	: Program to test I2C master's Rx (interrupt) functionality
  * Author		: Kyungjae Lee
- * History 		: Jun 13, 2023 - Created file
+ * History 		: Jun 15, 2023 - Created file
  */
 
 #include <string.h> 		/* strlen() */
@@ -13,7 +13,9 @@
 #define SLAVE_ADDR			0x68		/* Check Arduino IDE serial monitor */
 #define MY_ADDR				MASTER_ADDR /* STM32 Discovery board is master */
 
+/* Global variables */
 I2C_Handle_TypeDef I2C1Handle;
+uint8_t rxCmplt = RESET;
 
 /**
  * Pin selection for I2C communication
@@ -142,6 +144,10 @@ int main(int argc, char *argv[])
 	/* Configure I2C peripheral */
 	I2C1_Init();
 
+	/* I2C IRQ configurations */
+	I2C_IRQInterruptConfig(IRQ_NO_I2C1_EV, ENABLE);
+	I2C_IRQInterruptConfig(IRQ_NO_I2C1_ER, ENABLE);
+
 	/* Enable I2C peripheral (PE bit gets set here) */
 	I2C_PeriControl(I2C1, ENABLE);
 
@@ -162,21 +168,27 @@ int main(int argc, char *argv[])
 
 		/* Send the command to fetch 1 byte length info */
 		cmdCode = 0x51;	/* Command code for asking 1 byte length info */
-		I2C_MasterTxBlocking(&I2C1Handle, &cmdCode, 1, SLAVE_ADDR, I2C_REPEATED_START_EN);
+		while (I2C_MasterTxInterrupt(&I2C1Handle, &cmdCode, 1, SLAVE_ADDR, I2C_REPEATED_START_EN) != I2C_READY);
 
 		/* Fetch and store the length info received from the slave in @len */
-		I2C_MasterRxBlocking(&I2C1Handle, &len, 1, SLAVE_ADDR, I2C_REPEATED_START_EN);
+		while (I2C_MasterRxInterrupt(&I2C1Handle, &len, 1, SLAVE_ADDR, I2C_REPEATED_START_EN) != I2C_READY);
 
 		/* Send the command to receive the complete data from slave */
 		cmdCode = 0x52;	/* Command code for reading complete data from slave */
-		I2C_MasterTxBlocking(&I2C1Handle, &cmdCode, 1, SLAVE_ADDR, I2C_REPEATED_START_EN);
+		while (I2C_MasterTxInterrupt(&I2C1Handle, &cmdCode, 1, SLAVE_ADDR, I2C_REPEATED_START_EN) != I2C_READY);
 
 		/* Receive the complete data from slave */
-		I2C_MasterRxBlocking(&I2C1Handle, rxBuff, len, SLAVE_ADDR, I2C_REPEATED_START_DI);
+		while (I2C_MasterRxInterrupt(&I2C1Handle, rxBuff, len, SLAVE_ADDR, I2C_REPEATED_START_DI) != I2C_READY);
 			/* Since this is the last transaction, disable the repeated start.
 			 * After this transaction, you should be able to see the whole
 			 * data received in the Rx buffer.
 			 */
+
+		/* Reset rxCmplt set by the previous 'I2C_MasterRxInterrupt()' function */
+		rxCmplt = RESET;
+
+		/* Wait till Rx operation is finished */
+		while (rxCmplt != SET);
 
 		/* Print the data received to the console
 		 *
@@ -191,5 +203,85 @@ int main(int argc, char *argv[])
 			 * the terminating null ('\n') character. Add it here!
 			 */
 		printf("Data received: %s\n", rxBuff);
+
+		/* Reset rxCmplt for the next operation */
+		rxCmplt = RESET;
 	}
 } /* End of main */
+
+/**
+ * I2C1_ER_IRQHandler()
+ * Desc.	: Handles I2C error IRQ
+ * Param.	: None
+ * Return	: None
+ * Note		: This function calls 'I2C_ER_IRQHandling()' function which
+ * 			  implements the actual error IRQ handling functionality.
+ */
+void I2C1_ER_IRQHandler(void)
+{
+	I2C_ER_IRQHandling(&I2C1Handle);
+} /* End of I2C1_ER_IRQHandler */
+
+/**
+ * I2C1_EV_IRQHandler()
+ * Desc.	: Handles I2C event IRQ
+ * Param.	: None
+ * Return	: None
+ * Note		: This function calls 'I2C_EV_IRQHandling()' function which
+ * 			  implements the actual event IRQ handling functionality.
+ */
+void I2C1_EV_IRQHandler(void)
+{
+	I2C_EV_IRQHandling(&I2C1Handle);
+} /* End of I2C1_EV_IRQHandler */
+
+/**
+ * I2C_ApplicationEventCallback()
+ * Desc.	: Notifies the application of the event occurred
+ * Param.	: @pSPIHandle - pointer to SPI handle structure
+ * 			  @appEvent - SPI event occurred
+ * Returns	: None
+ * Note		: N/A
+ */
+void I2C_ApplicationEventCallback(I2C_Handle_TypeDef *pI2CHandle, uint8_t appEvent)
+{
+	/*
+	#define I2C_EV_TX_CMPLT			0
+	#define I2C_EV_RX_CMPLT			1
+	#define I2C_EV_STOP				2
+	#define I2C_ERROR_BERR			3
+	#define I2C_ERROR_ARLO			4
+	#define I2C_ERROR_AF  			5
+	#define I2C_ERROR_OVR 			6
+	#define I2C_ERROR_TIMEOUT		7
+	#define I2C_EV_DATA_REQ			8
+	#define I2C_EV_DATA_RCV			9
+	*/
+
+	if (appEvent == I2C_EV_TX_CMPLT)
+	{
+		printf("Tx completed\n");
+	}
+	else if (appEvent == I2C_EV_RX_CMPLT)
+	{
+		printf("Rx completed\n");
+		rxCmplt = SET;
+	}
+	else if (appEvent == I2C_ERROR_AF)
+	{
+		printf("Error: ACK failure\n");
+
+		/* Master ACK failure occurs when slave fails to send ACK for the byte
+		 * sent from the master.
+		 * If this is the case, there's no reason to keep the communication
+		 * going. So close the communication.
+		 */
+		I2C_CloseTx(pI2CHandle);
+
+		/* Generate STOP condition to release the bus */
+		I2C_GenerateSTOPCondition(pI2CHandle->pI2Cx);
+
+		/* Hang in infinite loop */
+		while (1);
+	}
+} /* End of I2C_ApplicationEventCallback */

@@ -2,7 +2,9 @@
  * Filename		: stm32f407xx_gpio_driver.h
  * Description	: STM32F407xx MCU specific GPIO driver header file
  * Author		: Kyungjae Lee
- * Created on	: May 21, 2023
+ * History		: May 21, 2023 - Created file
+ * 				  Jun 08, 2023 - Added SPI peripheral specific information
+ * 				  Jun 16, 2023 - Added I2C peripheral specific information
  */
 
 #ifndef STM32F407XX_GPIO_DRIVER_H
