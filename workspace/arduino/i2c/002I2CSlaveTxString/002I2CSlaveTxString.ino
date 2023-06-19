@@ -5,7 +5,7 @@
 // Include the required Wire library for I2C<br>#include <Wire.h>
 int LED = 13;
 uint8_t active_command = 0xff,led_status=0;
-char name_msg[32] = "Welcome to FastBit EBA\n";
+char name_msg[32] = "Msg from slave.\n";
 
 uint16_t device_id = 0xFF45;
 
