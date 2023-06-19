@@ -73,7 +73,7 @@ void I2C1_Init(void)
 
 	I2C1Handle.pI2Cx = I2C1;
 	I2C1Handle.I2C_Config.I2C_ACKEnable = I2C_ACK_ENABLE;
-	I2C1Handle.I2C_Config.I2C_DeviceAddress = DUMMY_ADDR;
+	I2C1Handle.I2C_Config.I2C_DeviceAddress = MY_ADDR;
 		/* Since STM32 board is master, I2C_DeviceAddress field does not have
 		 * to be configured. However, you can assign some dummy value to it if
 		 * you wanted to. When selecting the dummy address value, make sure to
