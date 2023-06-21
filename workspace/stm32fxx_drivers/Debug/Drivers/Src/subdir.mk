@@ -7,18 +7,21 @@
 C_SRCS += \
 ../Drivers/Src/stm32f407xx_gpio_driver.c \
 ../Drivers/Src/stm32f407xx_i2c_driver.c \
+../Drivers/Src/stm32f407xx_rcc_driver.c \
 ../Drivers/Src/stm32f407xx_spi_driver.c \
 ../Drivers/Src/stm32f407xx_usart_driver.c 
 
 OBJS += \
 ./Drivers/Src/stm32f407xx_gpio_driver.o \
 ./Drivers/Src/stm32f407xx_i2c_driver.o \
+./Drivers/Src/stm32f407xx_rcc_driver.o \
 ./Drivers/Src/stm32f407xx_spi_driver.o \
 ./Drivers/Src/stm32f407xx_usart_driver.o 
 
 C_DEPS += \
 ./Drivers/Src/stm32f407xx_gpio_driver.d \
 ./Drivers/Src/stm32f407xx_i2c_driver.d \
+./Drivers/Src/stm32f407xx_rcc_driver.d \
 ./Drivers/Src/stm32f407xx_spi_driver.d \
 ./Drivers/Src/stm32f407xx_usart_driver.d 
 
@@ -30,7 +33,7 @@ Drivers/Src/%.o Drivers/Src/%.su: ../Drivers/Src/%.c Drivers/Src/subdir.mk
 clean: clean-Drivers-2f-Src
 
 clean-Drivers-2f-Src:
-	-$(RM) ./Drivers/Src/stm32f407xx_gpio_driver.d ./Drivers/Src/stm32f407xx_gpio_driver.o ./Drivers/Src/stm32f407xx_gpio_driver.su ./Drivers/Src/stm32f407xx_i2c_driver.d ./Drivers/Src/stm32f407xx_i2c_driver.o ./Drivers/Src/stm32f407xx_i2c_driver.su ./Drivers/Src/stm32f407xx_spi_driver.d ./Drivers/Src/stm32f407xx_spi_driver.o ./Drivers/Src/stm32f407xx_spi_driver.su ./Drivers/Src/stm32f407xx_usart_driver.d ./Drivers/Src/stm32f407xx_usart_driver.o ./Drivers/Src/stm32f407xx_usart_driver.su
+	-$(RM) ./Drivers/Src/stm32f407xx_gpio_driver.d ./Drivers/Src/stm32f407xx_gpio_driver.o ./Drivers/Src/stm32f407xx_gpio_driver.su ./Drivers/Src/stm32f407xx_i2c_driver.d ./Drivers/Src/stm32f407xx_i2c_driver.o ./Drivers/Src/stm32f407xx_i2c_driver.su ./Drivers/Src/stm32f407xx_rcc_driver.d ./Drivers/Src/stm32f407xx_rcc_driver.o ./Drivers/Src/stm32f407xx_rcc_driver.su ./Drivers/Src/stm32f407xx_spi_driver.d ./Drivers/Src/stm32f407xx_spi_driver.o ./Drivers/Src/stm32f407xx_spi_driver.su ./Drivers/Src/stm32f407xx_usart_driver.d ./Drivers/Src/stm32f407xx_usart_driver.o ./Drivers/Src/stm32f407xx_usart_driver.su
 
 .PHONY: clean-Drivers-2f-Src
 

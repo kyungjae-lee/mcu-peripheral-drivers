@@ -29,7 +29,7 @@ typedef struct
 	I2C_TypeDef 		*pI2Cx;	/* Base address of I2Cx(x:1,2,3) peripheral */
 	I2C_Config_TypeDef 	I2C_Config;
 	uint8_t				*pTxBuffer; 	/* Application Tx buffer address 	*/
-	uint8_t				*pRxBuffer; 	/* Application Tx buffer address 	*/
+	uint8_t				*pRxBuffer; 	/* Application Rx buffer address 	*/
 	uint32_t			TxLen; 			/* Tx length                     	*/
 	uint32_t			RxLen; 			/* Length of data left to receive 	*/
 	uint8_t				TxRxState; 		/* Available values @I2C_TxRxState	*/
