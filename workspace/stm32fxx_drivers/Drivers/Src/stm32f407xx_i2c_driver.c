@@ -983,16 +983,10 @@ void I2C_SlaveEnableDisableCallbackEvents(I2C_TypeDef *pI2Cx, uint8_t state)
 	}
 } /* End of I2C_SlaveEnableDisableCallbackEvents */
 
-
-/**
- * Application callback functions (Must be implemented by application)
- * Note: Since the driver does not know in which application this function will
- * 		 be implemented, it is good idea to give a weak function definition.
- */
 /**
  * I2C_ApplicationEventCallback()
  * Desc.	: Notifies the application of the event occurred
- * Param.	: @pSPIHandle - pointer to I2C handle structure
+ * Param.	: @pI2CHandle - pointer to I2C handle structure
  * 			  @appEvent - I2C event occurred
  * Returns	: None
  * Note		: This function must be implemented by the application. Since the driver
