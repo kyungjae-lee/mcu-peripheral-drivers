@@ -3,7 +3,7 @@
 "./Drivers/Src/stm32f407xx_rcc_driver.o"
 "./Drivers/Src/stm32f407xx_spi_driver.o"
 "./Drivers/Src/stm32f407xx_usart_driver.o"
+"./Src/spi_04_master_slave_rx_interrupt.o"
 "./Src/syscalls.o"
 "./Src/sysmem.o"
-"./Src/usasrt_02_tx_rx_interrupt.o"
 "./Startup/startup_stm32f407vgtx.o"

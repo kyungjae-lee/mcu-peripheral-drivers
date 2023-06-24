@@ -304,9 +304,9 @@ void GPIO_IRQInterruptConfig(uint8_t irqNumber, uint8_t state)
 		/* Configure NVIC_ISERx register */
 		if (irqNumber <= 31)
 			*NVIC_ISER0 |= (0x1 << irqNumber);
-		else if (32 <= irqNumber && irqNumber <= 64)
+		else if (32 <= irqNumber && irqNumber <= 63)
 			*NVIC_ISER1 |= (0x1 << irqNumber % 32);
-		else if (65 <= irqNumber && irqNumber <= 96)
+		else if (64 <= irqNumber && irqNumber <= 95)
 			*NVIC_ISER2 |= (0x1 << irqNumber % 32);
 	}
 	else
@@ -314,9 +314,9 @@ void GPIO_IRQInterruptConfig(uint8_t irqNumber, uint8_t state)
 		/* Configure NVIC_ICERx register */
 		if (irqNumber <= 31)
 			*NVIC_ICER0 |= (0x1 << irqNumber);
-		else if (32 <= irqNumber && irqNumber <= 64)
+		else if (32 <= irqNumber && irqNumber <= 63)
 			*NVIC_ICER1 |= (0x1 << irqNumber % 32);
-		else if (65 <= irqNumber && irqNumber <= 96)
+		else if (64 <= irqNumber && irqNumber <= 95)
 			*NVIC_ICER2 |= (0x1 << irqNumber % 32);
 	}
 }

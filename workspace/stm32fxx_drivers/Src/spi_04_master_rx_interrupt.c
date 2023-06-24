@@ -1,5 +1,5 @@
 /**
- * Filename		: spi_04_master_slave_rx_interrupt.c
+ * Filename		: spi_04_master_rx_interrupt.c
  * Description	: Program to demonstrate receiving and printing the user message
  * 				  received from the Arduino peripheral in SPI interrupt mode.
  * 				  User sends the message through Arduino IDE's serial monitor tool.
@@ -7,6 +7,7 @@
  * 				  STM32CubeIDE.
  * Author		: Kyungjae Lee
  * History 		: Jun 06, 2023 - Created file
+ * 				  Jun 23, 2023 - Refactored code
  *
  * Note			: Follow the instruction s to test this code.
  * 					1. Download this code to the STM32 board (master)
@@ -64,94 +65,102 @@ void delay(void)
  * SPI2_PinsInit()
  * Desc.	: Initializes and configures GPIO pins to be used as SPI2 pins
  * Param.	: None
- * Returns	: None
+ * Return	: None
  * Note		: N/A
  */
 void SPI2_PinsInit(void)
 {
-	GPIO_Handle_TypeDef SPIPins;
+	GPIO_Handle_TypeDef SPI2Pins;
 
-	SPIPins.pGPIOx = GPIOB;
-	SPIPins.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_ALTFCN;
-	SPIPins.GPIO_PinConfig.GPIO_PinAltFcnMode = 5;
-	SPIPins.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;
+	/* Zero-out all the fields in the structures (Very important! SPI2Pins
+	 * is a local variables whose members may be filled with garbage values before
+	 * initialization. These garbage values may set (corrupt) the bit fields that
+	 * you did not touch assuming that they will be 0 by default. Do NOT make this
+	 * mistake!
+	 */
+	memset(&SPI2Pins, 0, sizeof(SPI2Pins));
+
+	SPI2Pins.pGPIOx = GPIOB;
+	SPI2Pins.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_ALTFCN;
+	SPI2Pins.GPIO_PinConfig.GPIO_PinAltFcnMode = 5;
+	SPI2Pins.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;
 		/* I2C - Open-drain only!, SPI - Push-pull okay! */
-	SPIPins.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;	/* Optional */
-	SPIPins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST; /* Medium or slow ok as well */
+	SPI2Pins.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;	/* Optional */
+	SPI2Pins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST; /* Medium or slow ok as well */
 
 	/* SCLK */
-	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_13;
-	GPIO_Init(&SPIPins);
+	SPI2Pins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_13;
+	GPIO_Init(&SPI2Pins);
 
 	/* MOSI */
-	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_15;
-	GPIO_Init(&SPIPins);
+	SPI2Pins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_15;
+	GPIO_Init(&SPI2Pins);
 
 	/* MISO */
-	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_14;
-	GPIO_Init(&SPIPins);
+	SPI2Pins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_14;
+	GPIO_Init(&SPI2Pins);
 
 	/* NSS */
-	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_12;
-	GPIO_Init(&SPIPins);
-}
+	SPI2Pins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_12;
+	GPIO_Init(&SPI2Pins);
+} /* End of SPI2_PinsInit */
 
 /**
  * SPI2_Init()
- * Desc.	: Creates an SPI2Handle initializes SPI2 peripheral parameters
+ * Desc.	: Creates an SPI2Handle and initializes SPI2 peripheral parameters
  * Param.	: None
- * Returns	: None
+ * Return	: None
  * Note		: N/A
  */
 void SPI2_Init(void)
 {
-	SPI_Handle_TypeDef SPI2Handle;
-
 	SPI2Handle.pSPIx = SPI2;
 	SPI2Handle.SPI_Config.SPI_BusConfig = SPI_BUS_CONFIG_FULL_DUPLEX;
 	SPI2Handle.SPI_Config.SPI_DeviceMode = SPI_DEVICE_MODE_MASTER;
     SPI2Handle.SPI_Config.SPI_SCLKSpeed = SPI_SCLK_SPEED_PRESCALAR_32;  /* Generates 500KHz SCLK */
-    	/* Min prescalar -> maximum clk speed */
+		/* Min prescalar -> maximum clk speed */
 	SPI2Handle.SPI_Config.SPI_DFF = SPI_DFF_8BITS;
 	SPI2Handle.SPI_Config.SPI_CPOL = SPI_CPOL_LOW;
 	SPI2Handle.SPI_Config.SPI_CPHA = SPI_CPHA_LOW;
 	SPI2Handle.SPI_Config.SPI_SSM = SPI_SSM_DI; /* HW slave mgmt enabled (SSM = 0) for NSS pin */
 
 	SPI_Init(&SPI2Handle);
-}
+} /* End of SPI2_Init */
 
 /**
- * SPI_RxIntPinInit()
+ * SPI2_IntPinInit()
  * Desc.	: Configures the GPIO pin (PD6) over which SPI peripheral issues
  * 			  'data available' interrupt
  * Param.	: None
  * Returns	: None
- * Note		:
+ * Note		: N/A
  */
-void SPI_RxIntPinInit(void)
+void SPI2_IntPinInit(void)
 {
-	GPIO_Handle_TypeDef spiIntPin;
-	memset(&spiIntPin, 0, sizeof(spiIntPin));
+	GPIO_Handle_TypeDef SPIIntPin;
+	memset(&SPIIntPin, 0, sizeof(SPIIntPin));
 
 	/* GPIO pin (for interrupt) configuration */
-	spiIntPin.pGPIOx = GPIOD;
-	spiIntPin.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_6;
-	spiIntPin.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_IT_FT;
-	spiIntPin.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_LOW;
-	spiIntPin.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_PU;
+	SPIIntPin.pGPIOx = GPIOD;
+	SPIIntPin.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_6;
+	SPIIntPin.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_IT_FT;
+	SPIIntPin.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_LOW;
+	SPIIntPin.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_PU;
 
-	GPIO_Init(&spiIntPin);
+	GPIO_Init(&SPIIntPin);
 
 	GPIO_IRQPriorityConfig(IRQ_NO_EXTI9_5, NVIC_IRQ_PRI15);
 	GPIO_IRQInterruptConfig(IRQ_NO_EXTI9_5, ENABLE);
-}
+} /* End of SPI2_IntPinInit */
 
 int main(int argc, char *argv[])
 {
-	uint8_t dummyWrite = 0xff;
+	uint8_t dummyWrite = 0xFF;
+
+	printf("Application is running...\n");
 
 	/* Initialize and configure GPIO pin for SPI Rx interrupt */
-	SPI_RxIntPinInit();
+	SPI2_IntPinInit();
 
 	/* Initialize and configure GPIO pins to be used as SPI2 pins */
 	SPI2_PinsInit();
@@ -240,6 +249,19 @@ void SPI2_IRQHandler(void)
 }
 
 /**
+ * EXTI9_5_IRQHandler()
+ * Desc.	: Handles EXTI IRQ 5 to 9 (by calling 'GPIO_IRQHandling()')
+ * Param.	: None
+ * Returns	: None
+ * Note		: N/A
+ */
+void EXTI9_5_IRQHandler(void)
+{
+	GPIO_IRQHandling(GPIO_PIN_6);
+	dataAvailable = 1;
+}
+
+/**
  * SPI_ApplicationEventCallback()
  * Desc.	: Notifies the application of the event occurred
  * Param.	: @pSPIHandle - pointer to SPI handle structure
@@ -265,4 +287,4 @@ void SPI_ApplicationEventCallback(SPI_Handle_TypeDef *pSPIHandle, uint8_t appEve
 			i = 0;
 		}
 	}
-}
+} /* End of main */

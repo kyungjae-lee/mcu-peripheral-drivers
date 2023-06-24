@@ -41,7 +41,7 @@ void SPI_SlaveTransmit(uint8_t data)
 void setup() 
 {
   // Initialize serial for troubleshooting.
-  Serial.begin(1200);
+  Serial.begin(9600);
   
   // Initialize SPI Slave.
   SPI_SlaveInit();

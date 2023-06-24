@@ -1,9 +1,9 @@
-/**
+/*******************************************************************************
  * Filename		: stm32f407xx_spi_driver.h
  * Description	: STM32F407xx MCU specific SPI driver header file
  * Author		: Kyungjae Lee
  * History		: May 21, 2023 - Created file
- */
+ ******************************************************************************/
 
 #ifndef STM32F407XX_SPI_DRIVER_H
 #define STM32F407XX_SPI_DRIVER_H
@@ -162,7 +162,7 @@ void SPI_CloseRx(SPI_Handle_TypeDef *pSPIHandle);
  * Note: Since the driver does not know in which application this function will be
  * 	     implemented, it is good idea to give a weak function definition.
  */
-__WEAK void SPI_ApplicationEventCallback(SPI_Handle_TypeDef *pSPIHandle, uint8_t appEvent);
+void SPI_ApplicationEventCallback(SPI_Handle_TypeDef *pSPIHandle, uint8_t appEvent);
 
 
 #endif /* STM32F407XX_SPI_DRIVER_H */

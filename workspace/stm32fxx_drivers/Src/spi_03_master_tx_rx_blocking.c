@@ -1,21 +1,23 @@
-/**
- * Filename		: spi_03_master_slave_tx_rx_blocking.c
+/*******************************************************************************
+ * Filename		: spi_03_master_tx_rx_blocking.c
  * Description	: Program to test SPI master-slave Tx/Rx functionality (blocking)
  * Author		: Kyungjae Lee
  * History 		: Jun 03, 2023 - Created file
- * 				  Jun 05, 2023 - Added Semihosting features to utilize printf()
+ * 				  Jun 23, 2023 - Refactored code for consistency
+ ******************************************************************************/
+
+/**
+ * Pin selection for SPI communication
+ *
+ * SPI2_SCK  - PB13 (AF5)
+ * SPI2_MOSI - PB15 (AF5)
+ * SPI2_MISO - PB14 (AF5)
+ * SPI2_NSS  - PB12 (AF5)
  */
 
 #include <stdio.h>			/* printf() */
 #include <string.h> 		/* strlen() */
 #include "stm32f407xx.h"
-
-/* To use Semihosting features
- * (Make sure to exclude or remove 'syscalls.c' file from build. Otherwise,
- * an empty definition of `initialise_monitor_handles()` in `syscalls.c` file
- * will cause a build error.
- */
-extern void initialise_monitor_handles();
 
 /* Arduino (slave) command codes */
 #define CMD_LED_CTRL		0x50
@@ -37,75 +39,81 @@ extern void initialise_monitor_handles();
 /* Arduino LED pin */
 #define LED_PIN 			9
 
-
-/**
- * Pin selection for SPI communication
- *
- * SPI2_NSS  - PB12 (AF5)
- * SPI2_SCK  - PB13 (AF5)
- * SPI2_MISO - PB14 (AF5)
- * SPI2_MOSI - PB15 (AF5)
- */
-
 /**
  * delay()
  * Desc.	: Spinlock delays the program execution
  * Param.	: None
- * Returns	: None
+ * Return	: None
  * Note		: N/A
  */
 void delay(void)
 {
 	/* Appoximately ~200ms delay when the system clock freq is 16 MHz */
 	for (uint32_t i = 0; i < 500000 / 2; i++);
-}
+} /* End of Delay */
 
 /**
  * SPI2_PinsInit()
  * Desc.	: Initializes and configures GPIO pins to be used as SPI2 pins
  * Param.	: None
- * Returns	: None
+ * Return	: None
  * Note		: N/A
  */
 void SPI2_PinsInit(void)
 {
-	GPIO_Handle_TypeDef SPIPins;
+	GPIO_Handle_TypeDef SPI2Pins;
 
-	SPIPins.pGPIOx = GPIOB;
-	SPIPins.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_ALTFCN;
-	SPIPins.GPIO_PinConfig.GPIO_PinAltFcnMode = 5;
-	SPIPins.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;
+	/* Zero-out all the fields in the structures (Very important! SPI2Pins
+	 * is a local variables whose members may be filled with garbage values before
+	 * initialization. These garbage values may set (corrupt) the bit fields that
+	 * you did not touch assuming that they will be 0 by default. Do NOT make this
+	 * mistake!
+	 */
+	memset(&SPI2Pins, 0, sizeof(SPI2Pins));
+
+	SPI2Pins.pGPIOx = GPIOB;
+	SPI2Pins.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_ALTFCN;
+	SPI2Pins.GPIO_PinConfig.GPIO_PinAltFcnMode = 5;
+	SPI2Pins.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;
 		/* I2C - Open-drain only!, SPI - Push-pull okay! */
-	SPIPins.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;	/* Optional */
-	SPIPins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST; /* Medium or slow ok as well */
+	SPI2Pins.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;	/* Optional */
+	SPI2Pins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST; /* Medium or slow ok as well */
 
 	/* SCLK */
-	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_13;
-	GPIO_Init(&SPIPins);
+	SPI2Pins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_13;
+	GPIO_Init(&SPI2Pins);
 
 	/* MOSI */
-	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_15;
-	GPIO_Init(&SPIPins);
+	SPI2Pins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_15;
+	GPIO_Init(&SPI2Pins);
 
 	/* MISO */
-	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_14;
-	GPIO_Init(&SPIPins);
+	SPI2Pins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_14;
+	GPIO_Init(&SPI2Pins);
 
 	/* NSS */
-	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_12;
-	GPIO_Init(&SPIPins);
-}
+	SPI2Pins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_12;
+	GPIO_Init(&SPI2Pins);
+} /* End of SPI2_PinsInit */
 
 /**
  * SPI2_Init()
- * Desc.	: Creates an SPI2Handle initializes SPI2 peripheral parameters
+ * Desc.	: Creates an SPI2Handle and initializes SPI2 peripheral parameters
  * Param.	: None
- * Returns	: None
+ * Return	: None
  * Note		: N/A
  */
 void SPI2_Init(void)
 {
 	SPI_Handle_TypeDef SPI2Handle;
+
+	/* Zero-out all the fields in the structures (Very important! SPI2Handle
+	 * is a local variables whose members may be filled with garbage values before
+	 * initialization. These garbage values may set (corrupt) the bit fields that
+	 * you did not touch assuming that they will be 0 by default. Do NOT make this
+	 * mistake!
+	 */
+	memset(&SPI2Handle, 0, sizeof(SPI2Handle));
 
 	SPI2Handle.pSPIx = SPI2;
 	SPI2Handle.SPI_Config.SPI_BusConfig = SPI_BUS_CONFIG_FULL_DUPLEX;
@@ -118,13 +126,13 @@ void SPI2_Init(void)
 	SPI2Handle.SPI_Config.SPI_SSM = SPI_SSM_DI; /* HW slave mgmt enabled (SSM = 0) for NSS pin */
 
 	SPI_Init(&SPI2Handle);
-}
+} /* End of SPI2_Init */
 
 /**
  * GPIO_ButtonInit()
  * Desc.	: Initializes a GPIO pin for button
  * Param.	: None
- * Returns	: None
+ * Return	: None
  * Note		: N/A
  */
 void GPIO_ButtonInit(void)
@@ -132,7 +140,7 @@ void GPIO_ButtonInit(void)
 	GPIO_Handle_TypeDef GPIOBtn;
 
 	/* Zero-out all the fields in the structures (Very important! GPIOLed and GPIOBtn
-	 * are local variables whose members may be filled with garbage values before
+	 * is a local variables whose members may be filled with garbage values before
 	 * initialization. These garbage values may set (corrupt) the bit fields that
 	 * you did not touch assuming that they will be 0 by default. Do NOT make this
 	 * mistake!
@@ -148,21 +156,21 @@ void GPIO_ButtonInit(void)
 	GPIOBtn.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;
 		/* External pull-down resistor is already present (see the schematic) */
 	GPIO_Init(&GPIOBtn);
-}
+} /* End of GPIO_ButtonInit */
 
 /**
  * GPIO_LEDInit()
  * Desc.	: Initializes a GPIO pin for LED
  * Param.	: None
- * Returns	: None
+ * Return	: None
  * Note		: N/A
  */
 void GPIO_LEDInit(void)
 {
 	GPIO_Handle_TypeDef GPIOLed;
 
-	/* Zero-out all the fields in the structures (Very important! GPIOLed and GPIOBtn
-	 * are local variables whose members may be filled with garbage values before
+	/* Zero-out all the fields in the structures (Very important! GPIOLed
+	 * is a local variable whose members may be filled with garbage values before
 	 * initialization. These garbage values may set (corrupt) the bit fields that
 	 * you did not touch assuming that they will be 0 by default. Do NOT make this
 	 * mistake!
@@ -178,12 +186,12 @@ void GPIO_LEDInit(void)
 	GPIOLed.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;
 		/* External pull-down resistor is already present (see the schematic) */
 	GPIO_Init(&GPIOLed);
-}
+} /* End of GPIO_LEDInit */
 
 /**
  * SPI_VerifyResponse()
  * Desc.	: Verifies response from the slave (Arduino)
- * Param.	: @ackByte
+ * Param.	: @ackByte - response from slave
  * Returns	: 1 if response was ACK, 0 otherwise
  * Note		: N/A
  */
@@ -195,15 +203,12 @@ uint8_t SPI_VerifyResponse(uint8_t ackByte)
 	/* NACK */
 	else
 		return 0;
-}
+} /* End of SPI_VerifyResponse */
 
 int main(int argc, char *argv[])
 {
-	uint8_t dummyWrite = 0xff;
+	uint8_t dummyWrite = 0xFF;
 	uint8_t dummyRead;
-
-	/* Enables Semihosting features (After this, printf() can be use) */
-	//initialise_monitor_handles();
 
 	printf("Application is running...\n");
 
@@ -247,9 +252,7 @@ int main(int argc, char *argv[])
 		/* Enable SPI2 peripheral (Set SPI_CR1 bit[6] SPE - Peripheral enabled) */
 		SPI_PeriControl(SPI2, ENABLE);
 
-		/**
-		 * 1. CMD_LED_CTRL <pin no(1)> <value(1)>
-		 */
+		/* 1. CMD_LED_CTRL <pin no(1)> <value(1)> *****************************/
 
 		uint8_t cmdCode = CMD_LED_CTRL;
 		uint8_t ackByte;
@@ -292,9 +295,7 @@ int main(int argc, char *argv[])
 		}
 		/* End of CMD_LED_CTRL */
 
-		/**
-		 * 2. CMD_SENSOR_READ <analog pin number(1)>
-		 */
+		/* 2. CMD_SENSOR_READ <analog pin number(1)> **************************/
 
 		/* Wait until button is pressed */
 		while (!GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_0));
@@ -363,9 +364,7 @@ int main(int argc, char *argv[])
 		}
 		/* End of CMD_SENSOR_READ */
 
-		/**
-		 * 3. CMD_LED_READ <pin no(1)>
-		 */
+		/* 3. CMD_LED_READ <pin no(1)> ****************************************/
 
 		/* Wait until button is pressed */
 		while (!GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_0));
@@ -432,9 +431,7 @@ int main(int argc, char *argv[])
 		}
 		/* End of CMD_LED_READ */
 
-		/**
-		 * 4. CMD_PRINT <len(2)> <message(len)>
-		 */
+		/* 4. CMD_PRINT <len(2)> <message(len)> *******************************/
 
 		/* Wait until button is pressed */
 		while (!GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_0));
@@ -497,9 +494,7 @@ int main(int argc, char *argv[])
 		}
 		/* End of CMD_PRINT */
 
-		/**
-		 * 5. CMD_ID_READ
-		 */
+		/* 5. CMD_ID_READ *****************************************************/
 
 		/* Wait until button is pressed */
 		while (!GPIO_ReadFromInputPin(GPIOA, GPIO_PIN_0));
@@ -566,4 +561,4 @@ int main(int argc, char *argv[])
 	}
 
 	return 0;
-}
+} /* End of main */

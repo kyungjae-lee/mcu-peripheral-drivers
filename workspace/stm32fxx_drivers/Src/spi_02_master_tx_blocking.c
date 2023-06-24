@@ -1,22 +1,23 @@
-/**
- * Filename		: spi_02_master_slave_tx_blocking.c
+/*******************************************************************************
+ * Filename		: spi_02_master_tx_blocking.c
  * Description	: Program to test SPI master's Tx (blocking) functionality
  * 				  (with slave)
  * Author		: Kyungjae Lee
  * History 		: Jun 02, 2023 - Created file
- */
-
-#include <string.h> 		/* strlen() */
-#include "stm32f407xx.h"
+ * 				  Jun 23, 2023 - Refactored code for consistency
+ ******************************************************************************/
 
 /**
  * Pin selection for SPI communication
  *
- * SPI2_NSS  - PB12 (AF5)
  * SPI2_SCK  - PB13 (AF5)
- * SPI2_MISO - PB14 (AF5)
  * SPI2_MOSI - PB15 (AF5)
+ * SPI2_MISO - PB14 (AF5)
+ * SPI2_NSS  - PB12 (AF5)
  */
+
+#include <string.h> 		/* strlen() */
+#include "stm32f407xx.h"
 
 /**
  * delay()
@@ -29,7 +30,7 @@ void delay(void)
 {
 	/* Appoximately ~200ms delay when the system clock freq is 16 MHz */
 	for (uint32_t i = 0; i < 500000 / 2; i++);
-}
+} /* End of Delay */
 
 /**
  * SPI2_PinsInit()
@@ -40,36 +41,44 @@ void delay(void)
  */
 void SPI2_PinsInit(void)
 {
-	GPIO_Handle_TypeDef SPIPins;
+	GPIO_Handle_TypeDef SPI2Pins;
 
-	SPIPins.pGPIOx = GPIOB;
-	SPIPins.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_ALTFCN;
-	SPIPins.GPIO_PinConfig.GPIO_PinAltFcnMode = 5;
-	SPIPins.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;
+	/* Zero-out all the fields in the structures (Very important! SPI2Pins
+	 * is a local variables whose members may be filled with garbage values before
+	 * initialization. These garbage values may set (corrupt) the bit fields that
+	 * you did not touch assuming that they will be 0 by default. Do NOT make this
+	 * mistake!
+	 */
+	memset(&SPI2Pins, 0, sizeof(SPI2Pins));
+
+	SPI2Pins.pGPIOx = GPIOB;
+	SPI2Pins.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_ALTFCN;
+	SPI2Pins.GPIO_PinConfig.GPIO_PinAltFcnMode = 5;
+	SPI2Pins.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;
 		/* I2C - Open-drain only!, SPI - Push-pull okay! */
-	SPIPins.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;	/* Optional */
-	SPIPins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST; /* Medium or slow ok as well */
+	SPI2Pins.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;	/* Optional */
+	SPI2Pins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST; /* Medium or slow ok as well */
 
 	/* SCLK */
-	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_13;
-	GPIO_Init(&SPIPins);
+	SPI2Pins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_13;
+	GPIO_Init(&SPI2Pins);
 
 	/* MOSI */
-	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_15;
-	GPIO_Init(&SPIPins);
+	SPI2Pins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_15;
+	GPIO_Init(&SPI2Pins);
 
 	/* MISO (Not required for this application, save it for other use) */
-	//SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_14;
-	//GPIO_Init(&SPIPins);
+	//SPI2Pins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_14;
+	//GPIO_Init(&SPI2Pins);
 
 	/* NSS */
-	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_12;
-	GPIO_Init(&SPIPins);
-}
+	SPI2Pins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_12;
+	GPIO_Init(&SPI2Pins);
+} /* End of SPI2_PinsInit */
 
 /**
  * SPI2_Init()
- * Desc.	: Creates an SPI2Handle initializes SPI2 peripheral parameters
+ * Desc.	: Creates an SPI2Handle and initializes SPI2 peripheral parameters
  * Param.	: None
  * Returns	: None
  * Note		: N/A
@@ -77,6 +86,14 @@ void SPI2_PinsInit(void)
 void SPI2_Init(void)
 {
 	SPI_Handle_TypeDef SPI2Handle;
+
+	/* Zero-out all the fields in the structures (Very important! SPI2Handle
+	 * is a local variables whose members may be filled with garbage values before
+	 * initialization. These garbage values may set (corrupt) the bit fields that
+	 * you did not touch assuming that they will be 0 by default. Do NOT make this
+	 * mistake!
+	 */
+	memset(&SPI2Handle, 0, sizeof(SPI2Handle));
 
 	SPI2Handle.pSPIx = SPI2;
 	SPI2Handle.SPI_Config.SPI_BusConfig = SPI_BUS_CONFIG_FULL_DUPLEX;
@@ -89,7 +106,7 @@ void SPI2_Init(void)
 	SPI2Handle.SPI_Config.SPI_SSM = SPI_SSM_DI; /* HW slave mgmt enabled (SSM = 0) for NSS pin */
 
 	SPI_Init(&SPI2Handle);
-}
+} /* End of SPI2_Init */
 
 /**
  * GPIO_ButtonInit()
@@ -102,8 +119,8 @@ void GPIO_ButtonInit(void)
 {
 	GPIO_Handle_TypeDef GPIOBtn;
 
-	/* Zero-out all the fields in the structures (Very important! GPIOLed and GPIOBtn
-	 * are local variables whose members may be filled with garbage values before
+	/* Zero-out all the fields in the structures (Very important! GPIOBtn
+	 * is a local variables whose members may be filled with garbage values before
 	 * initialization. These garbage values may set (corrupt) the bit fields that
 	 * you did not touch assuming that they will be 0 by default. Do NOT make this
 	 * mistake!
@@ -119,11 +136,11 @@ void GPIO_ButtonInit(void)
 	GPIOBtn.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;
 		/* External pull-down resistor is already present (see the schematic) */
 	GPIO_Init(&GPIOBtn);
-}
+} /* End of GPIO_ButtonInit */
 
 int main(int argc, char *argv[])
 {
-	char userData[] = "Hello world";
+	char msg[] = "Hello world";
 
 	/* Initialize and configure GPIO pin for user button */
 	GPIO_ButtonInit();
@@ -162,10 +179,10 @@ int main(int argc, char *argv[])
 
 		/* Arduino sketch expects 1 byte of length information followed by data */
 		/* Send length information to the slave first */
-		uint8_t dataLen = strlen(userData);
-		SPI_TxBlocking(SPI2, &dataLen, 1);
+		uint8_t msgLen = strlen(msg);
+		SPI_TxBlocking(SPI2, &msgLen, 1);
 		/* Send data */
-		SPI_TxBlocking(SPI2, (uint8_t *)userData, strlen(userData));
+		SPI_TxBlocking(SPI2, (uint8_t *)msg, strlen(msg));
 
 		/* Wait until SPI no longer busy */
 		while (SPI2->SR & (0x1 << SPI_SR_BSY));
@@ -180,4 +197,4 @@ int main(int argc, char *argv[])
 	}
 
 	return 0;
-}
+} /* End of main */
