@@ -5,29 +5,26 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Src/rtc_lcd.c \
-../Src/syscalls.c \
-../Src/sysmem.c 
+../Bsp/ds1307.c \
+../Bsp/lcd.c 
 
 OBJS += \
-./Src/rtc_lcd.o \
-./Src/syscalls.o \
-./Src/sysmem.o 
+./Bsp/ds1307.o \
+./Bsp/lcd.o 
 
 C_DEPS += \
-./Src/rtc_lcd.d \
-./Src/syscalls.d \
-./Src/sysmem.d 
+./Bsp/ds1307.d \
+./Bsp/lcd.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
-Src/%.o Src/%.su: ../Src/%.c Src/subdir.mk
+Bsp/%.o Bsp/%.su: ../Bsp/%.c Bsp/subdir.mk
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F407G_DISC1 -DSTM32F4 -DSTM32F407VGTx -c -I../Inc -I"/home/klee/repos/mcu-peripheral-drivers/workspace/stm32fxx_drivers/Drivers/Inc" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"$(@:%.o=%.d)" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
 
-clean: clean-Src
+clean: clean-Bsp
 
-clean-Src:
-	-$(RM) ./Src/rtc_lcd.d ./Src/rtc_lcd.o ./Src/rtc_lcd.su ./Src/syscalls.d ./Src/syscalls.o ./Src/syscalls.su ./Src/sysmem.d ./Src/sysmem.o ./Src/sysmem.su
+clean-Bsp:
+	-$(RM) ./Bsp/ds1307.d ./Bsp/ds1307.o ./Bsp/ds1307.su ./Bsp/lcd.d ./Bsp/lcd.o ./Bsp/lcd.su
 
-.PHONY: clean-Src
+.PHONY: clean-Bsp
 

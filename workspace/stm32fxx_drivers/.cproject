@@ -72,13 +72,35 @@
 							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec.1987716603" name="MCU Output Converter Motorola S-rec with symbols" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec"/>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.464376944.213343187" name="spi_04_master_slave_rx_interrupt.c" rcbsApplicability="disable" resourcePath="Src/spi_04_master_slave_rx_interrupt.c" toolsToInvoke="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.719512344.335805016">
-						<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.719512344.335805016" name="MCU GCC Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.719512344"/>
-					</fileInfo>
+					<folderInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.464376944.1003488125" name="/" resourcePath="Bsp">
+						<toolChain id="com.st.stm32cube.ide.mcu.gnu.managedbuild.toolchain.exe.debug.1919837415" name="MCU ARM GCC" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.toolchain.exe.debug" unusedChildren="">
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_mcu.788843852.1672024025" name="MCU" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_mcu.788843852"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_cpuid.1779798733.1652870668" name="CPU" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_cpuid.1779798733"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_coreid.897550868.816274641" name="Core" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_coreid.897550868"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.fpu.560099526.1178752586" name="Floating-point unit" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.fpu.560099526"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.floatabi.1775142882.487837033" name="Floating-point ABI" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.floatabi.1775142882"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_board.1422317725.1067164783" name="Board" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_board.1422317725"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.defaults.606018700.246865878" name="Defaults" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.defaults.606018700"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.510878520" name="MCU GCC Assembler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.855009810"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.381142845" name="MCU GCC Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.719512344"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.995538180" name="MCU G++ Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.347385388"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.474435655" name="MCU GCC Linker" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.674721055"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.linker.1110712676" name="MCU G++ Linker" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.linker.1890211476"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.archiver.1115270670" name="MCU GCC Archiver" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.archiver.15655053"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.size.846249231" name="MCU Size" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.size.291389349"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objdump.listfile.1799817395" name="MCU Output Converter list file" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objdump.listfile.937877913"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.hex.1256468858" name="MCU Output Converter Hex" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.hex.1602902965"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.binary.503317298" name="MCU Output Converter Binary" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.binary.1286277232"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.verilog.1870335994" name="MCU Output Converter Verilog" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.verilog.880912740"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.srec.119469128" name="MCU Output Converter Motorola S-rec" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.srec.1866253031"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec.1619418528" name="MCU Output Converter Motorola S-rec with symbols" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec.1987716603"/>
+						</toolChain>
+					</folderInfo>
 					<sourceEntries>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Bsp"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Inc"/>
-						<entry excluding="spi_03_master_tx_rx_blocking.c|spi_02_master_tx_blocking.c|spi_01_master_only_tx_blocking.c|usasrt_02_tx_rx_interrupt.c|usasrt_01_tx_blocking.c|i2c_04_slave_tx_interrupt.c|i2c_03_master_rx_interrupt.c|i2c_02_master_rx_blocking.c|i2c_01_master_tx_blocking.c|i2c_01_master_rx.c|i2c_01_master_tx.c|spi_03_master_slave_tx_rx_blocking.c|spi_02_master_slave_tx_blocking.c|gpio_04_led_toggle_with_ext_button_interrupt.c|gpio_03_ext_led_toggle_with_ext_button.c|gpio_02_led_toggle_with_button.c|gpio_01_led_toggle.c|02_spi_master_slave_tx.c|01_spi_tx_data.c|04_led_toggle_with_ext_button_interrupt.c|03_ext_led_toggle_with_ext_button.c|02_led_toggle_with_button.c|03_led_button_external.c|02_led_button.c|01_led_toggle.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
+						<entry excluding="spi_04_master_rx_interrupt.c|spi_03_master_tx_rx_blocking.c|spi_02_master_tx_blocking.c|spi_01_master_only_tx_blocking.c|usasrt_02_tx_rx_interrupt.c|usasrt_01_tx_blocking.c|i2c_04_slave_tx_interrupt.c|i2c_03_master_rx_interrupt.c|i2c_02_master_rx_blocking.c|i2c_01_master_tx_blocking.c|i2c_01_master_rx.c|i2c_01_master_tx.c|spi_03_master_slave_tx_rx_blocking.c|spi_02_master_slave_tx_blocking.c|gpio_04_led_toggle_with_ext_button_interrupt.c|gpio_03_ext_led_toggle_with_ext_button.c|gpio_02_led_toggle_with_button.c|gpio_01_led_toggle.c|02_spi_master_slave_tx.c|01_spi_tx_data.c|04_led_toggle_with_ext_button_interrupt.c|03_ext_led_toggle_with_ext_button.c|02_led_toggle_with_button.c|03_led_button_external.c|02_led_button.c|01_led_toggle.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Startup"/>
 					</sourceEntries>
 				</configuration>
