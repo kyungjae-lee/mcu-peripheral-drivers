@@ -37,13 +37,13 @@
 #define TIME_FORMAT_24HRS	 	2
 
 /* Days */
-#define SUNDAY					1;
-#define MONDAY					2;
-#define TUESDAY					3;
-#define WEDNESDAY				4;
-#define THURSDAY				5;
-#define FRIDAY					6;
-#define SATURDAY				7;
+#define SUNDAY					0
+#define MONDAY					1
+#define TUESDAY					2
+#define WEDNESDAY				3
+#define THURSDAY				4
+#define FRIDAY					5
+#define SATURDAY				6
 
 
 typedef struct
@@ -59,7 +59,7 @@ typedef struct
 	uint8_t seconds;
 	uint8_t minutes;
 	uint8_t hours;
-	uint8_t	time_format;
+	uint8_t	timeFormat;
 } RTC_Time_TypeDef;
 
 /*******************************************************************************
@@ -69,7 +69,7 @@ typedef struct
 uint8_t DS1307_Init(void);
 void DS1307_SetCurrentTime(RTC_Time_TypeDef *);
 void DS1307_GetCurrentTime(RTC_Time_TypeDef *);
-void DS1307_SetCurrentDate(RTC_Time_TypeDef *);
-void DS1307_GetCurrentDate(RTC_Time_TypeDef *);
+void DS1307_SetCurrentDate(RTC_Date_TypeDef *);
+void DS1307_GetCurrentDate(RTC_Date_TypeDef *);
 
 #endif /* DS1307_H */

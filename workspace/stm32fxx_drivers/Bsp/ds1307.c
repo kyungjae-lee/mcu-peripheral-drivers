@@ -14,6 +14,8 @@ static void DS1307_I2CPinConfig(void);
 static void DS1307_I2CConfig(void);
 static void DS1307_Write(uint8_t value, uint8_t regAddr);
 static uint8_t DS1307_Read(uint8_t regAddr);
+static uint8_t BcdToBinary(uint8_t bcd);
+static uint8_t BinaryToBcd(uint8_t binary);
 
 /* Global variables */
 I2C_Handle_TypeDef gDS1307I2CHandle;
@@ -44,7 +46,7 @@ uint8_t DS1307_Init(void)
   	 *		 For data write logic, see the "I2C Data Bus" section of DS1307
   	 *		 reference manual.
   	 */
-	DS1307_Write(0x00, DS1307_SEC);
+	DS1307_Write(0x0, DS1307_SEC);
 
 	/* 5. Read back Clock Halt (CH) bit
 	 * Note: For data read logic, see the "I2C Data Bus" section of DS1307
@@ -57,14 +59,49 @@ uint8_t DS1307_Init(void)
 
 /**
  * DS1307_SetCurrentTime()
- * Desc.	:
- * Param.	:
+ * Desc.	: Sets the DS1307 Seconds, Minutes, Hours registers according to
+ * 			  the values configured in @rtcTime
+ * Param.	: @rtcTime - pointer to the RTC Time structure which contains the
+ * 			  values configured by the user
  * Return	: None
  * Note		: N/A
  */
 void DS1307_SetCurrentTime(RTC_Time_TypeDef *rtcTime)
 {
+	uint8_t secs, hrs;
 
+	/* Set seconds ************************************************************/
+
+	secs = BinaryToBcd(rtcTime->seconds);
+
+	/* Make sure to keep the CH bit (bit[7]) of the Seconds register */
+	secs &= ~(0x1 << 7);
+
+	DS1307_Write(secs, DS1307_SEC);
+
+	/* Set minutes ************************************************************/
+
+	DS1307_Write(BinaryToBcd(rtcTime->minutes), DS1307_MIN);
+
+	/* Set hours **************************************************************/
+
+	hrs = BinaryToBcd(rtcTime->hours);
+
+	if (rtcTime->timeFormat == TIME_FORMAT_24HRS)
+	{
+		/* To use 24HRS time format, clear bit[6] of the Hours register */
+		hrs &= ~(0x1 << 6);
+	}
+	else
+	{
+		/* To use 12HRS time format, set bit[6] of the Hours register */
+		hrs |= (0x1 << 6);
+
+		/* If PM, set bit[5] of the Hours register, if AM, clear it */
+		hrs = (rtcTime->timeFormat == TIME_FORMAT_12HRS_PM) ? hrs | (0x1 << 5) : hrs & ~(0x1 << 5);
+	}
+
+	DS1307_Write(hrs, DS1307_HR);
 } /* End of DS1307_SetCurrentTime */
 
 /**
@@ -76,7 +113,35 @@ void DS1307_SetCurrentTime(RTC_Time_TypeDef *rtcTime)
  */
 void DS1307_GetCurrentTime(RTC_Time_TypeDef *rtcTime)
 {
+	uint8_t secs, hrs;
 
+	/* Get seconds ************************************************************/
+
+	secs = DS1307_Read(DS1307_SEC);
+	secs &= ~(0x1 << 7); 	/* Exclude unnecessary bits */
+	rtcTime->seconds = BcdToBinary(secs);
+
+	/* Get minutes ************************************************************/
+
+	rtcTime->minutes = BcdToBinary(DS1307_Read(DS1307_MIN));
+
+	/* Get hours **************************************************************/
+
+	hrs = DS1307_Read(DS1307_HR);
+
+	if (hrs & (0x1 << 6))
+	{
+		/* 12HRS format */
+		rtcTime->timeFormat = !((hrs & (0x1 << 5)) == 0);
+		hrs &= ~(0x3 << 5);	/* Clear bit[6] and bit[5] */
+	}
+	else
+	{
+		/* 24HRS format */
+		rtcTime->timeFormat = TIME_FORMAT_24HRS;
+	}
+
+	rtcTime->hours = BcdToBinary(hrs);
 } /* End of DS1307_GetCurrentTime */
 
 /**
@@ -86,9 +151,12 @@ void DS1307_GetCurrentTime(RTC_Time_TypeDef *rtcTime)
  * Return	: None
  * Note		: N/A
  */
-void DS1307_SetCurrentDate(RTC_Time_TypeDef *rtcTime)
+void DS1307_SetCurrentDate(RTC_Date_TypeDef *rtcDate)
 {
-
+	DS1307_Write(BinaryToBcd(rtcDate->date), DS1307_DATE);
+	DS1307_Write(BinaryToBcd(rtcDate->month), DS1307_MONTH);
+	DS1307_Write(BinaryToBcd(rtcDate->year), DS1307_YEAR);
+	DS1307_Write(BinaryToBcd(rtcDate->day), DS1307_DAY);
 } /* End of DS1307_SetCurrentDate */
 
 /**
@@ -98,9 +166,12 @@ void DS1307_SetCurrentDate(RTC_Time_TypeDef *rtcTime)
  * Return	: None
  * Note		: N/A
  */
-void DS1307_GetCurrentDate(RTC_Time_TypeDef *rtcTime)
+void DS1307_GetCurrentDate(RTC_Date_TypeDef *rtcDate)
 {
-
+	rtcDate->day = BcdToBinary(DS1307_Read(DS1307_DAY));
+	rtcDate->date = BcdToBinary(DS1307_Read(DS1307_DATE));
+	rtcDate->month = BcdToBinary(DS1307_Read(DS1307_MONTH));
+	rtcDate->year = BcdToBinary(DS1307_Read(DS1307_YEAR));
 } /* End of DS1307_GetCurrentDate */
 
 
@@ -139,7 +210,7 @@ static void DS1307_I2CPinConfig(void)
 	i2cSda.GPIO_PinConfig.GPIO_PinNumber = DS1307_I2C_PIN_SDA;
 	i2cSda.GPIO_PinConfig.GPIO_PinOutType= GPIO_PIN_OUT_TYPE_OD;
 	i2cSda.GPIO_PinConfig.GPIO_PinPuPdControl = DS1307_I2C_PUPD;
-	i2cSda.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST;
+	i2cSda.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_HIGH;
 
 	GPIO_Init(&i2cSda);
 
@@ -149,7 +220,7 @@ static void DS1307_I2CPinConfig(void)
 	i2cScl.GPIO_PinConfig.GPIO_PinNumber = DS1307_I2C_PIN_SCL;
 	i2cScl.GPIO_PinConfig.GPIO_PinOutType= GPIO_PIN_OUT_TYPE_OD;
 	i2cScl.GPIO_PinConfig.GPIO_PinPuPdControl = DS1307_I2C_PUPD;
-	i2cScl.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST;
+	i2cScl.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_HIGH;
 
 	GPIO_Init(&i2cScl);
 } /* End of DS1307_I2CPinConfig */
@@ -201,3 +272,44 @@ static uint8_t DS1307_Read(uint8_t regAddr)
 
 	return rxData;
 } /* End of DS1307_Read */
+
+/**
+ * BcdToBinary()
+ * Desc.	: Converts the passed Binary-Coded Decimal (BCD) value to binary
+ * Param.   : @bcd - binary-coded decimal value to be converted into binary
+ * Return	: @bcd in binary representation
+ * Note		: N/A
+ */
+static uint8_t BcdToBinary(uint8_t bcd)
+{
+	uint8_t tens, ones;
+
+	tens = (uint8_t)((bcd >> 4) * 10);
+	ones = bcd & (uint8_t)0xF;
+
+	return tens + ones;
+} /* End of BcdToBinary */
+
+/**
+ * BinaryToBcd()
+ * Desc.	: Converts the passed binary value to Binary-Coded Decimal (BCD)
+ * Param.   : @binary - binary value to be converted into binary-coded decimal
+ * Return	: @binary in binary-coded decimal representation
+ * Note		: N/A
+ */
+uint8_t BinaryToBcd(uint8_t binary)
+{
+	uint8_t tens, ones;
+	uint8_t bcd;
+
+	bcd = binary;
+
+	if (binary >= 10)
+	{
+		tens = binary / 10;
+		ones = binary % 10;
+		bcd = (tens << 4) | ones;
+	}
+
+	return bcd;
+} /* End of BinaryToBcd */

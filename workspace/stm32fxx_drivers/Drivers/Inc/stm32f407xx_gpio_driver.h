@@ -1,11 +1,9 @@
-/*
+/*******************************************************************************
  * Filename		: stm32f407xx_gpio_driver.h
  * Description	: STM32F407xx MCU specific GPIO driver header file
  * Author		: Kyungjae Lee
  * History		: May 21, 2023 - Created file
- * 				  Jun 08, 2023 - Added SPI peripheral specific information
- * 				  Jun 16, 2023 - Added I2C peripheral specific information
- */
+ ******************************************************************************/
 
 #ifndef STM32F407XX_GPIO_DRIVER_H
 #define STM32F407XX_GPIO_DRIVER_H
@@ -13,13 +11,15 @@
 #include "stm32f407xx.h"
 
 /**
- * [!] Note: The driver layer should provide a configuration structure to the user application. User application
- * will initialize or fill the structure and the will pass it to the driver APIs, and the driver APIs will deccode
- * the structure and will take appropriate action such as initializing the peripheral registers. This is what the
- * configuration structure is for.
+ * Note: The driver layer should provide a configuration structure to the
+ * 		 user application. User application will initialize or fill the
+ * 		 structure and the will pass it to the driver APIs, and the driver APIs
+ * 		 will decode the structure and will take appropriate action such as
+ * 		 initializing the peripheral registers. This is what the configuration
+ * 		 structure is for.
  *
- * 1. GPIO handle structure
- * 2. GPIO configuration structure
+ * 		 1. GPIO handle structure
+ * 		 2. GPIO configuration structure
  */
 
 /**
@@ -88,10 +88,10 @@ typedef struct
  * @GPIO_PIN_SPEED
  * GPIO pin output speeds
  */
-#define GPIO_PIN_OUT_SPEED_LOW		0
-#define GPIO_PIN_OUT_SPEED_MEDIUM	0
-#define GPIO_PIN_OUT_SPEED_FAST		0
-#define GPIO_PIN_OUT_SPEED_HIGH		0
+#define GPIO_PIN_OUT_SPEED_LOW			0
+#define GPIO_PIN_OUT_SPEED_MEDIUM		1
+#define GPIO_PIN_OUT_SPEED_HIGH			2
+#define GPIO_PIN_OUT_SPEED_VERY_HIGH	3
 
 /**
  * @GPIO_PIN_PUPD
@@ -102,9 +102,10 @@ typedef struct
 #define GPIO_PIN_PD					2
 
 
-/*****************************************************************************************
- * APIs supported by the GPIO driver (See function definitions for more information)
- ****************************************************************************************/
+/*******************************************************************************
+ * APIs supported by the GPIO driver
+ * (See function definitions for more information)
+ ******************************************************************************/
 
 /**
  * Peripheral clock setup
