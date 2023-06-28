@@ -18,12 +18,22 @@
 #define LCD_PIN_D6		GPIO_PIN_5
 #define LCD_PIN_D7		GPIO_PIN_6
 
+/* LCD instructions */
+#define LCD_INST_4DL_2N_5X8F	0x28 /* 4 data lines, 2 lines, 5x8 font size */
+#define LCD_INST_DON_CURON		0x0E /* Display on, cursor on */
+#define LCD_INST_INCADD			0x06 /* Entry mode set */
+#define LCD_INST_CLEAR_DISPLAY	0x01 /* Clear display */
+#define LCD_INST_RETURN_HOME	0x02 /* Return home */
+
 /*******************************************************************************
  * APIs (See the function definitions for more information)
  ******************************************************************************/
 
 void LCD_Init(void);
-void LCD_TxCmd(uint8_t cmd);
+void LCD_TxInstruction(uint8_t instruction);
+void LCD_TxChar(uint8_t ch);
+void LCD_ClearDisplay(void);
+
 
 
 

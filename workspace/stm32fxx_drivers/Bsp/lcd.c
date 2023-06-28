@@ -14,6 +14,7 @@
 static void Write4Bits(uint8_t nibble);
 static void LCD_Enable(void);
 static void DelayMs(uint32_t delayInMs);
+static void DelayUs(uint32_t delayInUs);
 
 /**
  * LCD_Init()
@@ -92,10 +93,22 @@ void LCD_Init(void)
 	DelayMs(150);
 
 	Write4Bits(0x3);
-
 	Write4Bits(0x2);
 
 	/* Now, ready to send the command */
+
+	/* Set to use 4 data lines, 2 lines, 5x8 char font size */
+	LCD_TxInstruction(LCD_INST_4DL_2N_5X8F);
+
+	/* Set display on, cursor on */
+	LCD_TxInstruction(LCD_INST_DON_CURON);
+
+	/* Clear display */
+	LCD_ClearDisplay();
+
+	/* Entry mode set */
+	LCD_TxInstruction(LCD_INST_INCADD);
+
 } /* End of LCD_Init */
 
 /**
@@ -105,7 +118,7 @@ void LCD_Init(void)
  * Return	: None
  * Note		: N/A
  */
-void LCD_TxCmd(uint8_t cmd)
+void LCD_TxInstruction(uint8_t instruction)
 {
 	/* 1. Set RS=0 for LCD command */
 	GPIO_WriteToOutputPin(LCD_GPIO_PORT, LCD_PIN_RS, RESET);
@@ -113,8 +126,8 @@ void LCD_TxCmd(uint8_t cmd)
 	/* 2. Set RW=0 for write */
 	GPIO_WriteToOutputPin(LCD_GPIO_PORT, LCD_PIN_RW, RESET);
 
-	Write4Bits(cmd >> 4);	/* Send the higher nibble */
-	Write4Bits(cmd & 0xF);	/* Send the lower nibble */
+	Write4Bits(instruction >> 4);	/* Send the higher nibble */
+	Write4Bits(instruction & 0xF);	/* Send the lower nibble */
 } /* End of LCD_TxCmd */
 
 /**
@@ -140,6 +153,21 @@ void LCD_TxChar(uint8_t ch)
 	Write4Bits(ch & 0xF);	/* Send the lower nibble */
 } /* End of LCD_TxChar */
 
+/**
+ * LCD_ClearDisplay()
+ * Desc.	: Performs display clear routine
+ * Param.	: None
+ * Return	: None
+ * Note		: After sending the clear display instruction, give it 2 ms as per
+ * 			  the datasheet of LCD
+ */
+void LCD_ClearDisplay(void)
+{
+	/* Clear display */
+	Write4Bits(LCD_INST_CLEAR_DISPLAY);
+
+	DelayMs(2);	/* Wait 2 ms as per the datasheet */
+}
 
 /*******************************************************************************
  * Private functions
@@ -148,13 +176,25 @@ void LCD_TxChar(uint8_t ch)
 /**
  * DelayMs()
  * Desc.	: Spinlock delays for @delayInMs milliseconds
- * Param.	: @delay - time to delay in milliseconds
+ * Param.	: @delayInMs - time to delay in milliseconds
  * Returns	: None
  * Note		: N/A
  */
 static void DelayMs(uint32_t delayInMs)
 {
 	for (uint32_t i = 0; i < delayInMs * 1000; i++);
+} /* End of DelayMs */
+
+/**
+ * DelayUs()
+ * Desc.	: Spinlock delays for @delayInUs microseconds
+ * Param.	: @delayInUs - time to delay in microseconds
+ * Returns	: None
+ * Note		: N/A
+ */
+static void DelayUs(uint32_t delayInUs)
+{
+	for (uint32_t i = 0; i < delayInUs * 1; i++);
 } /* End of DelayMs */
 
 /**
