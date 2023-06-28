@@ -4,8 +4,8 @@
 
 ## Introduction
 
-* Developing MCU peripheral (GPIO, I2C, SPI, USART) drivers from scratch on the STM32F407-Discovery board
-* Developing applications to test correct functionalities of each peripheral driver
+* Developed MCU peripheral (GPIO, I2C, SPI, USART) drivers from scratch on the STM32F407-Discovery board
+* Developed applications to test correct functionalities of each peripheral driver
 
 
 
