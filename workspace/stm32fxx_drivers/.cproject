@@ -73,6 +73,9 @@
 							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec.1987716603" name="MCU Output Converter Motorola S-rec with symbols" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec"/>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.464376944.1004405319" name="rtc_lcd.c" rcbsApplicability="disable" resourcePath="Src/rtc_lcd.c" toolsToInvoke="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.719512344.1658835199">
+						<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.719512344.1658835199" name="MCU GCC Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.719512344"/>
+					</fileInfo>
 					<folderInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.464376944.1003488125" name="/" resourcePath="Bsp">
 						<toolChain id="com.st.stm32cube.ide.mcu.gnu.managedbuild.toolchain.exe.debug.1919837415" name="MCU ARM GCC" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.toolchain.exe.debug" unusedChildren="">
 							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_mcu.788843852.1672024025" name="MCU" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_mcu.788843852"/>
@@ -106,7 +109,7 @@
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Bsp"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Inc"/>
-						<entry excluding="spi_04_master_rx_interrupt.c|spi_03_master_tx_rx_blocking.c|spi_02_master_tx_blocking.c|spi_01_master_only_tx_blocking.c|usasrt_02_tx_rx_interrupt.c|usasrt_01_tx_blocking.c|i2c_04_slave_tx_interrupt.c|i2c_03_master_rx_interrupt.c|i2c_02_master_rx_blocking.c|i2c_01_master_tx_blocking.c|i2c_01_master_rx.c|i2c_01_master_tx.c|spi_03_master_slave_tx_rx_blocking.c|spi_02_master_slave_tx_blocking.c|gpio_04_led_toggle_with_ext_button_interrupt.c|gpio_03_ext_led_toggle_with_ext_button.c|gpio_02_led_toggle_with_button.c|gpio_01_led_toggle.c|02_spi_master_slave_tx.c|01_spi_tx_data.c|04_led_toggle_with_ext_button_interrupt.c|03_ext_led_toggle_with_ext_button.c|02_led_toggle_with_button.c|03_led_button_external.c|02_led_button.c|01_led_toggle.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
+						<entry excluding="usasrt_01_tx_blocking.c|usasrt_02_tx_rx_interrupt.c|i2c_04_slave_tx_interrupt.c|i2c_03_master_rx_interrupt.c|i2c_02_master_rx_blocking.c|i2c_01_master_tx_blocking.c|spi_04_master_rx_interrupt.c|spi_03_master_tx_rx_blocking.c|spi_02_master_tx_blocking.c|spi_01_master_only_tx_blocking.c|gpio_04_led_toggle_with_ext_button_interrupt.c|gpio_03_ext_led_toggle_with_ext_button.c|gpio_02_led_toggle_with_button.c|gpio_01_led_toggle.c|i2c_01_master_rx.c|i2c_01_master_tx.c|spi_03_master_slave_tx_rx_blocking.c|spi_02_master_slave_tx_blocking.c|02_spi_master_slave_tx.c|01_spi_tx_data.c|04_led_toggle_with_ext_button_interrupt.c|03_ext_led_toggle_with_ext_button.c|02_led_toggle_with_button.c|03_led_button_external.c|02_led_button.c|01_led_toggle.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Startup"/>
 					</sourceEntries>
 				</configuration>

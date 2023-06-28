@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Filename		: ds1307.c
- * Description	:
+ * Description	: Implementation of APIs for DS1307 RTC module
  * Author		: Kyungjae Lee
  * History 		: Jun 25, 2023 - Created file
  ******************************************************************************/
