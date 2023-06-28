@@ -27,6 +27,12 @@
 
 ## List of Files
 
-* Driver Layer
+* Peripheral drivers
   * Device header: [stm32f407xx.h](./workspace/stm32fxx_drivers/Drivers/Inc/stm32f407xx.h)
-  * GPIO driver: [stm32f407xx_gpio.h](./workspace/stm32fxx_drivers/Drivers/Inc/stm32f407xx_gpio.h),  [stm32f407xx_gpio.c](./workspace/Src/stm32fxx_drivers/Drivers/stm32f407xx_gpio.h)
+  * GPIO driver: [stm32f407xx_gpio.h](./workspace/stm32fxx_drivers/Drivers/Inc/stm32f407xx_gpio_driver.h),  [stm32f407xx_gpio.c](./workspace/Src/stm32fxx_drivers/Drivers/stm32f407xx_gpio_driver.h)
+  * SPI driver: [stm32f407xx_spi.h](./workspace/stm32fxx_drivers/Drivers/Inc/stm32f407xx_spi_driver.h),  [stm32f407xx_spi.c](./workspace/Src/stm32fxx_drivers/Drivers/stm32f407xx_spi_driver.h)
+  * I2C driver: [stm32f407xx_i2c.h](./workspace/stm32fxx_drivers/Drivers/Inc/stm32f407xx_i2c_driver.h),  [stm32f407xx_i2c.c](./workspace/Src/stm32fxx_drivers/Drivers/stm32f407xx_i2c_driver.h)
+  * USART driver: [stm32f407xx_usart.h](./workspace/stm32fxx_drivers/Drivers/Inc/stm32f407xx_usart_driver.h),  [stm32f407xx_usart.c](./workspace/Src/stm32fxx_drivers/Drivers/stm32f407xx_usart_driver.h)
+
+* Sample applications (Test drivers)
+  * See [./workspace/stm32fxx_drivers/Src](./workspace/stm32fxx_drivers/Src)
