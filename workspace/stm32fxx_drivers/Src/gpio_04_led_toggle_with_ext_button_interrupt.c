@@ -4,7 +4,6 @@
  * 				  the external button press
  * Author		: Kyungjae Lee
  * History		: May 24, 2023 - Created file
- * 				  Jun 02, 2023 - Removed redundant 'GPIO_PeriClockControl()'
  */
 
 #include <string.h>
@@ -44,7 +43,7 @@ int main(int argc, char *argv[])
 	GPIOLed.pGPIOx = GPIOD;
 	GPIOLed.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_12;
 	GPIOLed.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_OUT;
-	GPIOLed.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST;
+	GPIOLed.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_HIGH;
 	GPIOLed.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;
 	GPIOLed.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;
 	GPIO_Init(&GPIOLed);
@@ -53,7 +52,7 @@ int main(int argc, char *argv[])
 	GPIOBtn.pGPIOx = GPIOD;
 	GPIOBtn.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_6;
 	GPIOBtn.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_IT_FT;	/* Interrupt falling-edge */
-	GPIOBtn.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST; /* Doesn't matter */
+	GPIOBtn.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_HIGH; /* Doesn't matter */
 	//GPIOBtn.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;	/* N/A */
 	GPIOBtn.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_PU;
 	GPIO_Init(&GPIOBtn);

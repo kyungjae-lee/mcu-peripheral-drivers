@@ -1,8 +1,15 @@
-/**
+/*******************************************************************************
  * Filename		: i2c_04_slave_tx_interrupt.c
  * Description	: Program to test I2C slave's Tx (interrupt) functionality
  * Author		: Kyungjae Lee
  * History 		: Jun 18, 2023 - Created file
+ ******************************************************************************/
+
+/**
+ * Pin selection for I2C communication
+ *
+ * I2C1_SCL  - PB6 (AF4)
+ * I2C1_SDA  - PB7 (AF4)
  */
 
 #include <string.h> 		/* strlen() */
@@ -16,13 +23,6 @@
 I2C_Handle_TypeDef I2C1Handle;
 uint8_t txBuff[32] = "Msg from STM32 slave.";
 	/* Arduino wire library limits the length of I2C data to be <= 32 bytes */
-
-/**
- * Pin selection for I2C communication
- *
- * I2C1_SCL  - PB6 (AF4)
- * I2C1_SDA  - PB7 (AF4)
- */
 
 /**
  * delay()
@@ -53,7 +53,7 @@ void I2C1_PinsInit(void)
 	I2CPins.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_OD;
 	I2CPins.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_PU;
 	I2CPins.GPIO_PinConfig.GPIO_PinAltFcnMode = 4;
-	I2CPins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST;
+	I2CPins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_HIGH;
 
 	/* SCL */
 	I2CPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_6;

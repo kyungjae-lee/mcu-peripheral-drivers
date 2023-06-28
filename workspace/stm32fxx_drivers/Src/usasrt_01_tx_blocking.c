@@ -1,8 +1,15 @@
-/**
+/*******************************************************************************
  * Filename		: usart_01_tx_blocking.c
  * Description	: Program to test USART Tx (blocking-based) functionality
  * Author		: Kyungjae Lee
  * History 		: Jun 20, 2023 - Created file
+ ******************************************************************************/
+
+/**
+ * Pin selection for USART communication
+ *
+ * USART_TX  - PA2 (AF7)
+ * USART_RX  - PA3 (AF7)
  */
 
 #include <string.h> 		/* strlen() */
@@ -12,13 +19,6 @@
 /* Global variables */
 char msg[1024] = "USART Tx msg from STM32.\n\r";
 USART_Handle_TypeDef USART2Handle;
-
-/**
- * Pin selection for USART communication
- *
- * USART_TX  - PA2 (AF7)
- * USART_RX  - PA3 (AF7)
- */
 
 /**
  * delay()
@@ -57,7 +57,7 @@ void USART2_PinsInit(void)
 	USART2Pins.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;
 	USART2Pins.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_PU;
 	USART2Pins.GPIO_PinConfig.GPIO_PinAltFcnMode = 7;
-	USART2Pins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST;
+	USART2Pins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_HIGH;
 
 	/* Tx */
 	USART2Pins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_2;
@@ -111,7 +111,7 @@ void GPIO_ButtonInit(void)
 	GPIOBtn.pGPIOx = GPIOA;
 	GPIOBtn.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_0;
 	GPIOBtn.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_IN;
-	GPIOBtn.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST; /* Doesn't matter */
+	GPIOBtn.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_HIGH; /* Doesn't matter */
 	//GPIOBtn.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;	/* N/A */
 	GPIOBtn.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;
 		/* External pull-down resistor is already present (see the schematic) */

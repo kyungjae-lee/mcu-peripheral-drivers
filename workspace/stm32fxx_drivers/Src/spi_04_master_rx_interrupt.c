@@ -86,7 +86,7 @@ void SPI2_PinsInit(void)
 	SPI2Pins.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;
 		/* I2C - Open-drain only!, SPI - Push-pull okay! */
 	SPI2Pins.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;	/* Optional */
-	SPI2Pins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST; /* Medium or slow ok as well */
+	SPI2Pins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_HIGH; /* Medium or slow ok as well */
 
 	/* SCLK */
 	SPI2Pins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_13;

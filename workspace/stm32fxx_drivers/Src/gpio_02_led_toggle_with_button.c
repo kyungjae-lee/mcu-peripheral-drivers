@@ -3,7 +3,6 @@
  * Description	: Program to toggle the on-board LED whenever the on-board button is pressed
  * Author		: Kyungjae Lee
  * History		: May 23, 2023 - Created file
- * 				  Jun 02, 2023 - Removed redundant 'GPIO_PeriClockControl()'
  */
 
 #include "stm32f407xx.h"
@@ -32,7 +31,7 @@ int main(int argc, char *argv[])
 	GPIOLed.pGPIOx = GPIOD;
 	GPIOLed.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_12;
 	GPIOLed.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_OUT;
-	GPIOLed.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST;
+	GPIOLed.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_HIGH;
 	GPIOLed.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;
 	GPIOLed.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;
 	GPIO_Init(&GPIOLed);
@@ -41,7 +40,7 @@ int main(int argc, char *argv[])
 	GPIOBtn.pGPIOx = GPIOA;
 	GPIOBtn.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_0;
 	GPIOBtn.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_IN;
-	GPIOBtn.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST; /* Doesn't matter */
+	GPIOBtn.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_HIGH; /* Doesn't matter */
 	//GPIOBtn.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;	/* N/A */
 	GPIOBtn.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;
 		/* External pull-down resistor is already present (see the schematic) */

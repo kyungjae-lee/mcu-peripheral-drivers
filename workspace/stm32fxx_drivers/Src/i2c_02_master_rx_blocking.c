@@ -1,8 +1,15 @@
-/**
+/*******************************************************************************
  * Filename		: i2c_02_master_rx_blocking.c
  * Description	: Program to test I2C master's Rx (blocking) functionality
  * Author		: Kyungjae Lee
  * History 		: Jun 13, 2023 - Created file
+ ******************************************************************************/
+
+/**
+ * Pin selection for I2C communication
+ *
+ * I2C1_SCL  - PB6 (AF4)
+ * I2C1_SDA  - PB7 (AF4)
  */
 
 #include <string.h> 		/* strlen() */
@@ -13,14 +20,8 @@
 #define SLAVE_ADDR			0x68		/* Check Arduino IDE serial monitor */
 #define MY_ADDR				MASTER_ADDR /* STM32 Discovery board is master */
 
+/* Global variables */
 I2C_Handle_TypeDef I2C1Handle;
-
-/**
- * Pin selection for I2C communication
- *
- * I2C1_SCL  - PB6 (AF4)
- * I2C1_SDA  - PB7 (AF4)
- */
 
 /**
  * delay()
@@ -51,7 +52,7 @@ void I2C1_PinsInit(void)
 	I2CPins.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_OD;
 	I2CPins.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_PU;
 	I2CPins.GPIO_PinConfig.GPIO_PinAltFcnMode = 4;
-	I2CPins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST;
+	I2CPins.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_HIGH;
 
 	/* SCL */
 	I2CPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_6;
@@ -109,7 +110,7 @@ void GPIO_ButtonInit(void)
 	GPIOBtn.pGPIOx = GPIOA;
 	GPIOBtn.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_0;
 	GPIOBtn.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_IN;
-	GPIOBtn.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_FAST; /* Doesn't matter */
+	GPIOBtn.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_HIGH; /* Doesn't matter */
 	//GPIOBtn.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;	/* N/A */
 	GPIOBtn.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;
 		/* External pull-down resistor is already present (see the schematic) */
