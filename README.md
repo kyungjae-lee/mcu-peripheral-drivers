@@ -1,6 +1,6 @@
 # MCU Peripheral Drivers
 
-This repository contains the source code for **MCU Peripheral Drivers** development project. Visit "MCU Peripheral Drivers" section on my website for more details: [https://kyungjae.dev/mcu-peripheral-drivers/](https://kyungjae.dev/mcu-peripheral-drivers/).
+This repository contains the source code for the **MCU Peripheral Drivers** development project. Visit "MCU Peripheral Drivers" section on my website for more details: [https://kyungjae.dev/mcu-peripheral-drivers/](https://kyungjae.dev/mcu-peripheral-drivers/).
 
 
 
