@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Filename		: lcd.c
+ * Filename		: lcd_hd44780u.c
  * Description	: Implementation of APIs for 16x2 Character LCD module
  * 				  (4-bit interface; only DB4-DB7 pins of the LCD module will be
  * 				  used)
@@ -7,8 +7,8 @@
  * History 		: Jun 27, 2023 - Created file
  ******************************************************************************/
 
+#include "lcd_hd44780u.h"
 #include "stm32f407xx.h"
-#include "lcd.h"
 
 /* Function prototypes */
 static void Write4Bits(uint8_t nibble);
@@ -131,9 +131,9 @@ void LCD_TxInstruction(uint8_t instruction)
 } /* End of LCD_TxCmd */
 
 /**
- * LCD_TxChar()
- * Desc.	: Sends a character to the LCD
- * Param.	: @ch -
+ * LCD_PrintChar()
+ * Desc.	: Sends a character to be printed to the LCD
+ * Param.	: @ch - character to print
  * Return	: None
  * Note		: This function assumes 4-bit parallel data transmission.
  * 			  First, the higher nibble of the data will be sent through the data
@@ -141,7 +141,7 @@ void LCD_TxInstruction(uint8_t instruction)
  * 			  then, the lower nibble of the data will be sent through the data
  * 			  lines D4, D5, d6, d7.
  */
-void LCD_TxChar(uint8_t ch)
+void LCD_PrintChar(uint8_t ch)
 {
 	/* 1. Set RS=1 for LCD user data */
 	GPIO_WriteToOutputPin(LCD_GPIO_PORT, LCD_PIN_RS, SET);
@@ -159,15 +159,77 @@ void LCD_TxChar(uint8_t ch)
  * Param.	: None
  * Return	: None
  * Note		: After sending the clear display instruction, give it 2 ms as per
- * 			  the datasheet of LCD
+ * 			  the datasheet of LCD (See p.24 of LCD datasheet).
  */
 void LCD_ClearDisplay(void)
 {
 	/* Clear display */
-	Write4Bits(LCD_INST_CLEAR_DISPLAY);
+	LCD_TxInstruction(LCD_INST_CLEAR_DISPLAY);
 
 	DelayMs(2);	/* Wait 2 ms as per the datasheet */
 }
+
+/**
+ * LCD_ReturnHome()
+ * Desc.	: Returns the cursor to the home position
+ * Param.	: None
+ * Return	: None
+ * Note		: After sending the clear display instruction, give it 2 ms as per
+ * 			  the datasheet of LCD (See p.24 of LCD datasheet).
+ */
+void LCD_ReturnHome(void)
+{
+	/* Return home */
+	Write4Bits(LCD_INST_RETURN_HOME);
+
+	DelayMs(2);	/* Wait 2 ms as per the datasheet */
+} /* End of LCD_ReturnHome */
+
+/**
+ * LCD_PrintString()
+ * Desc.	: Prints the passed string @msg to the LCD screen
+ * Param.	: @msg - string to print
+ * Return	: None
+ * Note		: N/A
+ */
+void LCD_PrintString(char *msg)
+{
+	do
+	{
+		LCD_PrintChar((uint8_t)*msg++);
+	}
+	while (*msg != '\0');
+} /* End of LCD_PrintString */
+
+/**
+ * LCD_SetCursor()
+ * Desc.	: Sets the cursor position (@row, @column)
+ * Param.	: @row - the row in which the cursor should be placed
+ * 			  @column - the column in which the cursor should be placed
+ * Return	: None
+ * Note		: Row number: 1 ~ 2
+ * 			  Column number: 1 ~ 16 assuming a 2x16 character display
+ */
+void LCD_SetCursor(uint8_t row, uint8_t column)
+{
+	column--;
+
+	switch (row)
+	{
+	case 1:
+		/* Set cursor to 1st row address and add index */
+		LCD_TxInstruction((column |= 0x80));
+		break;
+	case 2:
+		/* Set cusor to 2nd row address and add index */
+		LCD_TxInstruction((column |= 0xC0));
+		break;
+	default:
+		break;
+	}
+} /* End of LCD_SetCursor */
+
+
 
 /*******************************************************************************
  * Private functions

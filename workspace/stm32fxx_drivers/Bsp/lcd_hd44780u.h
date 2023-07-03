@@ -1,12 +1,14 @@
 /*******************************************************************************
- * Filename		: lcd.h
+ * Filename		: lcd_hd44780u.h
  * Description	: APIs for 16x2 Character LCD module
  * Author		: Kyungjae Lee
  * History 		: Jun 27, 2023 - Created file
  ******************************************************************************/
 
-#ifndef LCD_H
-#define LCD_H
+#ifndef LCD_HD44780U_H
+#define LCD_HD44780U_H
+
+#include "stm32f407xx.h"
 
 /* Application configurable items */
 #define LCD_GPIO_PORT	GPIOD
@@ -31,10 +33,11 @@
 
 void LCD_Init(void);
 void LCD_TxInstruction(uint8_t instruction);
-void LCD_TxChar(uint8_t ch);
 void LCD_ClearDisplay(void);
+void LCD_ReturnHome(void);
+void LCD_PrintChar(uint8_t ch);
+void LCD_PrintString(char *msg);
+void LCD_SetCursor(uint8_t row, uint8_t column);
 
 
-
-
-#endif /* LCD_H */
+#endif /* LCD_HD44780U_H */

@@ -6,10 +6,11 @@
  * History 		: Jun 25, 2023 - Created file
  ******************************************************************************/
 
+#include <lcd_hd44780u.h>
+#include "rtc_ds1307.h"
 #include <string.h> 		/* strlen() */
 #include <stdio.h> 			/* printf() */
 #include "stm32f407xx.h"
-#include "ds1307.h"
 
 #define SYSTICK_TIM_CLK		16000000UL
 
@@ -22,12 +23,16 @@
 #define SYST_CSR_TICKINT	(1 << 1U)
 #define SYST_CSR_CLKSOURCE	(1 << 2U) /* Processor clock */
 
+#define PRINT_ON_LCD	/* Comment this out if LCD is not installed */
+
 /* Function prototypes */
 char* TimeToString(RTC_Time_TypeDef *rtcTime);
 char* DateToString(RTC_Date_TypeDef *rtcDate);
 char* GetDay(uint8_t dayCode);
 void NumToString(uint8_t num, char *buf);
 void SysTickTimer_Init(uint32_t tickHz);
+void DelayMs(uint32_t delayInMs);
+
 
 int main(int argc, char *argv[])
 {
@@ -36,6 +41,20 @@ int main(int argc, char *argv[])
 	char *amPm;
 
 	printf("RTC test application running...\n");
+
+#ifndef PRINT_ON_LCD
+    printf("RTC test without LCD");
+#else
+	LCD_Init();
+
+    LCD_PrintString("RTC test on LCD");
+
+    DelayMs(2000);
+
+    /* Start printing from the beginning */
+    LCD_ClearDisplay();
+    LCD_ReturnHome();
+#endif
 
 	if (DS1307_Init())
 	{
@@ -70,17 +89,31 @@ int main(int argc, char *argv[])
 	{
 		/* 12HRS format (e.g., 08:33:45 PM) */
 		amPm = (currTime.timeFormat) ? "PM" : "AM";
+#ifndef PRINT_ON_LCD
 		printf("Current time = %s %s\n", TimeToString(&currTime), amPm);
+#else
+		LCD_PrintString(TimeToString(&currTime));
+		LCD_PrintString(amPm);
+#endif
 	}
 	else
 	{
 		/* 24HRS format (e.g., 20:33:45) */
+#ifndef PRINT_ON_LCD
 		printf("Current time = %s\n", TimeToString(&currTime));
+#else
+		LCD_PrintString(TimeToString(&currTime));
+#endif
 	}
 
 	/* Print current date in 'MM/DD/YY <Day>' format **************************/
 
+#ifndef PRINT_ON_LCD
 	printf("Current date = %s <%s>\n", DateToString(&currDate), GetDay(currDate.day));
+#else
+	LCD_SetCursor(1, 2);
+	LCD_PrintString(DateToString(&currDate));
+#endif
 
 	while (1);
 
@@ -215,16 +248,47 @@ void SysTick_Handler(void)
 	{
 		/* 12HRS format (e.g., 08:33:45 PM) */
 		amPm = (currTime.timeFormat) ? "PM" : "AM";
+#ifndef PRINT_ON_LCD
 		printf("Current time = %s %s\n", TimeToString(&currTime), amPm);
+#else
+		LCD_SetCursor(1, 1);
+		LCD_PrintString(TimeToString(&currTime));
+		LCD_PrintString(amPm);
+#endif
 	}
 	else
 	{
 		/* 24HRS format (e.g., 20:33:45) */
+#ifndef PRINT_ON_LCD
 		printf("Current time = %s\n", TimeToString(&currTime));
+#else
+		LCD_SetCursor(1, 1);
+		LCD_PrintString(TimeToString(&currTime));
+#endif
 	}
 
 	/* Print current date in 'MM/DD/YY <Day>' format **************************/
 
 	DS1307_GetCurrentDate(&currDate);
+#ifndef PRINT_ON_LCD
 	printf("Current date = %s <%s>\n", DateToString(&currDate), GetDay(currDate.day));
+#else
+	LCD_SetCursor(1, 1);
+	LCD_PrintString(DateToString(&currDate));
+	LCD_PrintChar('<');
+	LCD_PrintString(GetDay(currDate.day));
+	LCD_PrintChar('>');
+#endif
 } /* End of SysTick_Handler */
+
+/**
+ * DelayMs()
+ * Desc.	: Spinlock delays for @delayInMs milliseconds
+ * Param.	: @delayInMs - time to delay in milliseconds
+ * Returns	: None
+ * Note		: N/A
+ */
+void DelayMs(uint32_t delayInMs)
+{
+	for (uint32_t i = 0; i < delayInMs * 1000; i++);
+} /* End of DelayMs */

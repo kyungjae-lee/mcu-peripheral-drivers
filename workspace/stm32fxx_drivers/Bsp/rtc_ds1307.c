@@ -1,13 +1,13 @@
 /*******************************************************************************
- * Filename		: ds1307.c
+ * Filename		: rtc_ds1307.c
  * Description	: Implementation of APIs for DS1307 RTC module
  * Author		: Kyungjae Lee
  * History 		: Jun 25, 2023 - Created file
  ******************************************************************************/
 
+#include <rtc_ds1307.h>
 #include <string.h> 	/* memset() */
 #include <stdint.h>
-#include "ds1307.h"
 
 /* Private function prototypes */
 static void DS1307_I2CPinConfig(void);

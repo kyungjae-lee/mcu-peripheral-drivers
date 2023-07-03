@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Filename		: ds1307.h
+ * Filename		: rtc_ds1307.h
  * Description	: APIs for DS1307 RTC module
  * Author		: Kyungjae Lee
  * History 		: Jun 25, 2023 - Created file
  ******************************************************************************/
 
-#ifndef DS1307_H
-#define DS1307_H
+#ifndef RTC_DS1307_H
+#define RTC_DS1307_H
 
 #include "stm32f407xx.h"
 
@@ -17,7 +17,6 @@
 #define DS1307_I2C_PIN_SDA		GPIO_PIN_7
 #define DS1307_I2C_SPEED		I2C_SCL_SPEED_SM /* Doesn't support fast mode */
 #define DS1307_I2C_PUPD			GPIO_PIN_PU		 /* Using internal pull-up R */
-
 
 /* Register addresses */
 #define DS1307_SEC				0x00
@@ -45,7 +44,6 @@
 #define FRIDAY					5
 #define SATURDAY				6
 
-
 typedef struct
 {
 	uint8_t date;
@@ -72,4 +70,5 @@ void DS1307_GetCurrentTime(RTC_Time_TypeDef *);
 void DS1307_SetCurrentDate(RTC_Date_TypeDef *);
 void DS1307_GetCurrentDate(RTC_Date_TypeDef *);
 
-#endif /* DS1307_H */
+
+#endif /* RTC_DS1307_H */
