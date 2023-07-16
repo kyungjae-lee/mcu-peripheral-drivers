@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Filename		: rtc_lcd.c
+ * Filename		: rtc_on_lcd.c
  * Description	: Application to read time and date information from DS1207 RTC
  *				  chip and display it on the 16x2 Character LCD
  * Author		: Kyungjae Lee
@@ -41,16 +41,19 @@ int main(int argc, char *argv[])
 	RTC_Date_TypeDef currDate;
 	char *amPm;
 
-	printf("RTC on LCD application running...\n");
+	printf("Application running with LCD...\n");
 
 #ifndef PRINT_ON_LCD
-    printf("RTC on LCD application without LCD");
+    printf("Application running without LCD...\n");
 #else
+    /* Initialize LCD module */
 	LCD_Init();
 
+	/* Display the project title and the name of the author */
 	DisplayPrologue();
 #endif
 
+	/* Initialize Tiny RTC module */
 	if (DS1307_Init())
 	{
 		/* RTC initialization was unsuccessful */
@@ -62,6 +65,7 @@ int main(int argc, char *argv[])
 	/* Initialize the SysTick Timer so it generates 1 interrupt per second */
 	SysTickTimer_Init(1);
 
+	/* Configure initial date and time to set */
 	currDate.day = FRIDAY;
 	currDate.date = 14;
 	currDate.month = 7;
@@ -72,18 +76,21 @@ int main(int argc, char *argv[])
 	currTime.seconds = 50;
 	currTime.timeFormat = TIME_FORMAT_12HRS_PM;
 
+	/* Set initial time and date */
 	DS1307_SetCurrentDate(&currDate);
 	DS1307_SetCurrentTime(&currTime);
 
+	/* Get initial time and date */
 	DS1307_GetCurrentDate(&currDate);
 	DS1307_GetCurrentTime(&currTime);
 
-	/* Print current time *****************************************************/
+	/* Print current time ----------------------------------------------------*/
 
 	if (currTime.timeFormat != TIME_FORMAT_24HRS)
 	{
 		/* 12HRS format (e.g., 08:33:45 PM) */
 		amPm = (currTime.timeFormat) ? "PM" : "AM";
+
 #ifndef PRINT_ON_LCD
 		printf("Current time = %s %s\n", TimeToString(&currTime), amPm);
 #else
@@ -96,6 +103,7 @@ int main(int argc, char *argv[])
 	else
 	{
 		/* 24HRS format (e.g., 20:33:45) */
+
 #ifndef PRINT_ON_LCD
 		printf("Current time = %s\n", TimeToString(&currTime));
 #else
@@ -103,10 +111,10 @@ int main(int argc, char *argv[])
 #endif
 	}
 
-	/* Print current date in 'MM/DD/YY <Day>' format **************************/
+	/* Print current date in 'MM/DD/YY Day' format ---------------------------*/
 
 #ifndef PRINT_ON_LCD
-	printf("Current date = %s <%s>\n", DateToString(&currDate), GetDay(currDate.day));
+	printf("Current date = %s %s\n", DateToString(&currDate), GetDay(currDate.day));
 #else
 	LCD_SetCursor(1, 1);
 	LCD_PrintString(DateToString(&currDate));
@@ -133,6 +141,7 @@ void DisplayPrologue(void)
 	LCD_SetCursor(2, 1);
     LCD_PrintString("on 16x2 LCD");
 
+    /* Introduce inter-frame delay */
     DelayMs(3000);
 
     /* Clear display */
@@ -224,15 +233,15 @@ void NumToString(uint8_t num, char *buf)
 	if (num < 10)
 	{
 		buf[0] = '0';
-		//buf[1] = num + '0';
-		buf[1] = num + 48;
+		buf[1] = num + '0';
+		//buf[1] = num + 48;
 	}
 	else if (10 <= num && num < 99)
 	{
-		//buf[0] = num / 10 + '0';
-		//buf[1] = num % 10 + '0';
-		buf[0] = num / 10 + 48;
-		buf[1] = num % 10 + 48;
+		buf[0] = num / 10 + '0';
+		buf[1] = num % 10 + '0';
+		//buf[0] = num / 10 + 48;
+		//buf[1] = num % 10 + 48;
 	}
 } /* End of NumToString */
 
@@ -274,7 +283,7 @@ void SysTick_Handler(void)
 	RTC_Date_TypeDef currDate;
 	char *amPm;
 
-	/* Print current time *****************************************************/
+	/* Print current time ----------------------------------------------------*/
 
 	DS1307_GetCurrentTime(&currTime);
 
@@ -282,6 +291,7 @@ void SysTick_Handler(void)
 	{
 		/* 12HRS format (e.g., 08:33:45 PM) */
 		amPm = (currTime.timeFormat) ? "PM" : "AM";
+
 #ifndef PRINT_ON_LCD
 		printf("Current time = %s %s\n", TimeToString(&currTime), amPm);
 #else
@@ -302,9 +312,10 @@ void SysTick_Handler(void)
 #endif
 	}
 
-	/* Print current date in 'MM/DD/YY <Day>' format **************************/
+	/* Print current date in 'MM/DD/YY Day' format ---------------------------*/
 
 	DS1307_GetCurrentDate(&currDate);
+
 #ifndef PRINT_ON_LCD
 	printf("Current date = %s <%s>\n", DateToString(&currDate), GetDay(currDate.day));
 #else

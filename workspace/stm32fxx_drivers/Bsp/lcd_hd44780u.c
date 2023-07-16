@@ -27,7 +27,7 @@ void LCD_Init(void)
 {
 	GPIO_Handle_TypeDef gpioPin;
 
-	/* 1. Configure the GPIO pins to be used for LCD connections **************/
+	/* 1. Configure the GPIO pins to be used for LCD connections -------------*/
 
 	/* Configure the GPIO pin to be connected to LCD RS pin */
 	gpioPin.pGPIOx = LCD_GPIO_PORT;
@@ -71,7 +71,7 @@ void LCD_Init(void)
 	GPIO_WriteToOutputPin(LCD_GPIO_PORT, LCD_PIN_D6, RESET);
 	GPIO_WriteToOutputPin(LCD_GPIO_PORT, LCD_PIN_D7, RESET);
 
-	/* 2. Initialize LCD module ***********************************************
+	/* 2. Initialize LCD module ------------------------------------------------
 	 * (See 'Figure 24. 4-Bit Interface' in the LCD reference manual)
 	 */
 

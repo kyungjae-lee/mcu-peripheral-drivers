@@ -70,7 +70,7 @@ void DS1307_SetCurrentTime(RTC_Time_TypeDef *rtcTime)
 {
 	uint8_t secs, hrs;
 
-	/* Set seconds ************************************************************/
+	/* Set seconds -----------------------------------------------------------*/
 
 	secs = BinaryToBcd(rtcTime->seconds);
 
@@ -79,11 +79,11 @@ void DS1307_SetCurrentTime(RTC_Time_TypeDef *rtcTime)
 
 	DS1307_Write(secs, DS1307_SEC);
 
-	/* Set minutes ************************************************************/
+	/* Set minutes -----------------------------------------------------------*/
 
 	DS1307_Write(BinaryToBcd(rtcTime->minutes), DS1307_MIN);
 
-	/* Set hours **************************************************************/
+	/* Set hours -------------------------------------------------------------*/
 
 	hrs = BinaryToBcd(rtcTime->hours);
 
@@ -115,17 +115,17 @@ void DS1307_GetCurrentTime(RTC_Time_TypeDef *rtcTime)
 {
 	uint8_t secs, hrs;
 
-	/* Get seconds ************************************************************/
+	/* Get seconds -----------------------------------------------------------*/
 
 	secs = DS1307_Read(DS1307_SEC);
 	secs &= ~(0x1 << 7); 	/* Exclude unnecessary bits */
 	rtcTime->seconds = BcdToBinary(secs);
 
-	/* Get minutes ************************************************************/
+	/* Get minutes -----------------------------------------------------------*/
 
 	rtcTime->minutes = BcdToBinary(DS1307_Read(DS1307_MIN));
 
-	/* Get hours **************************************************************/
+	/* Get hours -------------------------------------------------------------*/
 
 	hrs = DS1307_Read(DS1307_HR);
 
