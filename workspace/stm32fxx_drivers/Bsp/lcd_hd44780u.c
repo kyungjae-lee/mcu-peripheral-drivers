@@ -31,8 +31,9 @@ void LCD_Init(void)
 
 	/* Configure the GPIO pin to be connected to LCD RS pin */
 	gpioPin.pGPIOx = LCD_GPIO_PORT;
-	gpioPin.GPIO_PinConfig.GPIO_PinMode = LCD_PIN_RS;
-	gpioPin.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_MODE_OUT;
+	gpioPin.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_OUT;
+	gpioPin.GPIO_PinConfig.GPIO_PinNumber = LCD_PIN_RS;
+	gpioPin.GPIO_PinConfig.GPIO_PinOutType = GPIO_PIN_OUT_TYPE_PP;
 	gpioPin.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_PIN_NO_PUPD;
 	gpioPin.GPIO_PinConfig.GPIO_PinSpeed = GPIO_PIN_OUT_SPEED_HIGH;
 	GPIO_Init(&gpioPin);
@@ -46,6 +47,7 @@ void LCD_Init(void)
 	GPIO_Init(&gpioPin);
 
 	/* Configure the GPIO pin to be connected to LCD D4 pin */
+	gpioPin.GPIO_PinConfig.GPIO_PinNumber = LCD_PIN_D4;
 	GPIO_Init(&gpioPin);
 
 	/* Configure the GPIO pin to be connected to LCD D5 pin */
@@ -90,7 +92,7 @@ void LCD_Init(void)
 
 	Write4Bits(0x3);
 
-	DelayMs(150);
+	DelayUs(150);
 
 	Write4Bits(0x3);
 	Write4Bits(0x2);
@@ -112,9 +114,9 @@ void LCD_Init(void)
 } /* End of LCD_Init */
 
 /**
- * LCD_TxCmd()
- * Desc.	:
- * Param.	: @cmd -
+ * LCD_TxInstruction()
+ * Desc.	: Sends passed instruction (@instruction) to LCD
+ * Param.	: @instruction - LCD instruction to send
  * Return	: None
  * Note		: N/A
  */
@@ -128,7 +130,7 @@ void LCD_TxInstruction(uint8_t instruction)
 
 	Write4Bits(instruction >> 4);	/* Send the higher nibble */
 	Write4Bits(instruction & 0xF);	/* Send the lower nibble */
-} /* End of LCD_TxCmd */
+} /* End of LCD_TxInstruction */
 
 /**
  * LCD_PrintChar()
@@ -180,7 +182,7 @@ void LCD_ClearDisplay(void)
 void LCD_ReturnHome(void)
 {
 	/* Return home */
-	Write4Bits(LCD_INST_RETURN_HOME);
+	LCD_TxInstruction(LCD_INST_RETURN_HOME);
 
 	DelayMs(2);	/* Wait 2 ms as per the datasheet */
 } /* End of LCD_ReturnHome */
@@ -221,7 +223,7 @@ void LCD_SetCursor(uint8_t row, uint8_t column)
 		LCD_TxInstruction((column |= 0x80));
 		break;
 	case 2:
-		/* Set cusor to 2nd row address and add index */
+		/* Set cursor to 2nd row address and add index */
 		LCD_TxInstruction((column |= 0xC0));
 		break;
 	default:
@@ -294,8 +296,7 @@ static void Write4Bits(uint8_t nibble)
 static void LCD_Enable(void)
 {
 	GPIO_WriteToOutputPin(LCD_GPIO_PORT, LCD_PIN_EN, SET);
-	DelayMs(10);
+	DelayUs(10);
 	GPIO_WriteToOutputPin(LCD_GPIO_PORT, LCD_PIN_EN, RESET);
-	DelayMs(10);
-
+	DelayUs(100);
 } /* End of LCD_Enable */

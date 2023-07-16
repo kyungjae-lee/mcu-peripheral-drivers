@@ -106,8 +106,8 @@ void DS1307_SetCurrentTime(RTC_Time_TypeDef *rtcTime)
 
 /**
  * DS1307_GetCurrentTime()
- * Desc.	:
- * Param.	:
+ * Desc.	: Gets the current time information and stores it into @rtcTime
+ * Param.	: @rtcTime - RTC_Time structure to store the current time info
  * Return	: None
  * Note		: N/A
  */
@@ -146,8 +146,8 @@ void DS1307_GetCurrentTime(RTC_Time_TypeDef *rtcTime)
 
 /**
  * DS1307_SetCurrentDate()
- * Desc.	:
- * Param.	:
+ * Desc.	: Sets the current date information into @rtcDate
+ * Param.	: @rtcDate - RTC_Date structure which contains the current date info
  * Return	: None
  * Note		: N/A
  */
@@ -161,8 +161,8 @@ void DS1307_SetCurrentDate(RTC_Date_TypeDef *rtcDate)
 
 /**
  * DS1307_GetCurrentDate()
- * Desc.	:
- * Param.	:
+ * Desc.	: Gets the current date information and stores it into @rtcDate
+ * Param.	: @rtcDate - RTC_Date structure to store the current date info
  * Return	: None
  * Note		: N/A
  */
@@ -181,8 +181,8 @@ void DS1307_GetCurrentDate(RTC_Date_TypeDef *rtcDate)
 
 /**
  * DS1307_I2CPinConfig()
- * Desc.	:
- * Param.	:
+ * Desc.	: Configures the GPIO pins to be used for I2C communication
+ * Param.	: None
  * Return	: None
  * Note		: N/A
  */
@@ -205,8 +205,8 @@ static void DS1307_I2CPinConfig(void)
 	 */
 
 	i2cSda.pGPIOx = DS1307_I2C_GPIO_PORT;
-	i2cSda.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_ALTFCN;
 	i2cSda.GPIO_PinConfig.GPIO_PinAltFcnMode = 4;
+	i2cSda.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_ALTFCN;
 	i2cSda.GPIO_PinConfig.GPIO_PinNumber = DS1307_I2C_PIN_SDA;
 	i2cSda.GPIO_PinConfig.GPIO_PinOutType= GPIO_PIN_OUT_TYPE_OD;
 	i2cSda.GPIO_PinConfig.GPIO_PinPuPdControl = DS1307_I2C_PUPD;
@@ -215,8 +215,8 @@ static void DS1307_I2CPinConfig(void)
 	GPIO_Init(&i2cSda);
 
 	i2cScl.pGPIOx = DS1307_I2C_GPIO_PORT;
-	i2cScl.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_ALTFCN;
 	i2cScl.GPIO_PinConfig.GPIO_PinAltFcnMode = 4;
+	i2cScl.GPIO_PinConfig.GPIO_PinMode = GPIO_PIN_MODE_ALTFCN;
 	i2cScl.GPIO_PinConfig.GPIO_PinNumber = DS1307_I2C_PIN_SCL;
 	i2cScl.GPIO_PinConfig.GPIO_PinOutType= GPIO_PIN_OUT_TYPE_OD;
 	i2cScl.GPIO_PinConfig.GPIO_PinPuPdControl = DS1307_I2C_PUPD;

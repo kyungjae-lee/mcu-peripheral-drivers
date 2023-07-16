@@ -26,6 +26,7 @@
 #define PRINT_ON_LCD	/* Comment this out if LCD is not installed */
 
 /* Function prototypes */
+void DisplayPrologue(void);
 char* TimeToString(RTC_Time_TypeDef *rtcTime);
 char* DateToString(RTC_Date_TypeDef *rtcDate);
 char* GetDay(uint8_t dayCode);
@@ -40,20 +41,14 @@ int main(int argc, char *argv[])
 	RTC_Date_TypeDef currDate;
 	char *amPm;
 
-	printf("RTC test application running...\n");
+	printf("RTC on LCD application running...\n");
 
 #ifndef PRINT_ON_LCD
-    printf("RTC test without LCD");
+    printf("RTC on LCD application without LCD");
 #else
 	LCD_Init();
 
-    LCD_PrintString("RTC test on LCD");
-
-    DelayMs(2000);
-
-    /* Start printing from the beginning */
-    LCD_ClearDisplay();
-    LCD_ReturnHome();
+	DisplayPrologue();
 #endif
 
 	if (DS1307_Init())
@@ -68,13 +63,13 @@ int main(int argc, char *argv[])
 	SysTickTimer_Init(1);
 
 	currDate.day = FRIDAY;
-	currDate.date = 25;
-	currDate.month = 6;
+	currDate.date = 14;
+	currDate.month = 7;
 	currDate.year = 23;		/* Only the last two digits of the year */
 
 	currTime.hours = 11;
 	currTime.minutes = 59;
-	currTime.seconds = 30;
+	currTime.seconds = 50;
 	currTime.timeFormat = TIME_FORMAT_12HRS_PM;
 
 	DS1307_SetCurrentDate(&currDate);
@@ -92,7 +87,9 @@ int main(int argc, char *argv[])
 #ifndef PRINT_ON_LCD
 		printf("Current time = %s %s\n", TimeToString(&currTime), amPm);
 #else
+		LCD_SetCursor(2, 1);
 		LCD_PrintString(TimeToString(&currTime));
+		LCD_PrintString(" ");
 		LCD_PrintString(amPm);
 #endif
 	}
@@ -111,14 +108,48 @@ int main(int argc, char *argv[])
 #ifndef PRINT_ON_LCD
 	printf("Current date = %s <%s>\n", DateToString(&currDate), GetDay(currDate.day));
 #else
-	LCD_SetCursor(1, 2);
+	LCD_SetCursor(1, 1);
 	LCD_PrintString(DateToString(&currDate));
+	LCD_PrintString(" ");
+	LCD_PrintString(GetDay(currDate.day));
 #endif
 
 	while (1);
 
 	return 0;
 } /* End of main */
+
+/**
+ * DisplayPrologue()
+ * Desc.	: Displays the project title and the author's name
+ * Param.	: None
+ * Returns	: None
+ * Note		: N/A
+ */
+void DisplayPrologue(void)
+{
+	/* Display the project title */
+    LCD_PrintString("Real-time clock");
+	LCD_SetCursor(2, 1);
+    LCD_PrintString("on 16x2 LCD");
+
+    DelayMs(3000);
+
+    /* Clear display */
+    LCD_ClearDisplay();
+    LCD_ReturnHome();
+
+    /* Display the author's name */
+    LCD_PrintString("by");
+	LCD_SetCursor(2, 1);
+    LCD_PrintString("Kyungjae Lee");
+
+    DelayMs(3000);
+
+    /* Clear display */
+    LCD_ClearDisplay();
+    LCD_ReturnHome();
+} /* End of DisplayPrologue */
 
 /**
  * TimeToString()
@@ -175,7 +206,7 @@ char* DateToString(RTC_Date_TypeDef *rtcDate)
  */
 char* GetDay(uint8_t dayCode)
 {
-	char *days[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+	char *days[] = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
 
 	return days[dayCode];
 } /* End of GetDay */
@@ -193,12 +224,15 @@ void NumToString(uint8_t num, char *buf)
 	if (num < 10)
 	{
 		buf[0] = '0';
-		buf[1] = num + '0';
+		//buf[1] = num + '0';
+		buf[1] = num + 48;
 	}
 	else if (10 <= num && num < 99)
 	{
-		buf[0] = num / 10 + '0';
-		buf[1] = num % 10 + '0';
+		//buf[0] = num / 10 + '0';
+		//buf[1] = num % 10 + '0';
+		buf[0] = num / 10 + 48;
+		buf[1] = num % 10 + 48;
 	}
 } /* End of NumToString */
 
@@ -240,9 +274,9 @@ void SysTick_Handler(void)
 	RTC_Date_TypeDef currDate;
 	char *amPm;
 
-	DS1307_GetCurrentTime(&currTime);
-
 	/* Print current time *****************************************************/
+
+	DS1307_GetCurrentTime(&currTime);
 
 	if (currTime.timeFormat != TIME_FORMAT_24HRS)
 	{
@@ -251,8 +285,9 @@ void SysTick_Handler(void)
 #ifndef PRINT_ON_LCD
 		printf("Current time = %s %s\n", TimeToString(&currTime), amPm);
 #else
-		LCD_SetCursor(1, 1);
+		LCD_SetCursor(2, 1);
 		LCD_PrintString(TimeToString(&currTime));
+		LCD_PrintString(" ");
 		LCD_PrintString(amPm);
 #endif
 	}
@@ -262,7 +297,7 @@ void SysTick_Handler(void)
 #ifndef PRINT_ON_LCD
 		printf("Current time = %s\n", TimeToString(&currTime));
 #else
-		LCD_SetCursor(1, 1);
+		LCD_SetCursor(2, 1);
 		LCD_PrintString(TimeToString(&currTime));
 #endif
 	}
@@ -275,9 +310,10 @@ void SysTick_Handler(void)
 #else
 	LCD_SetCursor(1, 1);
 	LCD_PrintString(DateToString(&currDate));
-	LCD_PrintChar('<');
+	LCD_PrintString(" ");
+	//LCD_PrintChar('<');
 	LCD_PrintString(GetDay(currDate.day));
-	LCD_PrintChar('>');
+	//LCD_PrintChar('>');
 #endif
 } /* End of SysTick_Handler */
 
