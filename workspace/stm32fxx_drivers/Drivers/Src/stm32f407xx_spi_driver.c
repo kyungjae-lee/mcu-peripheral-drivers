@@ -3,6 +3,9 @@
  * Brief	: STM32F407xx MCU specific SPI driver source file
  * Author	; Kyungjae Lee
  * Date		: May 21, 2023
+ *
+ * Note		: This code includes only the features that are necessary for my
+ * 			  personal projects.
  * ****************************************************************************/
 
 #include "stm32f407xx.h"
@@ -12,9 +15,10 @@ static void SPI_TXE_InterruptHandle(SPI_Handle_TypeDef *pSPIHandle);
 static void SPI_RXNE_InterruptHandle(SPI_Handle_TypeDef *pSPIHandle);
 static void SPI_OVR_InterruptHandle(SPI_Handle_TypeDef *pSPIHandle);
 
-/*****************************************************************************************
- * APIs supported by the SPI driver (See function definitions for more information)
- ****************************************************************************************/
+/*******************************************************************************
+ * APIs supported by the SPI driver
+ * (See function definitions for more information)
+ ******************************************************************************/
 
 /**
  * SPI_PeriClockControl()

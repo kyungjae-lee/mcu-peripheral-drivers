@@ -3,6 +3,9 @@
  * Brief	: STM32F407xx MCU specific USART driver source file
  * Author	; Kyungjae Lee
  * Date		: Jun 20, 2023
+ *
+ * Note		: This code includes only the features that are necessary for my
+ * 			  personal projects.
  * ****************************************************************************/
 
 #include "stm32f407xx.h"
@@ -66,7 +69,7 @@ void USART_Init(USART_Handle_TypeDef *pUSARTHandle)
 	/* Temporary variable */
 	uint32_t temp = 0;
 
-	/* Configure USART_CR1 ****************************************************/
+	/* Configure USART_CR1 ---------------------------------------------------*/
 
 	/* Enable USART peripheral clock */
 	USART_PeriClockControl(pUSARTHandle->pUSARTx, ENABLE);
@@ -116,7 +119,7 @@ void USART_Init(USART_Handle_TypeDef *pUSARTHandle)
 	/* Write to USART_CR1 register */
 	pUSARTHandle->pUSARTx->CR1 = temp;
 
-	/* Configure USART_CR2 ****************************************************/
+	/* Configure USART_CR2 ---------------------------------------------------*/
 
 	temp = 0;
 
@@ -126,7 +129,7 @@ void USART_Init(USART_Handle_TypeDef *pUSARTHandle)
 	/* Write to USART_CR2 register */
 	pUSARTHandle->pUSARTx->CR2 = temp;
 
-	/* Configure USART_CR3 ****************************************************/
+	/* Configure USART_CR3 ---------------------------------------------------*/
 
 	temp = 0;
 
@@ -151,7 +154,7 @@ void USART_Init(USART_Handle_TypeDef *pUSARTHandle)
 	/* Write to USART_CR3 register */
 	pUSARTHandle->pUSARTx->CR3 = temp;
 
-	/* Configure USART_BRR (Baud rate register) *******************************/
+	/* Configure USART_BRR (Baud rate register) ------------------------------*/
 
 	/* Configure baudrate */
 	USART_SetBaudRate(pUSARTHandle->pUSARTx, pUSARTHandle->USART_Config.USART_Baud);
@@ -414,7 +417,7 @@ void USART_IRQHandling(USART_Handle_TypeDef *pUSARTHandle)
 	uint32_t temp1, temp2, temp3;
 	uint16_t *pData;
 
-	/* Check for TC (Transmission Complete) flag ******************************/
+	/* Check for TC (Transmission Complete) flag -----------------------------*/
 
 	/* Check the state of TC bit in SR */
 	temp1 = pUSARTHandle->pUSARTx->SR & (0x1 << USART_SR_TC);
@@ -452,7 +455,7 @@ void USART_IRQHandling(USART_Handle_TypeDef *pUSARTHandle)
 		}
 	}
 
-	/* Check for TXE (Transmit data register Empty) flag **********************/
+	/* Check for TXE (Transmit data register Empty) flag ---------------------*/
 
 	/* Check the state of TXE bit in SR */
 	temp1 = pUSARTHandle->pUSARTx->SR & (0x1 << USART_SR_TXE);
@@ -513,7 +516,7 @@ void USART_IRQHandling(USART_Handle_TypeDef *pUSARTHandle)
 		}
 	}
 
-	/* Check for RXNE flag ****************************************************/
+	/* Check for RXNE flag ---------------------------------------------------*/
 
 	temp1 = pUSARTHandle->pUSARTx->SR & (0x1 << USART_SR_RXNE);
 	temp2 = pUSARTHandle->pUSARTx->CR1 & (0x1 << USART_CR1_RXNEIE);
@@ -590,7 +593,7 @@ void USART_IRQHandling(USART_Handle_TypeDef *pUSARTHandle)
 		}
 	}
 
-	/* Check for CTS flag *****************************************************/
+	/* Check for CTS flag ----------------------------------------------------*/
 	/* Note: CTS feature is not applicable for UART4 and UART5 */
 
 	/* Check the state of CTS bit in SR */
@@ -611,7 +614,7 @@ void USART_IRQHandling(USART_Handle_TypeDef *pUSARTHandle)
 		USART_ApplicationEventCallback(pUSARTHandle, USART_EV_CTS);
 	}
 
-	/* Check for IDLE detection flag ******************************************/
+	/* Check for IDLE detection flag -----------------------------------------*/
 
 	/* Check the state of IDLE bit in SR */
 	temp1 = pUSARTHandle->pUSARTx->SR & (0x1 << USART_SR_IDLE);
@@ -628,7 +631,7 @@ void USART_IRQHandling(USART_Handle_TypeDef *pUSARTHandle)
 		USART_ApplicationEventCallback(pUSARTHandle, USART_EV_IDLE);
 	}
 
-	/* Check for Overrun detection flag ***************************************/
+	/* Check for Overrun detection flag --------------------------------------*/
 
 	/* Check the state of ORE flag in SR */
 	temp1 = pUSARTHandle->pUSARTx->SR & USART_SR_ORE;
@@ -646,7 +649,7 @@ void USART_IRQHandling(USART_Handle_TypeDef *pUSARTHandle)
 		USART_ApplicationEventCallback(pUSARTHandle, USART_ER_ORE);
 	}
 
-	/* Check for Error flag ***************************************************/
+	/* Check for Error flag --------------------------------------------------*/
 	/* Note: Noise flag, overrun error and framing error in multibuffer
 	 *		 communication. Multibuffer communication is not dealt in this
 	 *		 driver. Please refer to the MCU reference manual.

@@ -3,6 +3,9 @@
  * Brief	: STM32F407xx MCU specific RCC driver source file
  * Author	; Kyungjae Lee
  * Date		: Jun 20, 2023
+ *
+ * Note		: This code includes only the features that are necessary for my
+ * 			  personal projects.
  * ****************************************************************************/
 
 #include "stm32f407xx.h"
