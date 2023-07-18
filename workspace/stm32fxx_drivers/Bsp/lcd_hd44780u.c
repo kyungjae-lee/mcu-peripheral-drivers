@@ -20,9 +20,9 @@ static void DelayUs(uint32_t delayInUs);
 
 /**
  * LCD_Init()
- * Desc.	: Initializes GPIO pins to be used for LCD connections
- * Param.	: None
- * Return	: None
+ * Brief	: Initializes GPIO pins to be used for LCD connections
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void LCD_Init(void)
@@ -117,9 +117,9 @@ void LCD_Init(void)
 
 /**
  * LCD_TxInstruction()
- * Desc.	: Sends passed instruction (@instruction) to LCD
- * Param.	: @instruction - LCD instruction to send
- * Return	: None
+ * Brief	: Sends passed instruction (@instruction) to LCD
+ * Param	: @instruction - LCD instruction to send
+ * Retval	: None
  * Note		: N/A
  */
 void LCD_TxInstruction(uint8_t instruction)
@@ -136,9 +136,9 @@ void LCD_TxInstruction(uint8_t instruction)
 
 /**
  * LCD_PrintChar()
- * Desc.	: Sends a character to be printed to the LCD
- * Param.	: @ch - character to print
- * Return	: None
+ * Brief	: Sends a character to be printed to the LCD
+ * Param	: @ch - character to print
+ * Retval	: None
  * Note		: This function assumes 4-bit parallel data transmission.
  * 			  First, the higher nibble of the data will be sent through the data
  * 			  lines D4, D5, d6, d7,
@@ -159,9 +159,9 @@ void LCD_PrintChar(uint8_t ch)
 
 /**
  * LCD_ClearDisplay()
- * Desc.	: Performs display clear routine
- * Param.	: None
- * Return	: None
+ * Brief	: Performs display clear routine
+ * Param	: None
+ * Retval	: None
  * Note		: After sending the clear display instruction, give it 2 ms as per
  * 			  the datasheet of LCD (See p.24 of LCD datasheet).
  */
@@ -175,9 +175,9 @@ void LCD_ClearDisplay(void)
 
 /**
  * LCD_ReturnHome()
- * Desc.	: Returns the cursor to the home position
- * Param.	: None
- * Return	: None
+ * Brief	: Returns the cursor to the home position
+ * Param	: None
+ * Retval	: None
  * Note		: After sending the clear display instruction, give it 2 ms as per
  * 			  the datasheet of LCD (See p.24 of LCD datasheet).
  */
@@ -191,9 +191,9 @@ void LCD_ReturnHome(void)
 
 /**
  * LCD_PrintString()
- * Desc.	: Prints the passed string @msg to the LCD screen
- * Param.	: @msg - string to print
- * Return	: None
+ * Brief	: Prints the passed string @msg to the LCD screen
+ * Param	: @msg - string to print
+ * Retval	: None
  * Note		: N/A
  */
 void LCD_PrintString(char *msg)
@@ -207,10 +207,10 @@ void LCD_PrintString(char *msg)
 
 /**
  * LCD_SetCursor()
- * Desc.	: Sets the cursor position (@row, @column)
- * Param.	: @row - the row in which the cursor should be placed
+ * Brief	: Sets the cursor position (@row, @column)
+ * Param	: @row - the row in which the cursor should be placed
  * 			  @column - the column in which the cursor should be placed
- * Return	: None
+ * Retval	: None
  * Note		: Row number: 1 ~ 2
  * 			  Column number: 1 ~ 16 assuming a 2x16 character display
  */
@@ -240,9 +240,9 @@ void LCD_SetCursor(uint8_t row, uint8_t column)
 
 /**
  * DelayMs()
- * Desc.	: Spinlock delays for @delayInMs milliseconds
- * Param.	: @delayInMs - time to delay in milliseconds
- * Returns	: None
+ * Brief	: Spinlock delays for @delayInMs milliseconds
+ * Param	: @delayInMs - time to delay in milliseconds
+ * Retval	: None
  * Note		: N/A
  */
 static void DelayMs(uint32_t delayInMs)
@@ -252,9 +252,9 @@ static void DelayMs(uint32_t delayInMs)
 
 /**
  * DelayUs()
- * Desc.	: Spinlock delays for @delayInUs microseconds
- * Param.	: @delayInUs - time to delay in microseconds
- * Returns	: None
+ * Brief	: Spinlock delays for @delayInUs microseconds
+ * Param	: @delayInUs - time to delay in microseconds
+ * Retval	: None
  * Note		: N/A
  */
 static void DelayUs(uint32_t delayInUs)
@@ -264,10 +264,10 @@ static void DelayUs(uint32_t delayInUs)
 
 /**
  * Write4Bits()
- * Desc.	: Writes 4 bits of data/command to D4, D5, D6, D7 lines
+ * Brief	: Writes 4 bits of data/command to D4, D5, D6, D7 lines
  * 			  (msb to D7, lsb to D4)
- * Param.	: @value -
- * Return	: None
+ * Param	: @value -
+ * Retval	: None
  * Note		: N/A
  */
 static void Write4Bits(uint8_t nibble)
@@ -288,9 +288,9 @@ static void Write4Bits(uint8_t nibble)
 
 /**
  * LCD_Enable()
- * Desc.	: Makes high-to-low transition on the EN line
- * Param.	: None
- * Return	: None
+ * Brief	: Makes high-to-low transition on the EN line
+ * Param	: None
+ * Retval	: None
  * Note		: For the instruction execution time, give any value that is greater
  * 			  than 32 micro-seconds.
  */

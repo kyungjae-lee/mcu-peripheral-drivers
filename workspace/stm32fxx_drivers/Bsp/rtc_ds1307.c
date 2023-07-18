@@ -25,9 +25,9 @@ I2C_Handle_TypeDef gDS1307I2CHandle;
 
 /**
  * DS1307_Init()
- * Desc.	: Initializes DS1307 RTC module
- * Param.	: None
- * Return	: 0 if setting DS1307_SEC CH bit to 0 was successful (init success),
+ * Brief	: Initializes DS1307 RTC module
+ * Param	: None
+ * Retval	: 0 if setting DS1307_SEC CH bit to 0 was successful (init success),
  * 			  1 otherwise (init fail)
  * Note		: N/A
  */
@@ -62,11 +62,11 @@ uint8_t DS1307_Init(void)
 
 /**
  * DS1307_SetCurrentTime()
- * Desc.	: Sets the DS1307 Seconds, Minutes, Hours registers according to
+ * Brief	: Sets the DS1307 Seconds, Minutes, Hours registers according to
  * 			  the values configured in @rtcTime
- * Param.	: @rtcTime - pointer to the RTC Time structure which contains the
+ * Param	: @rtcTime - pointer to the RTC Time structure which contains the
  * 			  values configured by the user
- * Return	: None
+ * Retval	: None
  * Note		: N/A
  */
 void DS1307_SetCurrentTime(RTC_Time_TypeDef *rtcTime)
@@ -109,9 +109,9 @@ void DS1307_SetCurrentTime(RTC_Time_TypeDef *rtcTime)
 
 /**
  * DS1307_GetCurrentTime()
- * Desc.	: Gets the current time information and stores it into @rtcTime
- * Param.	: @rtcTime - RTC_Time structure to store the current time info
- * Return	: None
+ * Brief	: Gets the current time information and stores it into @rtcTime
+ * Param	: @rtcTime - RTC_Time structure to store the current time info
+ * Retval	: None
  * Note		: N/A
  */
 void DS1307_GetCurrentTime(RTC_Time_TypeDef *rtcTime)
@@ -149,9 +149,9 @@ void DS1307_GetCurrentTime(RTC_Time_TypeDef *rtcTime)
 
 /**
  * DS1307_SetCurrentDate()
- * Desc.	: Sets the current date information into @rtcDate
- * Param.	: @rtcDate - RTC_Date structure which contains the current date info
- * Return	: None
+ * Brief	: Sets the current date information into @rtcDate
+ * Param	: @rtcDate - RTC_Date structure which contains the current date info
+ * Retval	: None
  * Note		: N/A
  */
 void DS1307_SetCurrentDate(RTC_Date_TypeDef *rtcDate)
@@ -164,9 +164,9 @@ void DS1307_SetCurrentDate(RTC_Date_TypeDef *rtcDate)
 
 /**
  * DS1307_GetCurrentDate()
- * Desc.	: Gets the current date information and stores it into @rtcDate
- * Param.	: @rtcDate - RTC_Date structure to store the current date info
- * Return	: None
+ * Brief	: Gets the current date information and stores it into @rtcDate
+ * Param	: @rtcDate - RTC_Date structure to store the current date info
+ * Retval	: None
  * Note		: N/A
  */
 void DS1307_GetCurrentDate(RTC_Date_TypeDef *rtcDate)
@@ -184,9 +184,9 @@ void DS1307_GetCurrentDate(RTC_Date_TypeDef *rtcDate)
 
 /**
  * DS1307_I2CPinConfig()
- * Desc.	: Configures the GPIO pins to be used for I2C communication
- * Param.	: None
- * Return	: None
+ * Brief	: Configures the GPIO pins to be used for I2C communication
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 static void DS1307_I2CPinConfig(void)
@@ -230,9 +230,9 @@ static void DS1307_I2CPinConfig(void)
 
 /**
  * DS1307_I2CConfig()
- * Desc.	: Configures and initializes DS1307 I2C peripheral
- * Param.	: None
- * Return	: None
+ * Brief	: Configures and initializes DS1307 I2C peripheral
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 static void DS1307_I2CConfig(void)
@@ -245,10 +245,10 @@ static void DS1307_I2CConfig(void)
 
 /**
  * DS1307_Write()
- * Desc.	: Writes @value to @regAddr
- * Param.	: @value - value to write to @regAddr
+ * Brief	: Writes @value to @regAddr
+ * Param	: @value - value to write to @regAddr
  *            @regAddr - DS1307 register address to write @value to
- * Return	: None
+ * Retval	: None
  * Note		: N/A
  */
 static void DS1307_Write(uint8_t value, uint8_t regAddr)
@@ -262,9 +262,9 @@ static void DS1307_Write(uint8_t value, uint8_t regAddr)
 
 /**
  * DS1307_Read()
- * Desc.	: Writes @value to @regAddr
- * Param.   : @regAddr - DS1307 register address to read from
- * Return	: 1-byte data received from the slave (DS1307 RTC module)
+ * Brief	: Writes @value to @regAddr
+ * Param   : @regAddr - DS1307 register address to read from
+ * Retval	: 1-byte data received from the slave (DS1307 RTC module)
  * Note		: N/A
  */
 static uint8_t DS1307_Read(uint8_t regAddr)
@@ -278,9 +278,9 @@ static uint8_t DS1307_Read(uint8_t regAddr)
 
 /**
  * BcdToBinary()
- * Desc.	: Converts the passed Binary-Coded Decimal (BCD) value to binary
- * Param.   : @bcd - binary-coded decimal value to be converted into binary
- * Return	: @bcd in binary representation
+ * Brief	: Converts the passed Binary-Coded Decimal (BCD) value to binary
+ * Param	: @bcd - binary-coded decimal value to be converted into binary
+ * Retval	: @bcd in binary representation
  * Note		: N/A
  */
 static uint8_t BcdToBinary(uint8_t bcd)
@@ -295,9 +295,9 @@ static uint8_t BcdToBinary(uint8_t bcd)
 
 /**
  * BinaryToBcd()
- * Desc.	: Converts the passed binary value to Binary-Coded Decimal (BCD)
- * Param.   : @binary - binary value to be converted into binary-coded decimal
- * Return	: @binary in binary-coded decimal representation
+ * Brief	: Converts the passed binary value to Binary-Coded Decimal (BCD)
+ * Param	: @binary - binary value to be converted into binary-coded decimal
+ * Retval	: @binary in binary-coded decimal representation
  * Note		: N/A
  */
 uint8_t BinaryToBcd(uint8_t binary)
