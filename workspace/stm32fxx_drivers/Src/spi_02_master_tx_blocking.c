@@ -1,10 +1,9 @@
 /*******************************************************************************
- * Filename		: spi_02_master_tx_blocking.c
- * Description	: Program to test SPI master's Tx (blocking) functionality
- * 				  (with slave)
- * Author		: Kyungjae Lee
- * History 		: Jun 02, 2023 - Created file
- * 				  Jun 23, 2023 - Refactored code for consistency
+ * File		: spi_02_master_tx_blocking.c
+ * Brief	: Program to test SPI master's Tx (blocking) functionality
+ * 			  (with slave)
+ * Author	: Kyungjae Lee
+ * Date		: Jun 02, 2023
  ******************************************************************************/
 
 /**
@@ -21,9 +20,9 @@
 
 /**
  * delay()
- * Desc.	: Spinlock delays the program execution
- * Param.	: None
- * Returns	: None
+ * Brief	: Spinlock delays the program execution
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void delay(void)
@@ -34,9 +33,9 @@ void delay(void)
 
 /**
  * SPI2_PinsInit()
- * Desc.	: Initializes and configures GPIO pins to be used as SPI2 pins
- * Param.	: None
- * Returns	: None
+ * Brief	: Initializes and configures GPIO pins to be used as SPI2 pins
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void SPI2_PinsInit(void)
@@ -78,9 +77,9 @@ void SPI2_PinsInit(void)
 
 /**
  * SPI2_Init()
- * Desc.	: Creates an SPI2Handle and initializes SPI2 peripheral parameters
- * Param.	: None
- * Returns	: None
+ * Brief	: Creates an SPI2Handle and initializes SPI2 peripheral parameters
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void SPI2_Init(void)
@@ -110,9 +109,9 @@ void SPI2_Init(void)
 
 /**
  * GPIO_ButtonInit()
- * Desc.	: Initializes a GPIO pin for button
- * Param.	: None
- * Returns	: None
+ * Brief	: Initializes a GPIO pin for button
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void GPIO_ButtonInit(void)
@@ -137,6 +136,7 @@ void GPIO_ButtonInit(void)
 		/* External pull-down resistor is already present (see the schematic) */
 	GPIO_Init(&GPIOBtn);
 } /* End of GPIO_ButtonInit */
+
 
 int main(int argc, char *argv[])
 {

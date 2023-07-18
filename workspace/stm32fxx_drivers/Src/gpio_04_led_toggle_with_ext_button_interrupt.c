@@ -1,10 +1,10 @@
-/**
- * Filename		: gpio_04_led_toggle_with_ext_button_interrupt.c
- * Description	: Program to toggle LED whenever an interrupt is triggered by
- * 				  the external button press
- * Author		: Kyungjae Lee
- * History		: May 24, 2023 - Created file
- */
+/*******************************************************************************
+ * File		: gpio_04_led_toggle_with_ext_button_interrupt.c
+ * Brief	: Program to toggle LED whenever an interrupt is triggered by the
+ * 			  the external button press
+ * Author	: Kyungjae Lee
+ * Date		: May 24, 2023
+ ******************************************************************************/
 
 #include <string.h>
 #include "stm32f407xx.h"
@@ -15,16 +15,17 @@
 
 /**
  * delay()
- * Desc.	: Spinlock delays the program execution
- * Param.	: None
- * Returns	: None
+ * Brief	: Spinlock delays the program execution
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void delay(void)
 {
 	/* Appoximately ~200ms delay when the system clock freq is 16 MHz */
 	for (uint32_t i = 0; i < 500000 / 2; i++);
-}
+} /* End of delay */
+
 
 int main(int argc, char *argv[])
 {
@@ -62,12 +63,18 @@ int main(int argc, char *argv[])
 	GPIO_IRQInterruptConfig(IRQ_NO_EXTI9_5, ENABLE);	/* EXTI 9 to 5 */
 
 	while (1);
-}
+} /* End of main */
 
+/**
+ * EXTI9_5_IRQHandler()
+ * Brief	: Handles interrupt requests coming through EXTI lines 5-9
+ * Param	: None
+ * Retval	: None
+ * Note		: N/A
+ */
 void EXTI9_5_IRQHandler(void)
 {
 	delay(); /* Debounding time */
 	GPIO_IRQHandling(GPIO_PIN_6);	/* Clear the pending event from EXTI line */
 	GPIO_ToggleOutputPin(GPIOD, GPIO_PIN_12);
-}
-
+} /* End of EXTI9_5_IRQHandler */

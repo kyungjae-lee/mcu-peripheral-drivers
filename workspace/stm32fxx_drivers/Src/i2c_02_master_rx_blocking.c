@@ -1,8 +1,8 @@
 /*******************************************************************************
- * Filename		: i2c_02_master_rx_blocking.c
- * Description	: Program to test I2C master's Rx (blocking) functionality
- * Author		: Kyungjae Lee
- * History 		: Jun 13, 2023 - Created file
+ * File		: i2c_02_master_rx_blocking.c
+ * Brief	: Program to test I2C master's Rx (blocking) functionality
+ * Author	: Kyungjae Lee
+ * Date		: Jun 13, 2023
  ******************************************************************************/
 
 /**
@@ -25,9 +25,9 @@ I2C_Handle_TypeDef I2C1Handle;
 
 /**
  * delay()
- * Desc.	: Spinlock delays the program execution
- * Param.	: None
- * Returns	: None
+ * Brief	: Spinlock delays the program execution
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void delay(void)
@@ -38,9 +38,9 @@ void delay(void)
 
 /**
  * I2C1_PinsInit()
- * Desc.	: Initializes and configures GPIO pins to be used as I2C1 pins
- * Param.	: None
- * Returns	: None
+ * Brief	: Initializes and configures GPIO pins to be used as I2C1 pins
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void I2C1_PinsInit(void)
@@ -65,9 +65,9 @@ void I2C1_PinsInit(void)
 
 /**
  * I2C1_Init()
- * Desc.	: Creates an SPI2Handle initializes SPI2 peripheral parameters
- * Param.	: None
- * Returns	: None
+ * Brief	: Creates an SPI2Handle initializes SPI2 peripheral parameters
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void I2C1_Init(void)
@@ -89,9 +89,9 @@ void I2C1_Init(void)
 
 /**
  * GPIO_ButtonInit()
- * Desc.	: Initializes a GPIO pin for button
- * Param.	: None
- * Returns	: None
+ * Brief	: Initializes a GPIO pin for button
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void GPIO_ButtonInit(void)

@@ -1,10 +1,9 @@
-/**
- * Filename		: gpio_03_ext_led_toggle_with_ext_button.c
- * Description	: Program to toggle the external LED whenever the external LED is pressed
- * Author		: Kyungjae Lee
- * History		: May 24, 2023 - Created file
- * 				  Jun 02, 2023 - Removed redundant 'GPIO_PeriClockControl()'
- */
+/*******************************************************************************
+ * File		: gpio_03_ext_led_toggle_with_ext_button.c
+ * Brief	: Program to toggle the external LED whenever the external LED is pressed
+ * Author	: Kyungjae Lee
+ * Date		: May 24, 2023
+ ******************************************************************************/
 
 #include "stm32f407xx.h"
 
@@ -14,16 +13,17 @@
 
 /**
  * delay()
- * Desc.	: Spinlock delays the program execution
- * Param.	: None
- * Returns	: None
+ * Brief	: Spinlock delays the program execution
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void delay(void)
 {
 	/* Appoximately ~200ms delay when the system clock freq is 16 MHz */
 	for (uint32_t i = 0; i < 500000 / 2; i++);
-}
+} /* End of delay */
+
 
 int main(int argc, char *argv[])
 {
@@ -48,7 +48,6 @@ int main(int argc, char *argv[])
 		/* External pull-down resistor is already present (see the schematic) */
 	GPIO_Init(&GPIOBtn);
 
-
 	while (1)
 	{
 		if (GPIO_ReadFromInputPin(GPIOBtn.pGPIOx, GPIOBtn.GPIO_PinConfig.GPIO_PinNumber) == BTN_PRESSED)
@@ -59,4 +58,4 @@ int main(int argc, char *argv[])
 	}
 
 	return 0;
-}
+} /* End of main */

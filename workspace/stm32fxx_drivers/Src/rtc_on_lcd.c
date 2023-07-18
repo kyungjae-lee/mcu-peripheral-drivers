@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Filename		: rtc_on_lcd.c
- * Description	: Application to read time and date information from DS1207 RTC
- *				  chip and display it on the 16x2 Character LCD
- * Author		: Kyungjae Lee
- * History 		: Jun 25, 2023 - Created file
+ * File		: rtc_on_lcd.c
+ * Brief	: Application to read time and date information from DS1207 RTC chip
+ *			  and display it on the 16x2 Character LCD
+ * Author	: Kyungjae Lee
+ * Date		: Jun 25, 2023
  ******************************************************************************/
 
 #include <lcd_hd44780u.h>

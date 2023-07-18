@@ -1,10 +1,9 @@
 /*******************************************************************************
- * Filename		: spi_01_master_only_tx_blocking.c
- * Description	: Program to test SPI master's Tx (blocking) functionality
- * 				  (without slave)
- * Author		: Kyungjae Lee
- * History   	: May 27, 2023 - Created file
- * 				  Jun 23, 2023 - Refactored code for consistency
+ * File		: spi_01_master_only_tx_blocking.c
+ * Brief	: Program to test SPI master's Tx (blocking) functionality
+ * 			  (without slave)
+ * Author	: Kyungjae Lee
+ * Date		: May 27, 2023
  ******************************************************************************/
 
 /**
@@ -21,9 +20,9 @@
 
 /**
  * SPI2_PinsInit()
- * Desc.	: Initializes and configures GPIO pins to be used as SPI2 pins
- * Param.	: None
- * Returns	: None
+ * Brief	: Initializes and configures GPIO pins to be used as SPI2 pins
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void SPI2_PinsInit(void)
@@ -65,9 +64,9 @@ void SPI2_PinsInit(void)
 
 /**
  * SPI2_Init()
- * Desc.	: Creates an SPI2Handle and initializes SPI2 peripheral parameters
- * Param.	: None
- * Returns	: None
+ * Brief	: Creates an SPI2Handle and initializes SPI2 peripheral parameters
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void SPI2_Init(void)
@@ -94,6 +93,7 @@ void SPI2_Init(void)
 
 	SPI_Init(&SPI2Handle);
 } /* End of SPI2_Init */
+
 
 int main(int argc, char *argv[])
 {

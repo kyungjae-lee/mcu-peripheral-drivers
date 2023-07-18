@@ -1,23 +1,31 @@
-/**
- * Filename		: spi_04_master_rx_interrupt.c
- * Description	: Program to demonstrate receiving and printing the user message
- * 				  received from the Arduino peripheral in SPI interrupt mode.
- * 				  User sends the message through Arduino IDE's serial monitor tool.
- * 				  Monitor the message received using the SWV ITM data console of
- * 				  STM32CubeIDE.
- * Author		: Kyungjae Lee
- * History 		: Jun 06, 2023 - Created file
- * 				  Jun 23, 2023 - Refactored code
+/*******************************************************************************
+ * File		: spi_04_master_rx_interrupt.c
+ * Brief	: Program to demonstrate receiving and printing the user message
+ * 			  received from the Arduino peripheral in SPI interrupt mode.
+ * 			  User sends the message through Arduino IDE's serial monitor tool.
+ * 			  Monitor the message received using the SWV ITM data console of
+ * 			  STM32CubeIDE.
+ * Author	: Kyungjae Lee
+ * Date		: Jun 06, 2023
  *
- * Note			: Follow the instruction s to test this code.
- * 					1. Download this code to the STM32 board (master)
- * 					2. Download slave code (003SPISlaveUartReadOverSPI.ino) to
- * 					   the Arduino board (slave)
- * 					3. Reset both boards
- * 					4. Enable SWV ITM data console to see the message
- * 					5. Open Arduino IDE serial monitor tool
- * 					6. Type anything and send the message (Make sure to set the
- * 					   line ending to 'carriage return'.)
+ * Note		: Follow the instruction s to test this code.
+ * 				1. Download this code to the STM32 board (master)
+ * 				2. Download slave code (003SPISlaveUartReadOverSPI.ino) to
+ * 				   the Arduino board (slave)
+ * 				3. Reset both boards
+ * 				4. Enable SWV ITM data console to see the message
+ * 				5. Open Arduino IDE serial monitor tool
+ * 				6. Type anything and send the message (Make sure to set the
+ * 				   line ending to 'carriage return'.)
+ ******************************************************************************/
+
+/**
+ * Pin selection for SPI communication
+ *
+ * SPI2_NSS  - PB12 (AF5)
+ * SPI2_SCK  - PB13 (AF5)
+ * SPI2_MISO - PB14 (AF5)
+ * SPI2_MOSI - PB15 (AF5)
  */
 
 #include <stdio.h>			/* printf() */
@@ -26,6 +34,7 @@
 
 #define MAX_LEN	500
 
+/* Global variables */
 SPI_Handle_TypeDef SPI2Handle;
 char rxBuf[MAX_LEN];
 volatile uint8_t rxByte;
@@ -40,32 +49,23 @@ volatile uint8_t dataAvailable = 0;
 	 */
 
 /**
- * Pin selection for SPI communication
- *
- * SPI2_NSS  - PB12 (AF5)
- * SPI2_SCK  - PB13 (AF5)
- * SPI2_MISO - PB14 (AF5)
- * SPI2_MOSI - PB15 (AF5)
- */
-
-/**
  * delay()
- * Desc.	: Spinlock delays the program execution
- * Param.	: None
- * Returns	: None
+ * Brief	: Spinlock delays the program execution
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void delay(void)
 {
 	/* Appoximately ~200ms delay when the system clock freq is 16 MHz */
 	for (uint32_t i = 0; i < 500000 / 2; i++);
-}
+} /* End of Delay */
 
 /**
  * SPI2_PinsInit()
- * Desc.	: Initializes and configures GPIO pins to be used as SPI2 pins
- * Param.	: None
- * Return	: None
+ * Brief	: Initializes and configures GPIO pins to be used as SPI2 pins
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void SPI2_PinsInit(void)
@@ -107,9 +107,9 @@ void SPI2_PinsInit(void)
 
 /**
  * SPI2_Init()
- * Desc.	: Creates an SPI2Handle and initializes SPI2 peripheral parameters
- * Param.	: None
- * Return	: None
+ * Brief	: Creates an SPI2Handle and initializes SPI2 peripheral parameters
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void SPI2_Init(void)
@@ -129,10 +129,10 @@ void SPI2_Init(void)
 
 /**
  * SPI2_IntPinInit()
- * Desc.	: Configures the GPIO pin (PD6) over which SPI peripheral issues
+ * Brief	: Configures the GPIO pin (PD6) over which SPI peripheral issues
  * 			  'data available' interrupt
- * Param.	: None
- * Returns	: None
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void SPI2_IntPinInit(void)
@@ -152,6 +152,7 @@ void SPI2_IntPinInit(void)
 	GPIO_IRQPriorityConfig(IRQ_NO_EXTI9_5, NVIC_IRQ_PRI15);
 	GPIO_IRQInterruptConfig(IRQ_NO_EXTI9_5, ENABLE);
 } /* End of SPI2_IntPinInit */
+
 
 int main(int argc, char *argv[])
 {
@@ -234,39 +235,39 @@ int main(int argc, char *argv[])
 	}
 
 	return 0;
-}
+} /* End of main */
 
 /**
  * SPI2_IRQHandler()
- * Desc.	: Handles SPI2 interrupt (by calling 'SPI_IRQHandling()')
- * Param.	: None
- * Returns	: None
+ * Brief	: Handles SPI2 interrupt (by calling 'SPI_IRQHandling()')
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void SPI2_IRQHandler(void)
 {
 	SPI_IRQHandling(&SPI2Handle);
-}
+} /* End of SPI2_IRQHandler */
 
 /**
  * EXTI9_5_IRQHandler()
- * Desc.	: Handles EXTI IRQ 5 to 9 (by calling 'GPIO_IRQHandling()')
- * Param.	: None
- * Returns	: None
+ * Brief	: Handles EXTI IRQ 5 to 9 (by calling 'GPIO_IRQHandling()')
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void EXTI9_5_IRQHandler(void)
 {
 	GPIO_IRQHandling(GPIO_PIN_6);
 	dataAvailable = 1;
-}
+} /* End of EXTI9_5_IRQHandler */
 
 /**
  * SPI_ApplicationEventCallback()
- * Desc.	: Notifies the application of the event occurred
- * Param.	: @pSPIHandle - pointer to SPI handle structure
+ * Brief	: Notifies the application of the event occurred
+ * Param	: @pSPIHandle - pointer to SPI handle structure
  * 			  @appEvent - SPI event occurred
- * Returns	: None
+ * Retval	: None
  * Note		: N/A
  */
 void SPI_ApplicationEventCallback(SPI_Handle_TypeDef *pSPIHandle, uint8_t appEvent)
@@ -287,4 +288,4 @@ void SPI_ApplicationEventCallback(SPI_Handle_TypeDef *pSPIHandle, uint8_t appEve
 			i = 0;
 		}
 	}
-} /* End of main */
+} /* End of SPI_ApplicationEventCallback */

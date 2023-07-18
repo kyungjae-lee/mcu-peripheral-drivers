@@ -1,8 +1,8 @@
 /*******************************************************************************
- * Filename		: usart_01_tx_blocking.c
- * Description	: Program to test USART Tx (blocking-based) functionality
- * Author		: Kyungjae Lee
- * History 		: Jun 20, 2023 - Created file
+ * File		: usart_01_tx_blocking.c
+ * Brief	: Program to test USART Tx (blocking-based) functionality
+ * Author	: Kyungjae Lee
+ * Date		: Jun 20, 2023
  ******************************************************************************/
 
 /**
@@ -22,9 +22,9 @@ USART_Handle_TypeDef USART2Handle;
 
 /**
  * delay()
- * Desc.	: Spinlock delays the program execution
- * Param.	: None
- * Returns	: None
+ * Brief	: Spinlock delays the program execution
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void delay(void)
@@ -35,9 +35,9 @@ void delay(void)
 
 /**
  * USART2_PinsInit()
- * Desc.	: Initializes and configures GPIO pins to be used as USART2 pins
- * Param.	: None
- * Returns	: None
+ * Brief	: Initializes and configures GPIO pins to be used as USART2 pins
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void USART2_PinsInit(void)
@@ -70,9 +70,9 @@ void USART2_PinsInit(void)
 
 /**
  * USART2_Init()
- * Desc.	: Initializes USART2 handle
- * Param.	: None
- * Returns	: None
+ * Brief	: Initializes USART2 handle
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void USART2_Init(void)
@@ -90,9 +90,9 @@ void USART2_Init(void)
 
 /**
  * GPIO_ButtonInit()
- * Desc.	: Initializes a GPIO pin for button
- * Param.	: None
- * Returns	: None
+ * Brief	: Initializes a GPIO pin for button
+ * Param	: None
+ * Retval	: None
  * Note		: N/A
  */
 void GPIO_ButtonInit(void)
