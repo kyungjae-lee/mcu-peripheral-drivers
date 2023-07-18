@@ -32,10 +32,10 @@ This repository contains the source code for the **MCU Peripheral Drivers** deve
 
 * Driver layer (Peripheral drivers)
   * Device header: [stm32f407xx.h](./workspace/stm32fxx_drivers/Drivers/Inc/stm32f407xx.h)
-  * GPIO driver: [stm32f407xx_gpio.h](./workspace/stm32fxx_drivers/Drivers/Inc/stm32f407xx_gpio_driver.h),  [stm32f407xx_gpio.c](./workspace/stm32fxx_drivers/Drivers/Src/stm32f407xx_gpio_driver.c)
-  * SPI driver: [stm32f407xx_spi.h](./workspace/stm32fxx_drivers/Drivers/Inc/stm32f407xx_spi_driver.h),  [stm32f407xx_spi.c](./workspace/stm32fxx_drivers/Drivers/Src/stm32f407xx_spi_driver.c)
-  * I2C driver: [stm32f407xx_i2c.h](./workspace/stm32fxx_drivers/Drivers/Inc/stm32f407xx_i2c_driver.h),  [stm32f407xx_i2c.c](./workspace/stm32fxx_drivers/Drivers/Src/stm32f407xx_i2c_driver.c)
-  * USART driver: [stm32f407xx_usart.h](./workspace/stm32fxx_drivers/Drivers/Inc/stm32f407xx_usart_driver.h),  [stm32f407xx_usart.c](./workspace/stm32fxx_drivers/Drivers/Src/stm32f407xx_usart_driver.c)
+  * GPIO driver: [stm32f407xx_gpio_driver.h](./workspace/stm32fxx_drivers/Drivers/Inc/stm32f407xx_gpio_driver.h),  [stm32f407xx_gpio_driver.c](./workspace/stm32fxx_drivers/Drivers/Src/stm32f407xx_gpio_driver.c)
+  * SPI driver: [stm32f407xx_spi_driver.h](./workspace/stm32fxx_drivers/Drivers/Inc/stm32f407xx_spi_driver.h),  [stm32f407xx_spi_driver.c](./workspace/stm32fxx_drivers/Drivers/Src/stm32f407xx_spi_driver.c)
+  * I2C driver: [stm32f407xx_i2c_driver.h](./workspace/stm32fxx_drivers/Drivers/Inc/stm32f407xx_i2c_driver.h),  [stm32f407xx_i2c_driver.c](./workspace/stm32fxx_drivers/Drivers/Src/stm32f407xx_i2c_driver.c)
+  * USART driver: [stm32f407xx_usart_driver.h](./workspace/stm32fxx_drivers/Drivers/Inc/stm32f407xx_usart_driver.h),  [stm32f407xx_usart_driver.c](./workspace/stm32fxx_drivers/Drivers/Src/stm32f407xx_usart_driver.c)
 
 * Application layer (Test applications)
   * See [./workspace/stm32fxx_drivers/Src](./workspace/stm32fxx_drivers/Src)
