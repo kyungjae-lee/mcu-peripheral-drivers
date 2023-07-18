@@ -1,26 +1,23 @@
-/**
- * Filename		: stm32f407xx_gpio_driver.c
- * Description	: STM32F407xx MCU specific GPIO driver source file
- * Author		: Kyungjae Lee
- * Created on	: May 18, 2023
- */
+/*******************************************************************************
+ * File		: stm32f407xx_gpio_driver.c
+ * Brief	: STM32F407xx MCU specific GPIO driver source file
+ * Author	; Kyungjae Lee
+ * Date		: May 21, 2023
+ * ****************************************************************************/
 
 #include "stm32f407xx_gpio_driver.h"
 
-/*****************************************************************************************
- * APIs supported by the GPIO driver (See function definitions for more information)
- ****************************************************************************************/
-
-/**
- * Peripheral clock setup
- */
+/*******************************************************************************
+ * APIs supported by the GPIO driver
+ * (See function definitions for more information)
+ ******************************************************************************/
 
 /**
  * GPIO_PeriClockControl()
- * Desc.	: Enables or disables peripheral clock for the given GPIO port
- * Param.	: @pGPIOx - base address of GPIO peripheral
+ * Brief	: Enables or disables peripheral clock for the given GPIO port
+ * Param	: @pGPIOx - base address of GPIO peripheral
  * 			  @state - ENABLE or DISABLE macro
- * Returns	: None
+ * Retval	: None
  * Note		: N/A
  */
 void GPIO_PeriClockControl(GPIO_TypeDef *pGPIOx, uint8_t state)
@@ -68,7 +65,7 @@ void GPIO_PeriClockControl(GPIO_TypeDef *pGPIOx, uint8_t state)
 			GPIOI_PCLK_DI();
 
 	}
-}
+} /* End of GPIO_PeriClockControl */
 
 /**
  * Init and de-init
@@ -76,9 +73,9 @@ void GPIO_PeriClockControl(GPIO_TypeDef *pGPIOx, uint8_t state)
 
 /**
  * GPIO_Init()
- * Desc.	: Configures GPIO pin
- * Param.	: @pGPIOHandle - pointer to the GPIO handle structure
- * Returns	: None
+ * Brief	: Configures GPIO pin
+ * Param	: @pGPIOHandle - pointer to the GPIO handle structure
+ * Retval	: None
  * Note		: N/A
  */
 void GPIO_Init(GPIO_Handle_TypeDef *pGPIOHandle)
@@ -178,13 +175,13 @@ void GPIO_Init(GPIO_Handle_TypeDef *pGPIOHandle)
 		pGPIOHandle->pGPIOx->AFR[index] &= ~(0xF << bitOffset);	/* Clear */
 		pGPIOHandle->pGPIOx->AFR[index] |= temp;				/* Set */
 	}
-}
+} /* End of GPIO_Init */
 
 /**
  * GPIO_DeInit()
- * Desc.	: Deinitializes GPIO pin
+ * Brief	: Deinitializes GPIO pin
  * Params.	: @pGPIOx - base address of GPIO peripheral
- * Returns	: None
+ * Retval	: None
  * Note		: N/A
  */
 void GPIO_DeInit(GPIO_TypeDef *pGPIOx)	/* Utilize RCC_AHB1RSTR (AHB1 peripheral reset register to reset in one queue) */
@@ -208,44 +205,40 @@ void GPIO_DeInit(GPIO_TypeDef *pGPIOx)	/* Utilize RCC_AHB1RSTR (AHB1 peripheral 
 		GPIOH_RESET();
 	else if (pGPIOx == GPIOI)
 		GPIOI_RESET();
-}
-
-/**
- * Data read and write
- */
+} /* End of GPIO_DeInit */
 
 /**
  * GPIO_ReadFromInputPin()
- * Desc.	: Reads the input pin (@pGPIOx, @pinNumber) and returns the read value
- * Param.	: @pGPIOx - base address of GPIO peripheral
+ * Brief	: Reads the input pin (@pGPIOx, @pinNumber) and returns the read value
+ * Param	: @pGPIOx - base address of GPIO peripheral
  * 			  @pinNumber - pin number
- * Returns	: 0 or 1
+ * Retval	: 0 or 1
  * Note 	: N/A
  */
 uint8_t GPIO_ReadFromInputPin(GPIO_TypeDef *pGPIOx, uint8_t pinNumber)
 {
 	return (uint8_t)((pGPIOx->IDR >> pinNumber) & 0x1);
-}
+} /* End of GPIO_ReadFromInputPin */
 
 /**
  * GPIO_ReadFromInputPort()
- * Desc.	: Returns the contents of @pGPIOx IDR
- * Param.	: @pGPIOx - base address of GPIO peripheral
- * Returns	: Contents of IDR (least significant 16 bits)
+ * Brief	: Returns the contents of @pGPIOx IDR
+ * Param	: @pGPIOx - base address of GPIO peripheral
+ * Retval	: Contents of IDR (least significant 16 bits)
  * @note	: N/A
  */
 uint16_t GPIO_ReadFromInputPort(GPIO_TypeDef *pGPIOx)
 {
 	return (uint16_t)pGPIOx->IDR;
-}
+} /* End of GPIO_ReadFromInputPort */
 
 /**
  * GPIO_WriteToOutputPin()
- * Desc.	: Writes @value to the output pin @pGPIOx @pinNumber
- * Param.	: @pGPIOx - base address of GPIO peripheral
+ * Brief	: Writes @value to the output pin @pGPIOx @pinNumber
+ * Param	: @pGPIOx - base address of GPIO peripheral
  * 			  @pinNumber - output pin number
  * 			  @value - value to write to output pin
- * Returns	: None
+ * Retval	: None
  * Note		: Be aware of the possibility that a user may pass 0-255 value to @value
  */
 void GPIO_WriteToOutputPin(GPIO_TypeDef *pGPIOx, uint8_t pinNumber, uint8_t value)
@@ -254,45 +247,41 @@ void GPIO_WriteToOutputPin(GPIO_TypeDef *pGPIOx, uint8_t pinNumber, uint8_t valu
 		pGPIOx->ODR &= ~(0x1 << pinNumber);
 	else
 		pGPIOx->ODR |= (0x1 << pinNumber);
-}
+} /* End of GPIO_WriteToOutputPin */
 
 /**
  * GPIO_WriteToOutputPort()
- * Desc.	: Writes @value to @pGPIOx ODR
- * Param.	: @pGPIOx - base address of GPIO peripheral
+ * Brief	: Writes @value to @pGPIOx ODR
+ * Param	: @pGPIOx - base address of GPIO peripheral
  * 			  @pinNumber - output pin number
  * 			  @value - value to write to output pin
- * Returns	: None
+ * Retval	: None
  * Note		: Be aware of the possibility that a user may pass 0-255 value to @value
  */
 void GPIO_WriteToOutputPort(GPIO_TypeDef *pGPIOx, uint16_t value)
 {
 	pGPIOx->ODR = value;
-}
+} /* End of GPIO_WriteToOutputPort */
 
 /**
  * GPIO_ToggleOutputPin()
- * Desc.	: Toggles output pin @pGPIOx @pinNumber
- * Param.	: @pGPIOx - base address of GPIO peripheral
+ * Brief	: Toggles output pin @pGPIOx @pinNumber
+ * Param	: @pGPIOx - base address of GPIO peripheral
  * 			  @pinNumber - output pin number
- * Returns	: None
+ * Retval	: None
  * Note		: N/A
  */
 void GPIO_ToggleOutputPin(GPIO_TypeDef *pGPIOx, uint8_t pinNumber)
 {
 	pGPIOx->ODR ^= (0x1 << pinNumber);
-}
-
-/**
- * IRQ configuration and ISR handling
- */
+} /* End of GPIO_ToggleOutputPin */
 
 /**
  * GPIO_IRQInterruptConfig()
- * Desc.	: Configures IRQ interrupts (processor; NVIC_ISERx, NVIC_ICERx)
- * Param.	: @irqNumber - IRQ number
+ * Brief	: Configures IRQ interrupts (processor; NVIC_ISERx, NVIC_ICERx)
+ * Param	: @irqNumber - IRQ number
  * 			  @state - ENABLE or DISABLE macro
- * Returns	: None
+ * Retval	: None
  * Note		: Reference - Cortex-M4 Devices Generic User Guide
  * 			  Clearing ISERx bit won't disable the interrupt.
  * 			  To disable interrupt ICERx bit has to be set!
@@ -319,18 +308,18 @@ void GPIO_IRQInterruptConfig(uint8_t irqNumber, uint8_t state)
 		else if (64 <= irqNumber && irqNumber <= 95)
 			*NVIC_ICER2 |= (0x1 << irqNumber % 32);
 	}
-}
+} /* End of GPIO_IRQInterruptConfig */
 
 /**
  * GPIO_IRQPriorityConfig()
- * Desc.	: Configures IRQ priority (processor; NVIC_IPRx)
- * Param.	: @irqNumber - IRQ number
+ * Brief	: Configures IRQ priority (processor; NVIC_IPRx)
+ * Param	: @irqNumber - IRQ number
  * 			  @irqPriotity - IRQ priority (Make sure this parameter is of
  * 			  				 type uint32_t. Due to the number of bits it
  * 			  				 needs to be shifted during the calculation,
  * 							 declaring it as uint8_t did not do its job.)
  * 			  @state - ENABLE or DISABLE macro
- * Returns	: None
+ * Retval	: None
  * Note		: Reference - Cortex-M4 Devices Generic User Guide
  * 			  STM32F407xx MCUs use only 4 most significant bits within
  * 			  each 8-bit section of IPRx. Make sure to account for
@@ -344,13 +333,13 @@ void GPIO_IRQPriorityConfig(uint8_t irqNumber, uint32_t irqPriority)
 	uint8_t iprSection = irqNumber % 4;
 	uint8_t bitOffset = (iprSection * 8) + (8 - NUM_PRI_BITS_USED);
 	*(NVIC_IPR_BASE + iprNumber) |= (irqPriority << bitOffset);
-}
+} /* GPIO_IRQPriorityConfig */
 
 /**
  * GPIO_IRQHandling()
- * Desc.	: Clears the pending state of the triggered IRQ
- * Param.	: @pinNumber - Pin number
- * Returns	: None
+ * Brief	: Clears the pending state of the triggered IRQ
+ * Param	: @pinNumber - Pin number
+ * Retval	: None
  * Note		: Clearing the pending bit in EXTI_PR is a bit unusual! The set bit
  * 			  can be cleared by programming the bit to 1. Don't be confused!
  * 			  This is by design!
@@ -363,4 +352,4 @@ void GPIO_IRQHandling(uint8_t pinNumber)
 		/* Clear the bit by programming it to 1 */
 		EXTI->PR |= (0x1 << pinNumber);
 	}
-}
+} /* End of GPIO_IRQHandling */

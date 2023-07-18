@@ -1,18 +1,20 @@
 /*******************************************************************************
- * Filename		: stm32f407xx_spi_driver.h
- * Description	: STM32F407xx MCU specific SPI driver header file
- * Author		: Kyungjae Lee
- * History		: May 21, 2023 - Created file
- ******************************************************************************/
+ * File		: stm32f407xx_spi_driver.h
+ * Brief	: STM32F407xx MCU specific SPI driver header file
+ * Author	; Kyungjae Lee
+ * Date		: May 21, 2023
+ * ****************************************************************************/
 
 #ifndef STM32F407XX_SPI_DRIVER_H
 #define STM32F407XX_SPI_DRIVER_H
 
 #include "stm32f407xx.h"
 
-/**
- * SPIx peripheral configuration structure
- */
+/*******************************************************************************
+ * SPIx peripheral structures
+ ******************************************************************************/
+
+/* SPIx peripheral configuration structure */
 typedef struct
 {
 	uint8_t SPI_DeviceMode;		/* Available values @SPI_DeviceMode 		*/
@@ -24,17 +26,15 @@ typedef struct
 	uint8_t SPI_SSM;			/* Available values @SPI_SSM		 		*/
 } SPI_Config_TypeDef;
 
-/**
- * SPIx peripheral handle structure
- */
+/* SPIx peripheral handle structure */
 typedef struct
 {
-	SPI_TypeDef 		*pSPIx;	/* Holds the base address of the SPIx(x:0,1,2) peripheral */
-	SPI_Config_TypeDef 	SPI_Config;
+	SPI_TypeDef 		*pSPIx;		/* Holds the base address of the SPIx(x:0,1,2) peripheral */
+	SPI_Config_TypeDef 	SPI_Config;	/* SPIx peripheral configuration structure */
 	uint8_t	volatile	*pTxBuffer;	/* App's Tx buffer address */
 	uint8_t	volatile	*pRxBuffer;	/* App's Rx buffer address */
-	uint32_t			TxLen;
-	uint32_t			RxLen;
+	uint32_t			TxLen;		/* Number of bytes left to transmit */
+	uint32_t			RxLen;		/* Number of bytes left to receive */
 	uint8_t				TxState;	/* Available values @SPI_ApplicationStateus */
 	uint8_t				RxState;	/* Available values @SPI_ApplicationStateus */
 } SPI_Handle_TypeDef;
@@ -111,9 +111,10 @@ typedef struct
 #define SPI_SSM_EN						1
 
 
-/*****************************************************************************************
- * APIs supported by the SPI driver (See function definitions for more information)
- ****************************************************************************************/
+/*******************************************************************************
+ * APIs supported by the SPI driver
+ * (See function definitions for more information)
+ ******************************************************************************/
 
 /**
  * Peripheral clock setup

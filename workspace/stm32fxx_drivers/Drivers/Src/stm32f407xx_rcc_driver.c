@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Filename		: stm32f407xx_rcc_driver.c
- * Description	: STM32F407xx MCU specific RCC driver source file
- * Author		: Kyungjae Lee
- * History		: Jun 20, 2023 - Created file
- ******************************************************************************/
+ * File		: stm32f407xx_spi_driver.c
+ * Brief	: STM32F407xx MCU specific RCC driver source file
+ * Author	; Kyungjae Lee
+ * Date		: Jun 20, 2023
+ * ****************************************************************************/
 
 #include "stm32f407xx.h"
 
@@ -15,9 +15,9 @@ uint16_t APB1_Prescalar[4] = {2, 4, 8, 16};
 
 /**
  * RCC_GetPCLK1Value()
- * Desc.	: Computes and returns APB1 peripheral clock frequency
- * Param.	: None
- * Return	: APB1 peripheral clock frequency
+ * Brief	: Computes and returns APB1 peripheral clock frequency
+ * Param	: None
+ * Retval	: APB1 peripheral clock frequency
  * Note		: N/A
  */
 uint32_t RCC_GetPCLK1Value(void)
@@ -79,9 +79,9 @@ uint32_t RCC_GetPCLK1Value(void)
 
 /**
  * RCC_GetPCLK2Value()
- * Desc.	: Computes and returns APB2 peripheral clock frequency
- * Param.	: None
- * Return	: APB2 peripheral clock frequency
+ * Brief	: Computes and returns APB2 peripheral clock frequency
+ * Param	: None
+ * Retval	: APB2 peripheral clock frequency
  * Note		: N/A
  */
 uint32_t RCC_GetPCLK2Value(void)
@@ -137,9 +137,9 @@ uint32_t RCC_GetPCLK2Value(void)
 
 /**
  * RCC_GetPLLOutputClk()
- * Desc.	: Controls PLL ouput clock
- * Param.	: None
- * Return	: None
+ * Brief	: Controls PLL ouput clock
+ * Param	: None
+ * Retval	: None
  * Note		: To be implemented as per the project requirements. Not used
  * 			  at this point.
  */
@@ -147,4 +147,3 @@ uint32_t RCC_GetPLLOutputClk(void)
 {
 	return 0;
 } /* End of RCC_GetPLLOutputClk */
-

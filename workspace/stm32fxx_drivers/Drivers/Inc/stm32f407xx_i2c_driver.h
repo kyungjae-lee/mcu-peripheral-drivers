@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Filename		: stm32f407xx_i2c_driver.h
- * Description	: STM32F407xx MCU specific I2C driver header file
- * Author		: Kyungjae Lee
- * History		: Jun 09, 2023 - Created file
- ******************************************************************************/
+ * File		: stm32f407xx_i2c_driver.h
+ * Brief	: STM32F407xx MCU specific I2C driver header file
+ * Author	; Kyungjae Lee
+ * Date		: Jun 09, 2023
+ * ****************************************************************************/
 
 #ifndef STM32F407XX_I2C_DRIVER_H
 #define STM32F407XX_I2C_DRIVER_H
@@ -30,8 +30,8 @@ typedef struct
 	I2C_Config_TypeDef 	I2C_Config;
 	uint8_t				*pTxBuffer; 	/* Application Tx buffer address 	*/
 	uint8_t				*pRxBuffer; 	/* Application Rx buffer address 	*/
-	uint32_t			TxLen; 			/* Tx length                     	*/
-	uint32_t			RxLen; 			/* Length of data left to receive 	*/
+	uint32_t			TxLen; 			/* Number of bytes left to transmit */
+	uint32_t			RxLen; 			/* Number of bytes left to receive 	*/
 	uint8_t				TxRxState; 		/* Available values @I2C_TxRxState	*/
 	uint8_t				DevAddr; 		/* Slave/device address          	*/
 	uint32_t			RxSize; 		/* Total size of data to receive 	*/

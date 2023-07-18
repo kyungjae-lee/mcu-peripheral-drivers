@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Filename		: stm32f407xx.h
- * Description	: Device header file for stm32f407xx MCU
- * Author		: Kyungjae Lee
- * History     	: May 18, 2023 - Created file
- ******************************************************************************/
+ * File		: stm32f407xx.h
+ * Brief	: Device header file for stm32f407xx MCU
+ * Author	; Kyungjae Lee
+ * Date		: May 18, 2023
+ * ****************************************************************************/
 
 #ifndef STM32F407XX_H
 #define STM32F407XX_H

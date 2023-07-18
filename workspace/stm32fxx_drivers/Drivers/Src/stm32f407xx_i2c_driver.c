@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Filename		: stm32f407xx_i2c_driver.c
- * Description	: STM32F407xx MCU specific I2C driver source file
- * Author		: Kyungjae Lee
- * History		: Jun 09, 2023 - Created file
- ******************************************************************************/
+ * File		: stm32f407xx_i2c_driver.c
+ * Brief	: STM32F407xx MCU specific I2C driver source file
+ * Author	; Kyungjae Lee
+ * Date		: Jun 09, 2023
+ * ****************************************************************************/
 
 #include "stm32f407xx.h"
 
@@ -20,10 +20,10 @@ static void I2C_ClearADDRFlag(I2C_Handle_TypeDef *pI2CHandle);
 
 /**
  * I2C_PeriControl()
- * Desc.	: Enables or disables I2C peripheral
- * Param.	: @pI2Cx - base address of I2Cx peripheral
+ * Brief	: Enables or disables I2C peripheral
+ * Param	: @pI2Cx - base address of I2Cx peripheral
  * 			  @state - ENABLE or DISABLE macro
- * Return	: None
+ * Retval	: None
  * Note		: N/A
  */
 void I2C_PeriControl(I2C_TypeDef *pI2Cx, uint8_t state)
@@ -40,9 +40,9 @@ void I2C_PeriControl(I2C_TypeDef *pI2Cx, uint8_t state)
 
 /**
  * I2C_PeriClockControl()
- * Desc.	: Enable or disable clock for I2C peripheral
- * Param.	: @pI2Cx - base address of I2Cx peripheral
- * Return	: None
+ * Brief	: Enable or disable clock for I2C peripheral
+ * Param	: @pI2Cx - base address of I2Cx peripheral
+ * Retval	: None
  * Note		: N/A
  */
 void I2C_PeriClockControl(I2C_TypeDef *pI2Cx, uint8_t state)
@@ -69,9 +69,9 @@ void I2C_PeriClockControl(I2C_TypeDef *pI2Cx, uint8_t state)
 
 /**
  * I2C_Init()
- * Desc.	: Initializes passed I2C peripheral
- * Param.	: @pI2CHandle - pointer to I2C peripheral handle
- * Return	: None
+ * Brief	: Initializes passed I2C peripheral
+ * Param	: @pI2CHandle - pointer to I2C peripheral handle
+ * Retval	: None
  * Note		: N/A
  */
 void I2C_Init(I2C_Handle_TypeDef *pI2CHandle)
@@ -165,9 +165,9 @@ void I2C_Init(I2C_Handle_TypeDef *pI2CHandle)
 
 /**
  * I2C_DeInit()
- * Desc.	: Deinitializes passed I2C peripheral
- * Param.	: @pI2Cx - base address of I2Cx peripheral
- * Return	: None
+ * Brief	: Deinitializes passed I2C peripheral
+ * Param	: @pI2Cx - base address of I2Cx peripheral
+ * Retval	: None
  * Note		: N/A
  */
 void I2C_DeInit(I2C_TypeDef *pI2Cx)
@@ -177,13 +177,13 @@ void I2C_DeInit(I2C_TypeDef *pI2Cx)
 
 /**
  * I2C_MasterTxBlocking()
- * Desc.	: Handles blocking-based I2C transmission
- * Param.	: @pI2CHandle - pointer to I2C peripheral handle
+ * Brief	: Handles blocking-based I2C transmission
+ * Param	: @pI2CHandle - pointer to I2C peripheral handle
  * 			  @pTxBuffer - address of the Tx buffer
  * 			  @len - length of the data to transmit
  * 			  @slaveAddr - slave address
  * 			  @repeatedStartState - I2C_REPEATED_START_EN or DI
- * Return	: None
+ * Retval	: None
  * Note		: N/A
  */
 void I2C_MasterTxBlocking(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pTxBuffer, uint8_t len, uint8_t slaveAddr, uint8_t repeatedStartState)
@@ -255,13 +255,13 @@ void I2C_MasterTxBlocking(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pTxBuffer, ui
 
 /**
  * I2C_MasterRxBlocking()
- * Desc.	: Handles blocking-based I2C reception
- * Param.	: @pI2CHandle - pointer to I2C peripheral handle
+ * Brief	: Handles blocking-based I2C reception
+ * Param	: @pI2CHandle - pointer to I2C peripheral handle
  * 			  @pTxBuffer - address of the Tx buffer
  * 			  @len - length of the data to transmit
  * 			  @slaveAddr - slave address
  * 			  @repeatedStartState - I2C_REPEATED_START_EN or DI
- * Return	: None
+ * Retval	: None
  * Note		: N/A
  */
 void I2C_MasterRxBlocking(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pRxBuffer, uint8_t len, uint8_t slaveAddr, uint8_t repeatedStartState)
@@ -359,13 +359,13 @@ void I2C_MasterRxBlocking(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pRxBuffer, ui
 
 /**
  * I2C_MasterTxInterrupt()
- * Desc.	: Handles interrupt-based I2C transmission
- * Param.	: @pI2CHandle - pointer to I2C peripheral handle
+ * Brief	: Handles interrupt-based I2C transmission
+ * Param	: @pI2CHandle - pointer to I2C peripheral handle
  * 			  @pTxBuffer - address of the Tx buffer
  * 			  @len - length of the data to transmit
  * 			  @slaveAddr - slave address
  * 			  @repeatedStartState - I2C_REPEATED_START_EN or DI
- * Return	: None
+ * Retval	: None
  * Note		: N/A
  */
 uint8_t I2C_MasterTxInterrupt(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pTxBuffer, uint8_t len, uint8_t slaveAddr, uint8_t repeatedStartState)
@@ -400,13 +400,13 @@ uint8_t I2C_MasterTxInterrupt(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pTxBuffer
 
 /**
  * I2C_MasterRxInterrupt()
- * Desc.	: Handles interrupt-based I2C reception
- * Param.	: @pI2CHandle - pointer to I2C peripheral handle
+ * Brief	: Handles interrupt-based I2C reception
+ * Param	: @pI2CHandle - pointer to I2C peripheral handle
  * 			  @pTxBuffer - address of the Tx buffer
  * 			  @len - length of the data to transmit
  * 			  @slaveAddr - slave address
  * 			  @repeatedStartState - I2C_REPEATED_START_EN or DI
- * Return	: None
+ * Retval	: None
  * Note		: N/A
  */
 uint8_t I2C_MasterRxInterrupt(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pRxBuffer, uint8_t len, uint8_t slaveAddr, uint8_t repeatedStartState)
@@ -443,10 +443,10 @@ uint8_t I2C_MasterRxInterrupt(I2C_Handle_TypeDef *pI2CHandle, uint8_t *pRxBuffer
 
 /**
  * I2C_SlaveTx()
- * Desc.	: Handles transmission of a byte of data upon master's read event
- * Param.	: @pI2Cx - base address of I2Cx peripheral
+ * Brief	: Handles transmission of a byte of data upon master's read event
+ * Param	: @pI2Cx - base address of I2Cx peripheral
  * 		      @data	- a byte of data to send
- * Return	: None
+ * Retval	: None
  * Note		: N/A
  */
 void I2C_SlaveTx(I2C_TypeDef *pI2Cx, uint8_t data)
@@ -456,10 +456,10 @@ void I2C_SlaveTx(I2C_TypeDef *pI2Cx, uint8_t data)
 
 /**
  * I2C_SlaveRx()
- * Desc.	: Handles reception of a byte of data upon master's write event
- * Param.	: @pI2Cx - base address of I2Cx peripheral
+ * Brief	: Handles reception of a byte of data upon master's write event
+ * Param	: @pI2Cx - base address of I2Cx peripheral
  * 			  @state - ENABLE or DISABLE macro
- * Return	: Received byte of data
+ * Retval	: Received byte of data
  * Note		: N/A
  */
 uint8_t I2C_SlaveRx(I2C_TypeDef *pI2Cx)
@@ -469,10 +469,10 @@ uint8_t I2C_SlaveRx(I2C_TypeDef *pI2Cx)
 
 /**
  * I2C_ManageACK()
- * Desc.	: Enables or disables @I2Cx peripheral's ACKing
- * Param.	: @pI2Cx - base address of I2Cx peripheral
+ * Brief	: Enables or disables @I2Cx peripheral's ACKing
+ * Param	: @pI2Cx - base address of I2Cx peripheral
  * 			  @state - ENABLE or DISABLE macro
- * Return	: None
+ * Retval	: None
  * Note		: N/A
  */
 void I2C_ManageACK(I2C_TypeDef *pI2Cx, uint8_t state)
@@ -491,10 +491,10 @@ void I2C_ManageACK(I2C_TypeDef *pI2Cx, uint8_t state)
 
 /**
  * I2C_IRQInterruptConfig()
- * Desc.	: Enables or disables I2C IRQ interrupts
- * Param.	: @irqNumber - IRQ number
+ * Brief	: Enables or disables I2C IRQ interrupts
+ * Param	: @irqNumber - IRQ number
  * 			  @state - ENABLE or DISABLE macro
- * Return	: None
+ * Retval	: None
  * Note		: N/A
  */
 void I2C_IRQInterruptConfig(uint8_t irqNumber, uint8_t state)
@@ -523,13 +523,13 @@ void I2C_IRQInterruptConfig(uint8_t irqNumber, uint8_t state)
 
 /**
  * I2C_IRQPriorityConfig()
- * Desc.	: Configures I2C IRQ interrupt priorities
- * Param.	: @irqNumber - IRQ number
+ * Brief	: Configures I2C IRQ interrupt priorities
+ * Param	: @irqNumber - IRQ number
  * 			  @irqPriotity - IRQ priority (Make sure this parameter is of
  * 			  				 type uint32_t. Due to the number of bits it
  * 			  				 needs to be shifted during the calculation,
  * 							 declaring it as uint8_t did not do its job.
- * Return	: None
+ * Retval	: None
  * Note		: N/A
  */
 void I2C_IRQPriorityConfig(uint8_t irqNumber, uint32_t irqPriority)
@@ -543,9 +543,9 @@ void I2C_IRQPriorityConfig(uint8_t irqNumber, uint32_t irqPriority)
 
 /**
  * I2C_EV_IRQHandling()
- * Desc.	: Handles I2C event IRQ (common for both master and slave modes)
- * Param.	: @pI2CHandle - pointer to I2C peripheral handle
- * Return	: None
+ * Brief	: Handles I2C event IRQ (common for both master and slave modes)
+ * Param	: @pI2CHandle - pointer to I2C peripheral handle
+ * Retval	: None
  * Note		: This function will first decode the event that occurred, and
  * 			  handle the event accordingly.
  */
@@ -781,9 +781,9 @@ void I2C_EV_IRQHandling(I2C_Handle_TypeDef *pI2CHandle)
 
 /**
  * I2C_ER_IRQHandling()
- * Desc.	: Handles I2C error IRQ (common for both master and slave modes)
- * Param.	: @pI2CHandle - pointer to I2C peripheral handle
- * Return	: None
+ * Brief	: Handles I2C error IRQ (common for both master and slave modes)
+ * Param	: @pI2CHandle - pointer to I2C peripheral handle
+ * Retval	: None
  * Note		: N/A
  */
 void I2C_ER_IRQHandling(I2C_Handle_TypeDef *pI2CHandle)
@@ -876,9 +876,9 @@ void I2C_ER_IRQHandling(I2C_Handle_TypeDef *pI2CHandle)
 
 /**
  * I2C_CloseTx()
- * Desc.	: Handles closing I2C Tx operation
- * Param.	: @pI2CHandle - pointer to I2C peripheral handle
- * Return	: None
+ * Brief	: Handles closing I2C Tx operation
+ * Param	: @pI2CHandle - pointer to I2C peripheral handle
+ * Retval	: None
  * Note		: N/A
  */
 void I2C_CloseTx(I2C_Handle_TypeDef *pI2CHandle)
@@ -897,9 +897,9 @@ void I2C_CloseTx(I2C_Handle_TypeDef *pI2CHandle)
 
 /**
  * I2C_CloseRx()
- * Desc.	: Handles closing I2C Rx operation
- * Param.	: @pI2CHandle - pointer to I2C peripheral handle
- * Return	: None
+ * Brief	: Handles closing I2C Rx operation
+ * Param	: @pI2CHandle - pointer to I2C peripheral handle
+ * Retval	: None
  * Note		: N/A
  */
 void I2C_CloseRx(I2C_Handle_TypeDef *pI2CHandle)
@@ -925,9 +925,9 @@ void I2C_CloseRx(I2C_Handle_TypeDef *pI2CHandle)
 
 /**
  * I2C_GenerateSTARTCondition()
- * Desc.	: Generates I2C START condition
- * Param.	: @pI2Cx - base address of I2Cx peripheral
- * Return	: None
+ * Brief	: Generates I2C START condition
+ * Param	: @pI2Cx - base address of I2Cx peripheral
+ * Retval	: None
  * Note		: N/A
  */
 void I2C_GenerateSTARTCondition(I2C_TypeDef *pI2Cx)
@@ -937,9 +937,9 @@ void I2C_GenerateSTARTCondition(I2C_TypeDef *pI2Cx)
 
 /**
  * I2C_GenerateSTOPCondition()
- * Desc.	: Generates I2C START condition
- * Param.	: @pI2Cx - base address of I2Cx peripheral
- * Return	: None
+ * Brief	: Generates I2C START condition
+ * Param	: @pI2Cx - base address of I2Cx peripheral
+ * Retval	: None
  * Note		: N/A
  */
 void I2C_GenerateSTOPCondition(I2C_TypeDef *pI2Cx)
@@ -949,10 +949,10 @@ void I2C_GenerateSTOPCondition(I2C_TypeDef *pI2Cx)
 
 /**
  * I2C_SlaveEnableDisableCallbackEvents()
- * Desc.	: Enables or disables @pI2Cx's (as a slave) callback events
- * Param.	: @pI2Cx - base address of I2Cx peripheral
+ * Brief	: Enables or disables @pI2Cx's (as a slave) callback events
+ * Param	: @pI2Cx - base address of I2Cx peripheral
  * 			  @state - ENABLE or DISABLE macro
- * Return	: None
+ * Retval	: None
  * Note		: N/A
  */
 void I2C_SlaveEnableDisableCallbackEvents(I2C_TypeDef *pI2Cx, uint8_t state)
@@ -985,10 +985,10 @@ void I2C_SlaveEnableDisableCallbackEvents(I2C_TypeDef *pI2Cx, uint8_t state)
 
 /**
  * I2C_ApplicationEventCallback()
- * Desc.	: Notifies the application of the event occurred
- * Param.	: @pI2CHandle - pointer to I2C handle structure
+ * Brief	: Notifies the application of the event occurred
+ * Param	: @pI2CHandle - pointer to I2C handle structure
  * 			  @appEvent - I2C event occurred
- * Returns	: None
+ * Retval	: None
  * Note		: This function must be implemented by the application. Since the driver
  * 			  does not know in which application this function will be implemented,
  * 			  the driver defines it as a weak function. The application may override
@@ -1008,10 +1008,10 @@ __WEAK void I2C_ApplicationEventCallback(I2C_Handle_TypeDef *pI2CHandle, uint8_t
 
 /**
  * I2C_ExecuteAddressPhaseRead()
- * Desc.	: Executes address phase for I2C read operation
- * Param.	: @pI2Cx - base address of I2Cx peripheral
+ * Brief	: Executes address phase for I2C read operation
+ * Param	: @pI2Cx - base address of I2Cx peripheral
  * 			  @slaveAddr - slave address
- * Return	: None
+ * Retval	: None
  * Note		: N/A
  */
 static void I2C_ExecuteAddressPhaseRead(I2C_TypeDef *pI2Cx, uint8_t slaveAddr)
@@ -1026,10 +1026,10 @@ static void I2C_ExecuteAddressPhaseRead(I2C_TypeDef *pI2Cx, uint8_t slaveAddr)
 
 /**
  * I2C_ExecuteAddressPhaseWrite()
- * Desc.	: Executes address phase for I2C write operation
- * Param.	: @pI2Cx - base address of I2Cx peripheral
+ * Brief	: Executes address phase for I2C write operation
+ * Param	: @pI2Cx - base address of I2Cx peripheral
  * 			  @slaveAddr - slave address
- * Return	: None
+ * Retval	: None
  * Note		: N/A
  */
 static void I2C_ExecuteAddressPhaseWrite(I2C_TypeDef *pI2Cx, uint8_t slaveAddr)
@@ -1044,9 +1044,9 @@ static void I2C_ExecuteAddressPhaseWrite(I2C_TypeDef *pI2Cx, uint8_t slaveAddr)
 
 /**
  * I2C_ClearADDRFlag()
- * Desc.	: Clears the ADDR bit of I2Cx SR1 register
- * Param.	: @pI2CHandle - pointer to I2C peripheral handle
- * Return	: None
+ * Brief	: Clears the ADDR bit of I2Cx SR1 register
+ * Param	: @pI2CHandle - pointer to I2C peripheral handle
+ * Retval	: None
  * Note		: ADDR bit is cleared by software reading SR1 register followed by
  * 			  reading SR2, or by hardware when PE = 0.
  * 			  This function is a private helper function.

@@ -1,30 +1,20 @@
 /*******************************************************************************
- * Filename		: stm32f407xx_gpio_driver.h
- * Description	: STM32F407xx MCU specific GPIO driver header file
- * Author		: Kyungjae Lee
- * History		: May 21, 2023 - Created file
- ******************************************************************************/
+ * File		: stm32f407xx_gpio_driver.h
+ * Brief	: STM32F407xx MCU specific GPIO driver header file
+ * Author	; Kyungjae Lee
+ * Date		: May 21, 2023
+ * ****************************************************************************/
 
 #ifndef STM32F407XX_GPIO_DRIVER_H
 #define STM32F407XX_GPIO_DRIVER_H
 
 #include "stm32f407xx.h"
 
-/**
- * Note: The driver layer should provide a configuration structure to the
- * 		 user application. User application will initialize or fill the
- * 		 structure and the will pass it to the driver APIs, and the driver APIs
- * 		 will decode the structure and will take appropriate action such as
- * 		 initializing the peripheral registers. This is what the configuration
- * 		 structure is for.
- *
- * 		 1. GPIO handle structure
- * 		 2. GPIO configuration structure
- */
+/*******************************************************************************
+ * GPIOx peripheral structures
+ ******************************************************************************/
 
-/**
- * GPIO pin configuration structure
- */
+/* GPIO pin configuration structure */
 typedef struct
 {
 	uint8_t GPIO_PinNumber;			/* Available values @GPIO_PIN_NUMBERS 		*/
@@ -35,9 +25,7 @@ typedef struct
 	uint8_t GPIO_PinAltFcnMode;		/* Only applicable when mode is set to alternate function mode */
 } GPIO_PinConfig_TypeDef;
 
-/**
- * GPIO pin handle structure
- */
+/* GPIO pin handle structure */
 typedef struct
 {
 	GPIO_TypeDef *pGPIOx;					/* Holds the base address of the GPIO port to which the pin belongs */
@@ -133,7 +121,6 @@ void GPIO_ToggleOutputPin(GPIO_TypeDef *pGPIOx, uint8_t pinNumber);
 void GPIO_IRQInterruptConfig(uint8_t irqNumber, uint8_t state);
 void GPIO_IRQPriorityConfig(uint8_t irqNumber, uint32_t irqPriority);
 void GPIO_IRQHandling(uint8_t pinNumber);
-
 
 
 #endif /* STM32F407XX_GPIO_DRIVER_H */

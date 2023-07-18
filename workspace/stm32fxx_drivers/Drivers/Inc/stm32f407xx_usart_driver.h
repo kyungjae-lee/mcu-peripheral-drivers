@@ -1,9 +1,9 @@
 /*******************************************************************************
- * Filename		: stm32f407xx_usart_driver.h
- * Description	: STM32F407xx MCU specific USART driver header file
- * Author		: Kyungjae Lee
- * History		: Jun 20, 2023 - Created file
- ******************************************************************************/
+ * File		: stm32f407xx_usart_driver.h
+ * Brief	: STM32F407xx MCU specific USART driver header file
+ * Author	; Kyungjae Lee
+ * Date		: Jun 20, 2023
+ * ****************************************************************************/
 
 #ifndef STM32F407XX_USART_DRIVER_H
 #define STM32F407XX_USART_DRIVER_H
@@ -11,10 +11,11 @@
 #include "stm32f407xx.h"
 
 /*******************************************************************************
- * USART peripheral structures
+ * APIs supported by the USART driver
+ * (See function definitions for more information)
  ******************************************************************************/
 
-/* USART peripheral configuration structure */
+/* USARTx peripheral configuration structure */
 typedef struct
 {
 	uint8_t USART_Mode;				/* Available values @USART_Mode 		 */
@@ -25,15 +26,15 @@ typedef struct
 	uint8_t USART_HWFlowControl;	/* Available values @USART_HWFlowControl */
 } USART_Config_TypeDef;
 
-/* USART peripheral handle structure */
+/* USARTx peripheral handle structure */
 typedef struct
 {
 	USART_TypeDef 			*pUSARTx;	/* Base address of USARTx(x:1,2,3) 	*/
 	USART_Config_TypeDef 	USART_Config;
 	uint8_t 				*pTxBuffer;	/* Application Tx buffer address 	*/
 	uint8_t 				*pRxBuffer;	/* Application Rx buffer address 	*/
-	uint32_t 				TxLen;		/* Length of data left to trasmit	*/
-	uint32_t 				RxLen;		/* Length of data left to receive	*/
+	uint32_t				TxLen;		/* Number of bytes left to transmit */
+	uint32_t				RxLen;		/* Number of bytes left to receive	*/
 	uint8_t 				TxBusyState;/* Available values @TxRxBusyState	*/
 	uint8_t 				RxBusyState;/* Available values @TxRxBusyState	*/
 } USART_Handle_TypeDef;
