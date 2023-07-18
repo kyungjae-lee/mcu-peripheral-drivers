@@ -1,8 +1,11 @@
 /*******************************************************************************
  * File		: lcd_hd44780u.h
- * Brief	: APIs for HD44780U 16x2 Character LCD module
+ * Brief	: APIs for the HD44780U 16x2 Character LCD module
  * Author	: Kyungjae Lee
  * Date		: Jun 27, 2023
+ *
+ * Note		: This code includes only the features that are necessary for my
+ * 			  personal projects.
  ******************************************************************************/
 
 #ifndef LCD_HD44780U_H

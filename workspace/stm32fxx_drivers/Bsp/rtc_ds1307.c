@@ -1,8 +1,11 @@
 /*******************************************************************************
  * File		: rtc_ds1307.c
- * Brief	: Implementation of APIs for DS1307 RTC module
+ * Brief	: Implementation of APIs for the DS1307 RTC module
  * Author	: Kyungjae Lee
  * Date		: Jun 25, 2023
+ *
+ * Note		: This code includes only the features that are necessary for my
+ * 			  personal projects.
  ******************************************************************************/
 
 #include <rtc_ds1307.h>

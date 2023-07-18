@@ -1,9 +1,12 @@
 /*******************************************************************************
  * File		: lcd_hd44780u.c
- * Brief	: Implementation of APIs for HD44780U 16x2 Character LCD module
+ * Brief	: Implementation of APIs for the HD44780U 16x2 Character LCD module
  * 			  (4-bit interface; only DB4-7 pins of the LCD module will be used)
  * Author	: Kyungjae Lee
  * Date		: Jun 27, 2023
+ *
+ * Note		: This code includes only the features that are necessary for my
+ * 			  personal projects.
  ******************************************************************************/
 
 #include "lcd_hd44780u.h"
