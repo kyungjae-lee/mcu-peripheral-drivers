@@ -68,10 +68,6 @@ void GPIO_PeriClockControl(GPIO_TypeDef *pGPIOx, uint8_t state)
 } /* End of GPIO_PeriClockControl */
 
 /**
- * Init and de-init
- */
-
-/**
  * GPIO_Init()
  * Brief	: Configures GPIO pin
  * Param	: @pGPIOHandle - pointer to the GPIO handle structure
