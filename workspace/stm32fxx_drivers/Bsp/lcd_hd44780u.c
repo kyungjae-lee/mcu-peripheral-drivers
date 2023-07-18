@@ -1,10 +1,9 @@
 /*******************************************************************************
- * Filename		: lcd_hd44780u.c
- * Description	: Implementation of APIs for 16x2 Character LCD module
- * 				  (4-bit interface; only DB4-DB7 pins of the LCD module will be
- * 				  used)
- * Author		: Kyungjae Lee
- * History 		: Jun 27, 2023 - Created file
+ * File		: lcd_hd44780u.c
+ * Brief	: Implementation of APIs for HD44780U 16x2 Character LCD module
+ * 			  (4-bit interface; only DB4-7 pins of the LCD module will be used)
+ * Author	: Kyungjae Lee
+ * Date		: Jun 27, 2023
  ******************************************************************************/
 
 #include "lcd_hd44780u.h"
@@ -169,7 +168,7 @@ void LCD_ClearDisplay(void)
 	LCD_TxInstruction(LCD_INST_CLEAR_DISPLAY);
 
 	DelayMs(2);	/* Wait 2 ms as per the datasheet */
-}
+} /* End of LCD_ClearDisplay */
 
 /**
  * LCD_ReturnHome()
@@ -230,7 +229,6 @@ void LCD_SetCursor(uint8_t row, uint8_t column)
 		break;
 	}
 } /* End of LCD_SetCursor */
-
 
 
 /*******************************************************************************

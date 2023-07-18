@@ -1,8 +1,8 @@
 /*******************************************************************************
- * Filename		: rtc_ds1307.h
- * Description	: APIs for DS1307 RTC module
- * Author		: Kyungjae Lee
- * History 		: Jun 25, 2023 - Created file
+ * File		: rtc_ds1307.h
+ * Brief	: APIs for DS1307 RTC module
+ * Author	: Kyungjae Lee
+ * Date		: Jun 25, 2023
  ******************************************************************************/
 
 #ifndef RTC_DS1307_H
@@ -44,6 +44,7 @@
 #define FRIDAY					5
 #define SATURDAY				6
 
+/* RTC date configuration structure */
 typedef struct
 {
 	uint8_t date;
@@ -52,6 +53,7 @@ typedef struct
 	uint8_t day;
 } RTC_Date_TypeDef;
 
+/* RTC time configuration structure */
 typedef struct
 {
 	uint8_t seconds;
@@ -60,8 +62,10 @@ typedef struct
 	uint8_t	timeFormat;
 } RTC_Time_TypeDef;
 
+
 /*******************************************************************************
- * APIs (See the function definitions for more information)
+ * APIs supported by the DS1307 RTC module
+ * (See the function definitions for more information)
  ******************************************************************************/
 
 uint8_t DS1307_Init(void);

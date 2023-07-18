@@ -1,8 +1,8 @@
 /*******************************************************************************
- * Filename		: lcd_hd44780u.h
- * Description	: APIs for 16x2 Character LCD module
- * Author		: Kyungjae Lee
- * History 		: Jun 27, 2023 - Created file
+ * File		: lcd_hd44780u.h
+ * Brief	: APIs for HD44780U 16x2 Character LCD module
+ * Author	: Kyungjae Lee
+ * Date		: Jun 27, 2023
  ******************************************************************************/
 
 #ifndef LCD_HD44780U_H
@@ -27,8 +27,10 @@
 #define LCD_INST_CLEAR_DISPLAY	0x01 /* Clear display */
 #define LCD_INST_RETURN_HOME	0x02 /* Return home */
 
+
 /*******************************************************************************
- * APIs (See the function definitions for more information)
+ * APIs supported by the HD44780U 16x2 Character LCD module
+ * (See the function definitions for more information)
  ******************************************************************************/
 
 void LCD_Init(void);
