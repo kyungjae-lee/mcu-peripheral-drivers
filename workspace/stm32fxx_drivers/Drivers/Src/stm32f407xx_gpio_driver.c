@@ -3,6 +3,9 @@
  * Brief	: STM32F407xx MCU specific GPIO driver source file
  * Author	; Kyungjae Lee
  * Date		: May 21, 2023
+ *
+ * Note		: This code includes only the features that are necessary for my
+ * 			  personal projects.
  * ****************************************************************************/
 
 #include "stm32f407xx_gpio_driver.h"

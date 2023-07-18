@@ -3,6 +3,9 @@
  * Brief	: Device header file for stm32f407xx MCU
  * Author	; Kyungjae Lee
  * Date		: May 18, 2023
+ *
+ * Note		: This code includes only the features that are necessary for my
+ * 			  personal projects.
  * ****************************************************************************/
 
 #ifndef STM32F407XX_H
