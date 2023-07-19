@@ -1,13 +1,14 @@
 # MCU Peripheral Drivers
 
-This repository contains the source code for the **MCU Peripheral Drivers** development project. Visit "MCU Peripheral Drivers" section on my website for more details: [https://kyungjae.dev/mcu-peripheral-drivers/](https://kyungjae.dev/mcu-peripheral-drivers/).
+This repository contains the source code for the **MCU Peripheral Drivers** development project. Visit the "MCU Peripheral Drivers" section on my website for more details: [https://kyungjae.dev/mcu-peripheral-drivers/](https://kyungjae.dev/mcu-peripheral-drivers/).
 
 
 
 ## Introduction
 
-* Developed MCU peripheral (GPIO, I2C, SPI, USART) drivers from scratch on the STM32F407-Discovery board
+* Developed MCU peripheral (GPIO, I2C, SPI, USART) drivers from scratch on the STM32F407G-Discovery board
 * Developed applications to test correct functionalities of each peripheral driver
+* Please see the [LCD Digital Clock](./lcd-digital-clock) project to observe how these drivers are utilized in a real-world embedded systems project
 
 
 
@@ -20,11 +21,14 @@ This repository contains the source code for the **MCU Peripheral Drivers** deve
 
 ## Architecture
 
+### Software Layers
+
+<img src="img/mcu-peripheral-drivers-software-layers.png" alt="mcu-peripheral-drivers-software-layers" width="600">
 
 
-<img src="img/mcu-peripheral-driver-development-project-architecture.png" alt="mcu-peripheral-driver-development-project-architecture" width="650">
 
-
+* **Application layer** consists of test applications designed to verify the proper functionality of the GPIO, SPI, I2C, and  USART peripheral drivers for the STM32F407xx MCU.
+* **Hardware abstraction layer** includes the device-specific header file for STM32F407xx MCU, along with the GPIO, SPI,  I2C, and USART peripheral drivers. This layer provides the application layer with a range of APIs to control the respective MCU peripherals.
 
 
 
@@ -39,3 +43,43 @@ This repository contains the source code for the **MCU Peripheral Drivers** deve
 
 * Application layer (Test applications)
   * See [./workspace/stm32fxx_drivers/Src](./workspace/stm32fxx_drivers/Src)
+
+
+
+## Testing (I2C Example)
+
+* The following example is taken from one of the I2C peripheral driver tests. For additional tests on various other MCU peripheral drivers, please visit the [MCU Peripheral Drivers](https://kyungjae.dev/mcu-peripheral-drivers/) section on my notebook.
+
+### Communication Interfaces
+
+
+
+<img src="img/mcu-peripheral-drivers-i2c-application-2-communication-interfaces.png" alt="mcu-peripheral-drivers-i2c-application-2-communication-interfaces" width="450">
+
+
+
+### Wiring
+
+
+
+<img src="img/mcu-peripheral-drivers-i2c-application-2-wiring.png" alt="mcu-peripheral-drivers-i2c-application-2-wiring" width="850">
+
+
+
+### Analysis using the Logic Analyzer
+
+
+
+<img src="img/mcu-peripheral-drivers-i2c-application-2-testing-entire-communication.png" alt="mcu-peripheral-drivers-i2c-application-2-testing-entire-communication" width="850">
+
+
+
+<img src="img/mcu-peripheral-drivers-i2c-application-2-testing-communication-part-1.png" alt="mcu-peripheral-drivers-i2c-application-2-testing-communication-part-1" width="850">
+
+
+
+### Cross-checking using the STM32CubeIDE Data Console
+
+
+
+<img src="img/mcu-peripheral-drivers-i2c-application-2-testing-stm32cubeide.png" alt="mcu-peripheral-drivers-i2c-application-2-testing-stm32cubeide" width="950">
