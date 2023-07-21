@@ -6,9 +6,10 @@ This repository contains the source code for the **MCU Peripheral Drivers** deve
 
 ## Introduction
 
-* Developed MCU peripheral (GPIO, I2C, SPI, USART) drivers from scratch on the STM32F407G-Discovery board
-* Developed applications to test correct functionalities of each peripheral driver
-* Please see the [LCD Digital Clock](https://kyungjae.dev/projects/lcd-digital-clock) project to observe how these drivers are utilized in a real-world embedded systems project
+* Developed MCU peripheral drivers (GPIO, SPI, I2C, USART) from scratch on the STM32F407G-Discovery board, along with comprehensive test applications to ensure their reliability and applicability for real‐world projects
+* Used STM32CubeIDE for software development, a logic analyzer for testing, and the on‐board ST‐LINK/V2 debug
+  circuitry for debugging
+* Please see the [LCD Digital Clock](./lcd-digital-clock) project to observe how these drivers are utilized in a real-world embedded systems project
 
 
 
