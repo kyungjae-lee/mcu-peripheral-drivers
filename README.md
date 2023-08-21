@@ -1,6 +1,6 @@
 # MCU Peripheral Drivers
 
-This repository contains the source code for the **MCU Peripheral Drivers** development project. Visit the "MCU Peripheral Drivers" section on my website for more details: [https://jackklee.com/projects/mcu-peripheral-drivers](https://jackklee.com/projects/mcu-peripheral-drivers).
+This repository contains the source code for the **MCU Peripheral Drivers** development project. Visit the "MCU Peripheral Drivers" section on my website for more details: [https://jackklee.com/portfolio/mcu-peripheral-drivers](https://jackklee.com/portfolio/mcu-peripheral-drivers).
 
 
 
