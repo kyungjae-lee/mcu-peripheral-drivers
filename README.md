@@ -49,7 +49,7 @@ This repository contains the source code for the **MCU Peripheral Drivers** deve
 
 ## Testing (I2C Example)
 
-* The following example is taken from one of the I2C peripheral driver tests. For additional tests on various other MCU peripheral drivers, please visit the [MCU Peripheral Drivers](https://kyungjae.dev/mcu-peripheral-drivers/) section on my notebook.
+* The following example is taken from one of the I2C peripheral driver tests. For additional tests on various other MCU peripheral drivers, please visit the [MCU Peripheral Drivers](https://jackklee.com/mcu-peripheral-drivers/) section on my notebook.
 
 ### Communication Interfaces
 
